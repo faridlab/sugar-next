@@ -7,24 +7,26 @@
   - [ ] ???
 - [ ] DOMAIN
   - [ ] ???
+- [ ] COMPONENTS
+  - [ ] ???
 - [ ] ROUTE
-  - [ ] Route(): `/` -> homepage
-  - [ ] Route(): `/dashboard` -> dashboard page
-  - [ ] Route(): `/login` -> User login
-  - [ ] Route(): `/register` -> User registration
-  - [ ] Route(): `/forgot-password` -> User forgot password
-  - [ ] Route(): `/reset-password/{token}` -> User reset password with new one
-  - [ ] Route(): `/profile` -> User profile
-  - [ ] Route(): `/settings` -> Settings page
-  - [ ] Route(): `/{collection}` -> List of all items in collection
-  - [ ] Route(): `/{collection}/create` -> Create new item in collection
-  - [ ] Route(): `/{collection}/{id}` -> Detail item by ID
-  - [ ] Route(): `/{collection}/{id}/edit` -> Edit item by ID
-  - [ ] Route(): `/{collection}/report` -> report page
-  - [ ] Route(): `/{collection}/import` -> Import new data in collection
-  - [ ] Route(): `/{collection}/export` -> Export data in collection
-  - [ ] Route(): `/{collection}/trash` -> List of all trashed/deleted items in collection
-  - [ ] Route(): `/{collection}/{id}/trashed` -> Detail trashed item by ID
+  - [X] Route(): `/` -> homepage
+  - [X] Route(): `/dashboard` -> dashboard page
+  - [X] Route(): `/login` -> User login
+  - [X] Route(): `/register` -> User registration
+  - [X] Route(): `/forgot-password` -> User forgot password
+  - [X] Route(): `/reset-password/{token}` -> User reset password with new one
+  - [X] Route(): `/profile` -> User profile
+  - [X] Route(): `/settings` -> Settings page
+  - [X] Route(): `/{collection}` -> List of all items in collection
+  - [X] Route(): `/{collection}/create` -> Create new item in collection
+  - [X] Route(): `/{collection}/{id}` -> Detail item by ID
+  - [X] Route(): `/{collection}/{id}/edit` -> Edit item by ID
+  - [X] Route(): `/{collection}/report` -> report page
+  - [X] Route(): `/{collection}/import` -> Import new data in collection
+  - [X] Route(): `/{collection}/export` -> Export data in collection
+  - [X] Route(): `/{collection}/trash` -> List of all trashed/deleted items in collection
+  - [X] Route(): `/{collection}/{id}/trashed` -> Detail trashed item by ID
 - [ ] CRUD
   - [ ] Resources(List): List data with datatables
   - [ ] Resources(Create): Create new data
