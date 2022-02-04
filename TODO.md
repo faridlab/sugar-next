@@ -9,6 +9,24 @@
   - [ ] ???
 - [ ] COMPONENTS
   - [ ] ???
+- [ ] PAGES
+  - [ ] Page(): `/` -> homepage
+  - [ ] Page(): `/dashboard` -> dashboard page
+  - [X] Page(): `/login` -> User login
+  - [ ] Page(): `/register` -> User registration
+  - [ ] Page(): `/forgot-password` -> User forgot password
+  - [ ] Page(): `/reset-password/{token}` -> User reset password with new one
+  - [ ] Page(): `/profile` -> User profile
+  - [ ] Page(): `/settings` -> Settings page
+  - [ ] Page(): `/{collection}` -> List of all items in collection
+  - [ ] Page(): `/{collection}/create` -> Create new item in collection
+  - [ ] Page(): `/{collection}/{id}` -> Detail item by ID
+  - [ ] Page(): `/{collection}/{id}/edit` -> Edit item by ID
+  - [ ] Page(): `/{collection}/report` -> report page
+  - [ ] Page(): `/{collection}/import` -> Import new data in collection
+  - [ ] Page(): `/{collection}/export` -> Export data in collection
+  - [ ] Page(): `/{collection}/trash` -> List of all trashed/deleted items in collection
+  - [ ] Page(): `/{collection}/{id}/trashed` -> Detail trashed item by ID
 - [ ] ROUTE
   - [X] Route(): `/` -> homepage
   - [X] Route(): `/dashboard` -> dashboard page
