@@ -13,7 +13,7 @@
   - [ ] Page(): `/` -> homepage
   - [ ] Page(): `/dashboard` -> dashboard page
   - [X] Page(): `/login` -> User login
-  - [ ] Page(): `/register` -> User registration
+  - [X] Page(): `/register` -> User registration
   - [ ] Page(): `/forgot-password` -> User forgot password
   - [ ] Page(): `/reset-password/{token}` -> User reset password with new one
   - [ ] Page(): `/profile` -> User profile
