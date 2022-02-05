@@ -11,7 +11,7 @@
   - [ ] ???
 - [ ] PAGES
   - [ ] Page(): `/` -> homepage
-  - [ ] Page(): `/dashboard` -> dashboard page
+  - [X] Page(): `/dashboard` -> dashboard page
   - [X] Page(): `/login` -> User login
   - [X] Page(): `/register` -> User registration
   - [X] Page(): `/forgot-password` -> User forgot password
