@@ -84,15 +84,6 @@ export async function hardDelete ({ url, type, data, params, headers = {}, confi
   return await api.delete(url, { data, params, headers, ...config })
 }
 
-export async function trash ({ url, params, headers = {}, config = {} }: RequestType) {
-  var token = await localStorage.getItem('authorization_token')
-  if (token) {
-    headers = { Authorization: `Bearer ${token}`, ...headers }
-  }
-  // const url = `/${collection}/trash` // Trash of collection
-  return await api.get(url, { params, headers })
-}
-
 export async function trashed ({ url, params, headers = {}, config = {} }: RequestType) {
   var token = await localStorage.getItem('authorization_token')
   if (token) {
