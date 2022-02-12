@@ -13,7 +13,7 @@ export type RequestType = {
 }
 
 export type RequestDataType = RequestType & {
-  type: number | string
+  type?: number | string
   data: any
 }
 
