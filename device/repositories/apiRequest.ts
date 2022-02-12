@@ -5,15 +5,7 @@ export async function get ({ url, params = {}, headers = {}, config = {} }: Requ
   return await api.get(url, { params, headers, ...config })
 }
 
-export async function create ({ url, data, params = {}, headers = {}, config = {} }: RequestDataType) {
-  var token = await localStorage.getItem('authorization_token')
-  // const _headers = state.headers
-
-  if (token) {
-    // headers = { Authorization: `Bearer ${token}`, ..._headers, ...headers }
-    headers = { Authorization: `Bearer ${token}`, ...headers }
-  }
-
+export async function post ({ url, data, params = {}, headers = {}, config = {} }: RequestDataType) {
   if (headers['Content-Type'] === 'multipart/form-data') {
     const formData = new FormData()
     for (const key in data) {
@@ -21,7 +13,6 @@ export async function create ({ url, data, params = {}, headers = {}, config = {
     }
     data = formData
   }
-
   // const url = `/${collection}`
   return await api.post(url, data, { params, headers, ...config })
 }
