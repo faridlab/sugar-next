@@ -1,4 +1,4 @@
-import axios, { AxiosRequestHeaders } from 'axios'
+import axios, { AxiosRequestConfig, AxiosRequestHeaders } from 'axios'
 
 const api = axios.create({
   baseURL: process.env.APIURL,
@@ -9,7 +9,7 @@ export type RequestType = {
   url: string
   params?: Object
   headers?: AxiosRequestHeaders
-  config?: Object
+  config?: AxiosRequestConfig
 }
 
 export type RequestDataType = RequestType & {
