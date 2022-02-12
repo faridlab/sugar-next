@@ -84,15 +84,6 @@ export async function hardDelete ({ url, type, data, params, headers = {}, confi
   return await api.delete(url, { data, params, headers, ...config })
 }
 
-export async function trashed ({ url, params, headers = {}, config = {} }: RequestType) {
-  var token = await localStorage.getItem('authorization_token')
-  if (token) {
-    headers = { Authorization: `Bearer ${token}`, ...headers }
-  }
-  // const url = `/${collection}/${id}/trashed` // Data trashed detail
-  return await api.get(url, { params, headers, ...config })
-}
-
 // Restore Model by ID /collection/{id}/restore
 // Restore Collection by selected Ids /collection/selected/restore --params selected=[1,2,3]
 // Restore all Models in Collection /collection/all/restore
