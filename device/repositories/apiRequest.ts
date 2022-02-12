@@ -1,10 +1,6 @@
 import api, { RequestType, RequestDataType } from '../utils/axios'
 
 export async function get ({ url, params, headers, config }: RequestType) {
-  const token = await localStorage.getItem('authorization_token')
-  if (token) {
-    headers = { Authorization: `Bearer ${token}`, ...headers }
-  }
   // const url = `/${collection}`
   return await api.get(url, { params, headers, ...config })
 }
