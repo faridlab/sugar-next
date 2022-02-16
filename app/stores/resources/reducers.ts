@@ -5,7 +5,7 @@ import { getCookie } from 'cookies-next'
 
 import {
   get,
-  create,
+  post,
   update,
   patch,
   destroy,
@@ -22,6 +22,16 @@ export const fetch = createAsyncThunk('resource/fetch', async ({ url, params, he
   }
   // const url = `/${collection}`
   const response = await get({ url, params, headers, config})
+  return response.data
+})
+
+export const create = createAsyncThunk('resource/create', async ({ url, data, params = {}, headers = {}, config = {} }: RequestDataType) => {
+  const token = getCookie('authorization_token')
+  if (token) {
+    headers = { Authorization: `Bearer ${token}`, ...headers }
+  }
+  // const url = `/${collection}`
+  const response = await post({ url, data, params, headers, config })
   return response.data
 })
 
