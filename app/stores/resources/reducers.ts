@@ -82,3 +82,15 @@ export const trashed = createAsyncThunk('resource/trashed', async ({ url, params
   const response = await get({ url, params, headers, config})
   return response.data
 })
+
+// Destroy Model by ID /collection/{id}
+// Destroy Collection by selected Ids /collection/selected --params selected=[1,2,3]
+// Destroy all Models in Collection /collection/all
+export const destroy = createAsyncThunk('resource/destroy', async ({ url, type, data, params, headers = {}, config = {} }: RequestDataType) => {
+  const token = getCookie('authorization_token')
+  if (token) {
+    headers = { Authorization: `Bearer ${token}`, ...headers }
+  }
+  const response = await deleteRequest({url, data, params, headers, ...config })
+  return response.data
+})
