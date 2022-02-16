@@ -18,11 +18,6 @@ export async function post ({ url, data, params = {}, headers = {}, config = {} 
 }
 
 export async function put ({ url, data, params = {}, headers = {}, config = {} }: RequestDataType) {
-  var token = await localStorage.getItem('authorization_token')
-
-  if (token) {
-    headers = { Authorization: `Bearer ${token}`, ...headers }
-  }
   // const url = `/${collection}/${id}`
   return await api.put(url, data, { params, headers, ...config })
 }
@@ -49,46 +44,11 @@ export async function update ({ url, data, params = {}, headers = {}, config = {
 }
 
 export async function patch ({ url, data, params = {}, headers = {}, config = {} }: RequestDataType) {
-  var token = await localStorage.getItem('authorization_token')
-  if (token) {
-    headers = { Authorization: `Bearer ${token}`, ...headers }
-  }
   // const url = `/${collection}/${id}`
   return await api.patch(url, data, { params, headers, ...config })
 }
 
-// Destroy Model by ID /collection/{id}
-// Destroy Collection by selected Ids /collection/selected --params selected=[1,2,3]
-// Destroy all Models in Collection /collection/all
-export async function destroy ({ url, type, data, params, headers = {}, config = {} }: RequestDataType) {
-  var token = await localStorage.getItem('authorization_token')
-  if (token) {
-    headers = { Authorization: `Bearer ${token}`, ...headers }
-  }
-  // const url = `/${collection}/${type}` // Softdelete
+export async function del ({ url, data, params = {}, headers = {}, config = {} }: RequestDataType) {
+  // const url = `/${collection}/${id}`
   return await api.delete(url, { data, params, headers, ...config })
-}
-
-// Delete Model by ID /collection/{id}/delete
-// Delete Collection by selected Ids /collection/selected/delete --params ids=[1,2,3]
-// Delete all Models in Collection /collection/all/delete
-export async function hardDelete ({ url, type, data, params, headers = {}, config = {} }: RequestDataType) {
-  var token = await localStorage.getItem('authorization_token')
-  if (token) {
-    headers = { Authorization: `Bearer ${token}`, ...headers }
-  }
-  // const url = `/${collection}/${type}/delete` // Permanent delete
-  return await api.delete(url, { data, params, headers, ...config })
-}
-
-// Restore Model by ID /collection/{id}/restore
-// Restore Collection by selected Ids /collection/selected/restore --params selected=[1,2,3]
-// Restore all Models in Collection /collection/all/restore
-export async function restore ({ url, type, data, params, headers = {}, config = {} }: RequestDataType) {
-  var token = await localStorage.getItem('authorization_token')
-  if (token) {
-    headers = { Authorization: `Bearer ${token}`, ...headers }
-  }
-  // const url = `/${collection}/${type}/restore` // Restore of collection
-  return await api.post(url, data, { params, headers, ...config })
 }
