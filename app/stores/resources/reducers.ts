@@ -7,10 +7,8 @@ import {
   get,
   post,
   update as updateRequest,
-  patch,
-  destroy,
-  hardDelete,
-  restore,
+  patch as patchRequest,
+  del as deleteRequest,
 } from '../../../device/repositories/apiRequest'
 
 import { RequestType, RequestDataType } from '../../../device/utils/axios'
@@ -52,6 +50,16 @@ export const detail = createAsyncThunk('resource/detail', async ({ url, params, 
   }
   // const url = `/${collection}/${id}`
   const response = await get({ url, params, headers, config})
+  return response.data
+})
+
+export const patch = createAsyncThunk('resource/patch', async ({ url, data, params = {}, headers = {}, config = {} }: RequestDataType) => {
+  const token = getCookie('authorization_token')
+  if (token) {
+    headers = { Authorization: `Bearer ${token}`, ...headers }
+  }
+  // const url = `/${collection}/${id}`
+  const response = await patchRequest({ url, data, params, headers, config })
   return response.data
 })
 
