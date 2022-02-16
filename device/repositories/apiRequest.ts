@@ -17,6 +17,16 @@ export async function post ({ url, data, params = {}, headers = {}, config = {} 
   return await api.post(url, data, { params, headers, ...config })
 }
 
+export async function put ({ url, data, params = {}, headers = {}, config = {} }: RequestDataType) {
+  var token = await localStorage.getItem('authorization_token')
+
+  if (token) {
+    headers = { Authorization: `Bearer ${token}`, ...headers }
+  }
+  // const url = `/${collection}/${id}`
+  return await api.put(url, data, { params, headers, ...config })
+}
+
 export async function update ({ url, data, params = {}, headers = {}, config = {} }: RequestDataType) {
   var token = await localStorage.getItem('authorization_token')
   // const _headers = state.headers
