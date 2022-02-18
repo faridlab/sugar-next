@@ -24,7 +24,7 @@ const initialState: InitState = {
   response: {},
   pending: false,
   error: false,
-};
+}
 
 export const resourceReducer = createReducer(initialState, builder => {
   builder
@@ -34,32 +34,32 @@ export const resourceReducer = createReducer(initialState, builder => {
       state.pending = false
     })
     .addCase(create.fulfilled, (state, action) => {
-      state.pending = false;
+      state.pending = false
     })
     .addCase(update.fulfilled, (state, action) => {
-      state.pending = false;
+      state.pending = false
     })
     .addCase(detail.fulfilled, (state, action) => {
-      state.pending = false;
+      state.pending = false
     })
     .addCase(patch.fulfilled, (state, action) => {
-      state.pending = false;
+      state.pending = false
     })
     .addCase(trash.fulfilled, (state, action) => {
-      state.pending = false;
+      state.pending = false
     })
     .addCase(trashed.fulfilled, (state, action) => {
-      state.pending = false;
+      state.pending = false
     })
     .addCase(destroy.fulfilled, (state, action) => {
-      state.pending = false;
+      state.pending = false
     })
     .addCase(hardDelete.fulfilled, (state, action) => {
-      state.pending = false;
+      state.pending = false
     })
     .addCase(restore.fulfilled, (state, action) => {
-      state.pending = false;
+      state.pending = false
     })
-});
+})
 
-export default resourceReducer;
+export default resourceReducer

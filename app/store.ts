@@ -4,7 +4,7 @@ import {
   ThunkAction,
 } from '@reduxjs/toolkit'
 
-import resourceReducer from './stores/resources/reducers'
+import resourceReducer from './stores/resources'
 
 export const store = configureStore({
   reducer: {
