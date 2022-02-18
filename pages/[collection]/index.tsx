@@ -1,8 +1,10 @@
-import { useEffect, useState } from 'react'
+import { ReactElement, useEffect, useState } from 'react'
 import type { NextPage } from 'next'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 import Head from 'next/head'
+import Layout from '../../app/layouts/layout'
+import { NextPageWithLayout } from '../../app/utils/pageTypes'
 
 import {
   useAppDispatch,
@@ -17,7 +19,7 @@ import {
   selectResource
 } from '../../app/stores/resources'
 
-const CollectionPage: NextPage = () => {
+const CollectionPage: NextPageWithLayout = () => {
   const router = useRouter()
   const { collection } = router.query
   const url = `/${collection}`
@@ -55,3 +57,11 @@ const CollectionPage: NextPage = () => {
 }
 
 export default CollectionPage
+
+CollectionPage.getLayout = function getLayout(page: ReactElement) {
+  return (
+    <Layout>
+      {page}
+    </Layout>
+  )
+}
