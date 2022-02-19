@@ -28,6 +28,8 @@ import {
 } from '../../app/stores/resources'
 import { Box, Breadcrumbs, Button, IconButton, Stack, Typography } from '@mui/material'
 
+import { DatagridPresenter } from '../../app/components/presenter'
+
 const CollectionPage: NextPageWithLayout = () => {
   const router = useRouter()
   const { collection } = router.query
@@ -114,7 +116,7 @@ const CollectionPage: NextPageWithLayout = () => {
             </Menu>
           </Stack>
         </Stack>
-        <Box>Box 2</Box>
+        <DatagridPresenter />
       </Box>
     </>
   )
