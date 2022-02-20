@@ -1,4 +1,4 @@
-import { ReactElement, useEffect, useState } from 'react'
+import { ReactElement, useCallback, useEffect, useState } from 'react'
 import type { NextPage } from 'next'
 import { useRouter } from 'next/router'
 
@@ -29,13 +29,76 @@ import {
 import { Box, Breadcrumbs, Button, IconButton, Stack, Typography } from '@mui/material'
 
 import { DatagridPresenter } from '../../app/components/presenter'
+import { Params } from '../../app/components/presenter/datagrid'
+import { GridActionsCellItem, GridEnrichedColDef, GridRowParams, GridValueGetterParams } from '@mui/x-data-grid'
+import DeleteIcon from '@mui/icons-material/Delete'
+import SecurityIcon from '@mui/icons-material/Security'
+import FileCopyIcon from '@mui/icons-material/FileCopy'
+
+const columns: GridEnrichedColDef[] = [
+  {
+    field: 'country',
+    headerName: 'Country',
+    editable: false,
+    valueGetter: (params: GridValueGetterParams) =>
+      `${params.row.country.name || ''}`,
+  },
+  {
+    field: 'province',
+    headerName: 'Province',
+    editable: false,
+    valueGetter: (params: GridValueGetterParams) =>
+      `${params.row.province.name || ''}`,
+  },
+  {
+    field: 'city',
+    headerName: 'City',
+    // width: 150,
+    editable: true,
+    valueGetter: (params: GridValueGetterParams) =>
+      `${params.row.name || ''}`,
+  },
+
+  // NOTE: actions will be always columns to be added
+  {
+    field: 'actions',
+    type: 'actions',
+    width: 80,
+    getActions: (params: GridRowParams) => [
+      <GridActionsCellItem
+        key={1}
+        icon={<DeleteIcon />}
+        label="Delete"
+        showInMenu
+      />,
+      <GridActionsCellItem
+        key={2}
+        icon={<SecurityIcon />}
+        label="Toggle Admin"
+        showInMenu
+      />,
+      <GridActionsCellItem
+        key={3}
+        icon={<FileCopyIcon />}
+        label="Duplicate User"
+        showInMenu
+      />,
+    ],
+  },
+]
 
 const CollectionPage: NextPageWithLayout = () => {
   const router = useRouter()
   const { collection } = router.query
   const url = `/${collection}`
 
-  const [ params, setParams ] = useState({page: 1, limit: 25})
+  const parameter = {
+    page: 1,
+    limit: 10,
+    relationship: ['country', 'province']
+  }
+
+  const [ params, setParams ] = useState(parameter)
 
   const dispatch = useAppDispatch()
   const {
@@ -45,19 +108,28 @@ const CollectionPage: NextPageWithLayout = () => {
     error,
   } = useAppSelector(selectResource)
 
+  const onPagerequest = async ({ page = 1, limit = 25 } = {}) => {
+    if(!router.isReady) return
+    dispatch(fetch({url, params: { ...params, page, limit }}))
+    return false
+  }
+
   useEffect(() => {
     if(!router.isReady) return
-    dispatch(fetch({url}))
-  }, [dispatch, params, url, router.isReady])
+    onPagerequest()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [ router.isReady ])
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const open = Boolean(anchorEl)
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget)
   }
+
   const handleClose = () => {
     setAnchorEl(null)
   }
+
 
   return (
     <>
@@ -116,7 +188,12 @@ const CollectionPage: NextPageWithLayout = () => {
             </Menu>
           </Stack>
         </Stack>
-        <DatagridPresenter />
+        <DatagridPresenter
+          columns={columns}
+          rows={data}
+          params={params}
+          onRequestData={onPagerequest}
+        />
       </Box>
     </>
   )
