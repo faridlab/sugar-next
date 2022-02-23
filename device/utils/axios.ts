@@ -1,7 +1,7 @@
 import axios, { AxiosRequestConfig, AxiosRequestHeaders } from 'axios'
 
 const api = axios.create({
-  baseURL: process.env.APIURL,
+  baseURL: process.env.NEXT_PUBLIC_APIURL,
   timeout: 120 * 1000
 })
 
