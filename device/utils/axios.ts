@@ -14,7 +14,7 @@ export type RequestType = {
 
 export type RequestDataType = RequestType & {
   type?: number | string
-  data: any
+  data: Record<string, any>[] | Record<string, any>
 }
 
 export default api

@@ -17,7 +17,7 @@ export type Params = {
 type PropsType = {
   params?: Params
   onRequestData: Function,
-  rows: Record<string, any>[],
+  rows: Record<string, any>[] | Record<string, any>,
   columns: GridEnrichedColDef[]
 }
 
