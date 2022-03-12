@@ -121,7 +121,7 @@ const CollectionPage: NextPageWithLayout = () => {
 
   const onRowClick = (params: GridRowParams) => {
     const { id } = params
-    router.push(`/collection/${id}`)
+    router.push(`/${collection}/${id}`)
   }
 
   useEffect(() => {
