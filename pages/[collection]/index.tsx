@@ -1,9 +1,9 @@
-import { ReactElement, useCallback, useEffect, useState } from 'react'
-import type { NextPage } from 'next'
+import { ReactElement, useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 
 import AddIcon from '@mui/icons-material/Add'
 import HomeIcon from '@mui/icons-material/Home'
+import PageviewIcon from '@mui/icons-material/Pageview'
 
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
@@ -53,8 +53,8 @@ const columns: GridEnrichedColDef[] = [
   {
     field: 'city',
     headerName: 'City',
-    // width: 150,
     editable: true,
+    flex: 1,
     valueGetter: (params: GridValueGetterParams) =>
       `${params.row.name || ''}`,
   },
@@ -65,6 +65,11 @@ const columns: GridEnrichedColDef[] = [
     type: 'actions',
     width: 80,
     getActions: (params: GridRowParams) => [
+      <GridActionsCellItem
+        key={0}
+        icon={<PageviewIcon sx={{ fontSize: 26 }} />}
+        label="View"
+      />,
       <GridActionsCellItem
         key={1}
         icon={<DeleteIcon />}
@@ -103,15 +108,20 @@ const CollectionPage: NextPageWithLayout = () => {
   const dispatch = useAppDispatch()
   const {
     data,
-    response,
-    pending,
-    error,
+    // response,
+    // pending,
+    // error,
   } = useAppSelector(selectResource)
 
   const onPagerequest = async ({ page = 1, limit = 25 } = {}) => {
     if(!router.isReady) return
     dispatch(fetch({url, params: { ...params, page, limit }}))
     return false
+  }
+
+  const onRowClick = (params: GridRowParams) => {
+    const { id } = params
+    router.push(`/collection/${id}`)
   }
 
   useEffect(() => {
@@ -129,7 +139,6 @@ const CollectionPage: NextPageWithLayout = () => {
   const handleClose = () => {
     setAnchorEl(null)
   }
-
 
   return (
     <>
@@ -193,6 +202,7 @@ const CollectionPage: NextPageWithLayout = () => {
           rows={data}
           params={params}
           onRequestData={onPagerequest}
+          onRowClick={onRowClick}
         />
       </Box>
     </>
