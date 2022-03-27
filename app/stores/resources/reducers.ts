@@ -39,7 +39,9 @@ export const resourceReducer = createReducer(initialState, builder => {
     .addCase(update.fulfilled, (state, action) => {
       state.pending = false
     })
-    .addCase(detail.fulfilled, (state, action) => {
+    .addCase(detail.fulfilled, (state, { type, payload, meta}) => {
+      state.data = (payload as any).data // FIXME: be aware of "any"
+      state.response = payload
       state.pending = false
     })
     .addCase(patch.fulfilled, (state, action) => {
