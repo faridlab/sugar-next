@@ -1,4 +1,5 @@
 import { createReducer } from '@reduxjs/toolkit'
+import { AxiosResponse } from 'axios'
 import {
   fetch,
   create,
@@ -13,14 +14,14 @@ import {
 } from './actions'
 
 export type InitState = {
-  data: Object | Array<any>
+  data: Object | Array<any> | unknown
   response: Object | any
   pending: boolean
   error: boolean
 }
 
 const initialState: InitState = {
-  data: [],
+  data: null,
   response: {},
   pending: false,
   error: false,
@@ -29,7 +30,7 @@ const initialState: InitState = {
 export const resourceReducer = createReducer(initialState, builder => {
   builder
     .addCase(fetch.fulfilled, (state, { type, payload, meta}) => {
-      state.data = (payload as any).data // FIXME: be aware of "any"
+      state.data = (payload as AxiosResponse).data
       state.response = payload
       state.pending = false
     })
@@ -40,7 +41,7 @@ export const resourceReducer = createReducer(initialState, builder => {
       state.pending = false
     })
     .addCase(detail.fulfilled, (state, { type, payload, meta}) => {
-      state.data = (payload as any).data // FIXME: be aware of "any"
+      state.data = (payload as AxiosResponse).data
       state.response = payload
       state.pending = false
     })
