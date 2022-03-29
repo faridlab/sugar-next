@@ -9,9 +9,9 @@ import {
   update as updateRequest,
   patch as patchRequest,
   del as deleteRequest,
-} from '../../../device/repositories/apiRequest'
+} from '@device/repositories/apiRequest'
 
-import { RequestType, RequestDataType } from '../../../device/utils/axios'
+import { RequestType, RequestDataType } from '@device/utils/axios'
 
 export const fetch = createAsyncThunk('resource/fetch', async ({ url, params, headers = {}, config = {} }: RequestType) => {
   const token = getCookie('authorization_token')

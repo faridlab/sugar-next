@@ -11,25 +11,25 @@ import MoreVertIcon from '@mui/icons-material/MoreVert'
 import Link from '@mui/material/Link'
 
 import Head from 'next/head'
-import Layout from '../../app/layouts/layout'
-import { NextPageWithLayout } from '../../app/utils/pageTypes'
+import Layout from '@app/layouts/layout'
+import { NextPageWithLayout } from '@app/utils/pageTypes'
 
 import {
   useAppDispatch,
   useAppSelector,
-} from '../../app/hooks'
+} from '@app/hooks'
 
 import {
   fetch,
-} from '../../app/stores/resources'
+} from '@app/stores/resources'
 
 import {
   selectResource
-} from '../../app/stores/resources'
+} from '@app/stores/resources'
 import { Box, Breadcrumbs, Button, IconButton, Stack, Typography } from '@mui/material'
 
-import { DatagridPresenter } from '../../app/components/presenter'
-import { Params } from '../../app/components/presenter/datagrid'
+import { DatagridPresenter } from '@app/components/presenter'
+import { Params } from '@app/components/presenter/datagrid'
 import { GridActionsCellItem, GridEnrichedColDef, GridRowParams, GridValueGetterParams } from '@mui/x-data-grid'
 import DeleteIcon from '@mui/icons-material/Delete'
 import SecurityIcon from '@mui/icons-material/Security'
@@ -100,7 +100,7 @@ const CollectionPage: NextPageWithLayout = () => {
   const parameter = {
     page: 1,
     limit: 10,
-    relationship: ['country', 'province']
+    // relationship: ['country', 'province']
   }
 
   const [ params, setParams ] = useState(parameter)
