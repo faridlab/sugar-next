@@ -117,6 +117,18 @@ export const hardDelete = async ({ url, type, data, params, headers = {}, config
   return response
 }
 
+// Restore Model by ID /collection/{id}/restore
+// Restore Collection by selected Ids /collection/selected/restore --params selected=[1,2,3]
+// Restore all Models in Collection /collection/all/restore
+export const restore = async ({ url, data, params = {}, headers = {}, config = {} }: RequestDataType) => {
+  const token = getCookie('authorization_token')
+  if (token) {
+    headers = { Authorization: `Bearer ${token}`, ...headers }
+  }
+  // const url = `/${collection}/${type}/restore` // Restore of collection
+  const response = await post({ url, data, params, headers, config })
+  return response
+}
 
 const params = {}
 const columns: GridEnrichedColDef[] = [
