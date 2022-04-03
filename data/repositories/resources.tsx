@@ -62,6 +62,16 @@ export const detail = async ({ url, params, headers = {}, config = {} }: Request
   return response
 }
 
+export const patch = async ({ url, data, params = {}, headers = {}, config = {} }: RequestDataType) => {
+  const token = getCookie('authorization_token')
+  if (token) {
+    headers = { Authorization: `Bearer ${token}`, ...headers }
+  }
+  // const url = `/${collection}/${id}`
+  const response = await patchRequest({ url, data, params, headers, config })
+  return response
+}
+
 
 const params = {}
 const columns: GridEnrichedColDef[] = [
