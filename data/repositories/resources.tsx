@@ -104,6 +104,19 @@ export const destroy = async ({ url, type, data, params, headers = {}, config = 
   return response
 }
 
+// Delete Model by ID /collection/{id}/delete
+// Delete Collection by selected Ids /collection/selected/delete --params ids=[1,2,3]
+// Delete all Models in Collection /collection/all/delete
+export const hardDelete = async ({ url, type, data, params, headers = {}, config = {} }: RequestDataType) => {
+  const token = getCookie('authorization_token')
+  if (token) {
+    headers = { Authorization: `Bearer ${token}`, ...headers }
+  }
+  // const url = `/${collection}/${type}/delete` // Permanent delete
+  const response = await deleteRequest({url, data, params, headers, ...config })
+  return response
+}
+
 
 const params = {}
 const columns: GridEnrichedColDef[] = [
