@@ -92,6 +92,18 @@ export const trashed = async ({ url, params, headers = {}, config = {} }: Reques
   return response
 }
 
+// Destroy Model by ID /collection/{id}
+// Destroy Collection by selected Ids /collection/selected --params selected=[1,2,3]
+// Destroy all Models in Collection /collection/all
+export const destroy = async ({ url, type, data, params, headers = {}, config = {} }: RequestDataType) => {
+  const token = getCookie('authorization_token')
+  if (token) {
+    headers = { Authorization: `Bearer ${token}`, ...headers }
+  }
+  const response = await deleteRequest({url, data, params, headers, ...config })
+  return response
+}
+
 
 const params = {}
 const columns: GridEnrichedColDef[] = [
