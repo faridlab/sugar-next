@@ -10,6 +10,29 @@ import SecurityIcon from '@mui/icons-material/Security'
 import FileCopyIcon from '@mui/icons-material/FileCopy'
 import PageviewIcon from '@mui/icons-material/Pageview'
 
+import { getCookie } from 'cookies-next'
+
+import {
+  get,
+  post,
+  update as updateRequest,
+  patch as patchRequest,
+  del as deleteRequest,
+} from '@device/repositories/apiRequest'
+
+import { RequestType, RequestDataType } from '@device/utils/axios'
+
+export const fetch = async ({ url, params, headers = {}, config = {} }: RequestType) => {
+  const token = getCookie('authorization_token')
+  if (token) {
+    headers = { Authorization: `Bearer ${token}`, ...headers }
+  }
+  // const url = `/${collection}`
+  const response = await get({ url, params, headers, config})
+  return response
+}
+
+
 const params = {}
 const columns: GridEnrichedColDef[] = [
   // ...
