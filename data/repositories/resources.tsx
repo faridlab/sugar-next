@@ -32,6 +32,16 @@ export const fetch = async ({ url, params, headers = {}, config = {} }: RequestT
   return response
 }
 
+export const create = async ({ url, data, params = {}, headers = {}, config = {} }: RequestDataType) => {
+  const token = getCookie('authorization_token')
+  if (token) {
+    headers = { Authorization: `Bearer ${token}`, ...headers }
+  }
+  // const url = `/${collection}`
+  const response = await post({ url, data, params, headers, config })
+  return response
+}
+
 
 const params = {}
 const columns: GridEnrichedColDef[] = [
