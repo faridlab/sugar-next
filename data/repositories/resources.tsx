@@ -72,6 +72,16 @@ export const patch = async ({ url, data, params = {}, headers = {}, config = {} 
   return response
 }
 
+export const trash = async ({ url, params, headers = {}, config = {} }: RequestType) => {
+  const token = getCookie('authorization_token')
+  if (token) {
+    headers = { Authorization: `Bearer ${token}`, ...headers }
+  }
+  // const url = `/${collection}/trash` // Trash of collection
+  const response = await get({ url, params, headers, config})
+  return response
+}
+
 
 const params = {}
 const columns: GridEnrichedColDef[] = [
