@@ -1,5 +1,5 @@
 export default interface Resources {
-  id?: string | number // NOTE: it will be defined when data fetched
+  id?: string | number | null // NOTE: it will be defined when data fetched
 
   created_at?: string | null // TODO: should has datetime string pattern type | interface
   updated_at?: string | null // TODO: should has datetime string pattern type | interface
