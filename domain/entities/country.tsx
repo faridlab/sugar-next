@@ -3,9 +3,9 @@ import Province from "@domain/entities/province"
 import City from "@domain/entities/city"
 
 export default interface Country extends Resources {
-  isocode: string
-  name: string
-  phonecode: number
+  isocode: string | null
+  name: string | null
+  phonecode: number | null
 
   provinces?: Province[]
   cities?: City[]
