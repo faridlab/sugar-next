@@ -14,6 +14,8 @@ import Head from 'next/head'
 import Layout from '@app/layouts/layout'
 import { NextPageWithLayout } from '@app/utils/pageTypes'
 
+import * as dataRepositories from '@data/repositories'
+
 import {
   useAppDispatch,
   useAppSelector,
@@ -100,7 +102,7 @@ const CollectionPage: NextPageWithLayout = () => {
   const parameter = {
     page: 1,
     limit: 10,
-    // relationship: ['country', 'province']
+    relationship: ['province']
   }
 
   const [ params, setParams ] = useState(parameter)
@@ -126,9 +128,17 @@ const CollectionPage: NextPageWithLayout = () => {
 
   useEffect(() => {
     if(!router.isReady) return
-    onPagerequest()
+    const { resources } = dataRepositories // as default
+    let cols = dataRepositories[collection]?.columns || resources.columns
+    console.log(cols)
+    // console.log(resources)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ router.isReady ])
+
+  useEffect(() => {
+    onPagerequest()
+    console.log(1111)
+  }, [])
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const open = Boolean(anchorEl)

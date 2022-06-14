@@ -14,14 +14,14 @@ import {
 } from './actions'
 
 export type InitState = {
-  data: Object | Array<any> | unknown
-  response: Object | any
-  pending: boolean
+  data: Record<string, any> | Record<string, any>[] | Object | null,
+  response: Object | any,
+  pending: boolean,
   error: boolean
 }
 
 const initialState: InitState = {
-  data: null,
+  data: [],
   response: {},
   pending: false,
   error: false,
