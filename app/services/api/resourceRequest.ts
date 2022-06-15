@@ -6,7 +6,7 @@ export const resourceApi = createApi({
   reducerPath: 'resourceApi',
   baseQuery: fetchBaseQuery({ baseUrl: 'https://pokeapi.co/api/v2/' }),
   endpoints: (builder) => ({
-    fetch: builder.query({
+    getPokemonByName: builder.query({
       query: (name) => `pokemon/${name}`,
     }),
   }),
@@ -14,4 +14,4 @@ export const resourceApi = createApi({
 
 // Export hooks for usage in functional components, which are
 // auto-generated based on the defined endpoints
-export const { useGetPokemonByNameQuery } = resourceApi
+export const { useFetchQuery } = resourceApi
