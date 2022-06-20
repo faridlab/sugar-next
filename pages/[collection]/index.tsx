@@ -31,78 +31,17 @@ import {
 import { Box, Breadcrumbs, Button, IconButton, Stack, Typography } from '@mui/material'
 
 import { DatagridPresenter } from '@app/components/presenter'
-import { Params } from '@app/components/presenter/datagrid'
-import { GridActionsCellItem, GridEnrichedColDef, GridRowParams, GridValueGetterParams } from '@mui/x-data-grid'
-import DeleteIcon from '@mui/icons-material/Delete'
-import SecurityIcon from '@mui/icons-material/Security'
-import FileCopyIcon from '@mui/icons-material/FileCopy'
-
-const columns: GridEnrichedColDef[] = [
-  {
-    field: 'country',
-    headerName: 'Country',
-    editable: false,
-    valueGetter: (params: GridValueGetterParams) =>
-      `${params.row.country.name || ''}`,
-  },
-  {
-    field: 'province',
-    headerName: 'Province',
-    editable: false,
-    valueGetter: (params: GridValueGetterParams) =>
-      `${params.row.province.name || ''}`,
-  },
-  {
-    field: 'city',
-    headerName: 'City',
-    editable: true,
-    flex: 1,
-    valueGetter: (params: GridValueGetterParams) =>
-      `${params.row.name || ''}`,
-  },
-
-  // NOTE: actions will be always columns to be added
-  {
-    field: 'actions',
-    type: 'actions',
-    width: 80,
-    getActions: (params: GridRowParams) => [
-      <GridActionsCellItem
-        key={0}
-        icon={<PageviewIcon sx={{ fontSize: 26 }} />}
-        label="View"
-      />,
-      <GridActionsCellItem
-        key={1}
-        icon={<DeleteIcon />}
-        label="Delete"
-        showInMenu
-      />,
-      <GridActionsCellItem
-        key={2}
-        icon={<SecurityIcon />}
-        label="Toggle Admin"
-        showInMenu
-      />,
-      <GridActionsCellItem
-        key={3}
-        icon={<FileCopyIcon />}
-        label="Duplicate User"
-        showInMenu
-      />,
-    ],
-  },
-]
+import { GridEnrichedColDef, GridRowParams } from '@mui/x-data-grid'
 
 const CollectionPage: NextPageWithLayout = () => {
   const router = useRouter()
   const { collection } = router.query
   const url = `/${collection}`
+  const [ columns, setColumns ] = useState<GridEnrichedColDef[]>([])
 
   const parameter = {
     page: 1,
     limit: 10,
-    relationship: ['province']
   }
 
   const [ params, setParams ] = useState(parameter)
@@ -129,15 +68,14 @@ const CollectionPage: NextPageWithLayout = () => {
   useEffect(() => {
     if(!router.isReady) return
     const { resources } = dataRepositories // as default
-    let cols = dataRepositories[collection]?.columns || resources.columns
-    console.log(cols)
-    // console.log(resources)
+    const columns = dataRepositories[collection]?.columns || resources.columns
+    setColumns(columns)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ router.isReady ])
 
   useEffect(() => {
     onPagerequest()
-    console.log(1111)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
