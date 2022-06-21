@@ -6,14 +6,14 @@ const api = axios.create({
 })
 
 export type RequestType = {
-  url: string
-  params?: Object
-  headers?: AxiosRequestHeaders
-  config?: AxiosRequestConfig
+  url: string,
+  params?: Object,
+  headers?: AxiosRequestHeaders,
+  config?: AxiosRequestConfig,
 }
 
 export type RequestDataType = RequestType & {
-  type?: number | string
+  type?: number | string,
   data: Record<string, any>[] | Record<string, any>
 }
 
