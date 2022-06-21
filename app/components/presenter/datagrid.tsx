@@ -2,12 +2,9 @@ import { FunctionComponent, useEffect, useState } from 'react'
 import {
   DataGrid,
   GridApiRef,
-  GridCallbackDetails,
   GridEnrichedColDef,
   GridPinnedColumns,
-  GridRowParams,
-  GridToolbarContainer,
-  MuiEvent
+  GridToolbarContainer
 } from '@mui/x-data-grid'
 import AddIcon from '@mui/icons-material/Add'
 import { Button } from '@mui/material'
@@ -47,21 +44,22 @@ const pinnedColumns: GridPinnedColumns = {
 }
 
 export type Params = {
-  page: number
-  limit: number
-  // [key: string]: Object | number | string | Record<string, any>[] | Function
+  page: number;
+  limit: number;
+  [key: string]: Object | number | string | Record<string, any> | Record<string, any>[] | Function;
 }
 
 type PropsType = {
-  params?: Params
-  onRequestData: Function,
-  onRowClick: Function,
-  rows: Record<string, any>[] | Record<string, any>,
-  columns: GridEnrichedColDef[]
+  params: Params;
+  onPaginationChanged: Function;
+  onRowClick: Function;
+  rows: Record<string, any>[] | Record<string, any>;
+  columns: GridEnrichedColDef[];
+  isLoading: boolean;
 }
 
 const DatagridPresenter: FunctionComponent<PropsType> = (props: PropsType) => {
-  const { params, onRequestData, onRowClick, rows, columns} = props
+  const { params, isLoading, onPaginationChanged, onRowClick, rows, columns} = props
   const { page, limit } = params
   const [currentPage, setCurrentPage] = useState<number>(page)
   const [pageSize, setPageSize] = useState<number>(limit)
@@ -71,13 +69,14 @@ const DatagridPresenter: FunctionComponent<PropsType> = (props: PropsType) => {
       page: currentPage + 1,
       limit: pageSize
     }
-    onRequestData(params)
+    onPaginationChanged(params)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentPage, pageSize])
 
   return(
     <div style={{ width: '100%' }}>
       <DataGrid
+        loading={isLoading}
         autoHeight={true}
         rows={rows}
         columns={columns}
