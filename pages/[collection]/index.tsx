@@ -3,7 +3,6 @@ import { useRouter } from 'next/router'
 
 import AddIcon from '@mui/icons-material/Add'
 import HomeIcon from '@mui/icons-material/Home'
-import PageviewIcon from '@mui/icons-material/Pageview'
 
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
@@ -16,49 +15,33 @@ import { NextPageWithLayout } from '@app/utils/pageTypes'
 
 import * as dataRepositories from '@data/repositories'
 
-import {
-  useAppDispatch,
-  useAppSelector,
-} from '@app/hooks'
+import { useFetchQuery } from '@app/services/api/apiRequest'
 
-import {
-  fetch,
-} from '@app/stores/resources'
-
-import {
-  selectResource
-} from '@app/stores/resources'
 import { Box, Breadcrumbs, Button, IconButton, Stack, Typography } from '@mui/material'
 
 import { DatagridPresenter } from '@app/components/presenter'
 import { GridEnrichedColDef, GridRowParams } from '@mui/x-data-grid'
+
+import { Params } from '@component/presenter/datagrid'
 
 const CollectionPage: NextPageWithLayout = () => {
   const router = useRouter()
   const { collection } = router.query
   const url = `/${collection}`
   const [ columns, setColumns ] = useState<GridEnrichedColDef[]>([])
+  const [ rows, setRows ] = useState([])
 
-  const parameter = {
+  const parameter: Params = {
     page: 1,
     limit: 10,
   }
-
   const [ params, setParams ] = useState(parameter)
 
-  const dispatch = useAppDispatch()
-  const {
-    data,
-    // response,
-    // pending,
-    // error,
-  } = useAppSelector(selectResource)
-
-  const onPagerequest = async ({ page = 1, limit = 25 } = {}) => {
-    if(!router.isReady) return
-    dispatch(fetch({url, params: { ...params, page, limit }}))
-    return false
-  }
+  const { data, error, isLoading } = useFetchQuery({ url, params })
+  useEffect(() => {
+    if(!data) return
+    setRows(data.data)
+  }, [data])
 
   const onRowClick = (params: GridRowParams) => {
     const { id } = params
@@ -69,14 +52,11 @@ const CollectionPage: NextPageWithLayout = () => {
     if(!router.isReady) return
     const { resources } = dataRepositories // as default
     const columns = dataRepositories[collection]?.columns || resources.columns
+    const parameters = dataRepositories[collection]?.params || resources.params
+    setParams({...params, ...parameters})
     setColumns(columns)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ router.isReady ])
-
-  useEffect(() => {
-    onPagerequest()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const open = Boolean(anchorEl)
@@ -86,6 +66,10 @@ const CollectionPage: NextPageWithLayout = () => {
 
   const handleClose = () => {
     setAnchorEl(null)
+  }
+
+  const onPaginationChanged = (parameters: Params) => {
+    setParams({...params, ...parameters})
   }
 
   return (
@@ -147,9 +131,10 @@ const CollectionPage: NextPageWithLayout = () => {
         </Stack>
         <DatagridPresenter
           columns={columns}
-          rows={data}
+          rows={rows}
           params={params}
-          onRequestData={onPagerequest}
+          isLoading={isLoading}
+          onPaginationChanged={onPaginationChanged}
           onRowClick={onRowClick}
         />
       </Box>
