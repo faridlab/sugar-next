@@ -18,7 +18,6 @@ export const apiRequest = createApi({
   endpoints: (builder) => ({
     fetch: builder.query({
       query: ({ url, params = {}, headers = {}, config = {} }: RequestType) => {
-        console.log('URL::', url)
         return {
           url,
           method: 'GET',
