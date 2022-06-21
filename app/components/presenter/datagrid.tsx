@@ -82,7 +82,7 @@ const DatagridPresenter: FunctionComponent<PropsType> = (props: PropsType) => {
         columns={columns}
         checkboxSelection
         disableSelectionOnClick
-
+        paginationMode="server"
         pageSize={pageSize}
         rowCount={200}
         onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
