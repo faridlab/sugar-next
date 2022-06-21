@@ -30,6 +30,7 @@ const CollectionPage: NextPageWithLayout = () => {
   const url = `/${collection}`
   const [ columns, setColumns ] = useState<GridEnrichedColDef[]>([])
   const [ rows, setRows ] = useState([])
+  const [ rowCount, setRowCount ] = useState(0)
 
   const parameter: Params = {
     page: 1,
@@ -40,8 +41,11 @@ const CollectionPage: NextPageWithLayout = () => {
   const { data, error, isLoading } = useFetchQuery({ url, params })
   useEffect(() => {
     if(!data) return
-    setRows(data.data)
-  }, [data])
+    const rows = data.data
+    setRows(rows)
+    const { meta } = data
+    setRowCount(meta.recordsTotal)
+  }, [data, isLoading])
 
   const onRowClick = (params: GridRowParams) => {
     const { id } = params
@@ -132,6 +136,7 @@ const CollectionPage: NextPageWithLayout = () => {
         <DatagridPresenter
           columns={columns}
           rows={rows}
+          rowCount={rowCount}
           params={params}
           isLoading={isLoading}
           onPaginationChanged={onPaginationChanged}

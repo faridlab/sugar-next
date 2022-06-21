@@ -52,6 +52,7 @@ export type Params = {
 type PropsType = {
   params: Params;
   onPaginationChanged: Function;
+  rowCount: number;
   onRowClick: Function;
   rows: Record<string, any>[] | Record<string, any>;
   columns: GridEnrichedColDef[];
@@ -59,7 +60,15 @@ type PropsType = {
 }
 
 const DatagridPresenter: FunctionComponent<PropsType> = (props: PropsType) => {
-  const { params, isLoading, onPaginationChanged, onRowClick, rows, columns} = props
+  const {
+    params,
+    isLoading,
+    onPaginationChanged,
+    onRowClick,
+    rows,
+    columns,
+    rowCount
+  } = props
   const { page, limit } = params
   const [currentPage, setCurrentPage] = useState<number>(page)
   const [pageSize, setPageSize] = useState<number>(limit)
@@ -84,7 +93,7 @@ const DatagridPresenter: FunctionComponent<PropsType> = (props: PropsType) => {
         disableSelectionOnClick
         paginationMode="server"
         pageSize={pageSize}
-        rowCount={200}
+        rowCount={rowCount}
         onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
         onRowClick={onRowClick}
         rowsPerPageOptions={[5, 10, 25, 50, 100]}
