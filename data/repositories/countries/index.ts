@@ -1,15 +1,10 @@
 import {
   data,
-  forms,
   validation
 } from '@domain/repositories/resources'
 
 import columns from '@data/repositories/countries/columns'
-columns.unshift({
-  field: 'name',
-  headerName: 'Country',
-  editable: false
-})
+import forms from '@data/repositories/countries/forms'
 
 const params = {}
 
