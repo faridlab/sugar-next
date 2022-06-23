@@ -54,8 +54,8 @@ const CollectionPage: NextPageWithLayout = () => {
   useEffect(() => {
     if(!router.isReady) return
     const { resources } = dataRepositories // as default
-    const columns = dataRepositories[collection]?.columns || resources.columns
-    const parameters = dataRepositories[collection]?.params || resources.params
+    const columns = (dataRepositories as any)[collection as string]?.columns || resources.columns
+    const parameters = (dataRepositories as any)[collection as string]?.params || resources.params
     setParams({...params, ...parameters})
     setColumns(columns)
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -146,12 +146,7 @@ const CollectionPage: NextPageWithLayout = () => {
   )
 }
 
-export default CollectionPage
-
 CollectionPage.getLayout = function getLayout(page: ReactElement) {
-  return (
-    <Layout>
-      {page}
-    </Layout>
-  )
+  return <Layout>{page}</Layout>
 }
+export default CollectionPage
