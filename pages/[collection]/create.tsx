@@ -13,14 +13,10 @@ import { NextPageWithLayout } from '../../app/utils/pageTypes'
 import FormGenerator from '@component/forms'
 import { FormLayoutProps } from '@component/forms'
 
-import { Box, Breadcrumbs, Button, IconButton, Stack, Typography } from '@mui/material'
+import { Box, Breadcrumbs, Button, Stack, Typography } from '@mui/material'
 
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
-import MenuIcon from '@mui/icons-material/Menu';
-import AddIcon from '@mui/icons-material/Add';
-import SearchIcon from '@mui/icons-material/Search';
-import MoreIcon from '@mui/icons-material/MoreVert';
 
 const CollectionCreatePage: NextPageWithLayout = () => {
   const router = useRouter()
