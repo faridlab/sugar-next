@@ -23,16 +23,19 @@ const CollectionCreatePage: NextPageWithLayout = () => {
   const { collection } = router.query
   const url = `/${collection}`
   const [ forms, setForms ] = useState<FormLayoutProps>([])
-  const [ value, setValue ] = useState(0)
+  const [ data, setData ] = useState<Record<string, any>>({})
 
   useEffect(() => {
     if(!router.isReady) return
     const { resources } = dataRepositories // as default
     const forms = (dataRepositories as any)[collection as string]?.forms || resources.forms
+    const data = (dataRepositories as any)[collection as string]?.data || resources.data
     setForms(forms)
+    setData(data)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ router.isReady ])
 
+  if(!router.isReady) return <>Loading...</>
   return (
     <>
       <Head>
@@ -57,6 +60,7 @@ const CollectionCreatePage: NextPageWithLayout = () => {
       </Box>
       <FormGenerator
         forms={forms}
+        data={data}
       />
       <AppBar position="fixed" color="inherit" sx={{ top: 'auto', bottom: 0, left: 240, width: 'calc(100vw - 240px)'}}>
         <Toolbar sx={{ display: 'flex', flexDirection: 'row'}}>
