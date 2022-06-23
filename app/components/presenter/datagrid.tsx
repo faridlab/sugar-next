@@ -70,8 +70,8 @@ const DatagridPresenter: FunctionComponent<PropsType> = (props: PropsType) => {
     rowCount
   } = props
   const { page, limit } = params
-  const [currentPage, setCurrentPage] = useState<number>(page)
-  const [pageSize, setPageSize] = useState<number>(limit)
+  const [currentPage, setCurrentPage] = useState<number>(0)
+  const [pageSize, setPageSize] = useState<number>(10)
 
   useEffect(() => {
     const params = {
@@ -101,6 +101,9 @@ const DatagridPresenter: FunctionComponent<PropsType> = (props: PropsType) => {
         onPageChange={(page) => setCurrentPage(page)}
         components={{
           Toolbar: DatagridToolbar,
+        }}
+        initialState={{
+          pinnedColumns,
         }}
       />
     </div>
