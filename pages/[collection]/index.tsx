@@ -32,11 +32,10 @@ const CollectionPage: NextPageWithLayout = () => {
   const [ rows, setRows ] = useState([])
   const [ rowCount, setRowCount ] = useState(0)
 
-  const parameter: Params = {
+  const [ params, setParams ] = useState({
     page: 1,
     limit: 10,
-  }
-  const [ params, setParams ] = useState(parameter)
+  })
 
   const { data, error, isLoading } = useFetchQuery({ url, params })
   useEffect(() => {
@@ -101,10 +100,10 @@ const CollectionPage: NextPageWithLayout = () => {
             >
               Core
             </Link> */}
-            <Typography color="text.primary">Countries</Typography>
+            <Typography color="text.primary">{collection}</Typography>
           </Breadcrumbs>
           <Stack spacing={2} direction="row">
-            <Button variant="text" startIcon={<AddIcon />}>New</Button>
+            <Button href={`/${collection}/create`} variant="text" startIcon={<AddIcon />}>New</Button>
             <IconButton
               aria-label="more"
               id="long-button"
