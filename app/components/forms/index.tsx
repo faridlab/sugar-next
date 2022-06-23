@@ -1,6 +1,7 @@
 import { FunctionComponent } from "react"
 import FormGenerator from "@component/forms/formGenerator"
 import TextField from '@component/forms/components/textField'
+import FormContext from '@component/forms/contexts'
 
 export interface FormPropsComponent {
   create?: FunctionComponent;
@@ -22,5 +23,7 @@ export type FormLayoutProps = Array<FormProps[]>
 
 export default FormGenerator
 export {
+  FormContext,
+
   TextField
 }
