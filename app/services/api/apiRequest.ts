@@ -26,7 +26,7 @@ export const apiRequest = createApi({
         }
       },
     }),
-    post: builder.query({
+    post: builder.mutation({
       query: ({ url, data, params = {}, headers = {}, config = {} }: RequestDataType) => {
         return {
           url,
@@ -37,7 +37,7 @@ export const apiRequest = createApi({
         }
       },
     }),
-    update: builder.query({
+    update: builder.mutation({
       query: ({ url, data, params = {}, headers = {}, config = {} }: RequestDataType) => {
         return {
           url,
@@ -48,7 +48,7 @@ export const apiRequest = createApi({
         }
       },
     }),
-    patch: builder.query({
+    patch: builder.mutation({
       query: ({ url, data, params = {}, headers = {}, config = {} }: RequestDataType) => {
         return {
           url,
@@ -59,7 +59,7 @@ export const apiRequest = createApi({
         }
       },
     }),
-    delete: builder.query({
+    delete: builder.mutation({
       query: ({ url, data, params = {}, headers = {}, config = {} }: RequestDataType) => {
         return {
           url,
@@ -75,8 +75,8 @@ export const apiRequest = createApi({
 
 export const {
   useFetchQuery,
-  usePostQuery,
-  useUpdateQuery,
-  usePatchQuery,
-  useDeleteQuery,
+  usePostMutation,
+  useUpdateMutation,
+  usePatchMutation,
+  useDeleteMutation,
 } = apiRequest
