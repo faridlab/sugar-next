@@ -5,6 +5,8 @@ interface DialogProps {
   isOpen: boolean;
   title: string;
   content: string;
+  onOk?: Function;
+  onClose?: Function;
 }
 
 const DialogComponent: FunctionComponent<DialogProps> = (props: DialogProps) => {
@@ -17,8 +19,17 @@ const DialogComponent: FunctionComponent<DialogProps> = (props: DialogProps) => 
   }, [props])
 
   const handleClose = () => {
+    const { onClose } = params
+    if(!onClose) return
+    onClose()
+  }
+
+  const handleOnOk = () => {
     const isOpen: boolean = false
     setParams({...params, isOpen})
+    const { onOk } = params
+    if(!onOk) return
+    onOk()
   }
 
   return (
@@ -38,7 +49,7 @@ const DialogComponent: FunctionComponent<DialogProps> = (props: DialogProps) => 
       </DialogContent>
       <DialogActions>
         {/* <Button onClick={handleClose}>Disagree</Button> */}
-        <Button onClick={handleClose} autoFocus>
+        <Button onClick={handleOnOk} autoFocus>
           Ok
         </Button>
       </DialogActions>

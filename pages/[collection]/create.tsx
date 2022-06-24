@@ -51,6 +51,15 @@ const CollectionCreatePage: NextPageWithLayout = () => {
         data: payloadData
       })
       const response = await createPost(payload).unwrap()
+      console.log(response)
+      const { status, message } = response
+      openDialog({
+        title: status,
+        content: message,
+        onOk: () => {
+          router.push(`/${collection}`)
+        }
+      })
     } catch (error) {
       const { status, message } = (error as any).data
       openDialog({
