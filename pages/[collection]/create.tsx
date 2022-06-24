@@ -25,6 +25,10 @@ const CollectionCreatePage: NextPageWithLayout = () => {
   const [ forms, setForms ] = useState<FormLayoutProps>([])
   const [ data, setData ] = useState<Record<string, any>>({})
 
+  const onDataChanged = (data: Record<string, any>) => {
+    setData(data)
+  }
+
   useEffect(() => {
     if(!router.isReady) return
     const { resources } = dataRepositories // as default
@@ -61,6 +65,7 @@ const CollectionCreatePage: NextPageWithLayout = () => {
       <FormGenerator
         forms={forms}
         data={data}
+        onDataChanged={onDataChanged}
       />
       <AppBar position="fixed" color="inherit" sx={{ top: 'auto', bottom: 0, left: 240, width: 'calc(100vw - 240px)'}}>
         <Toolbar sx={{ display: 'flex', flexDirection: 'row'}}>

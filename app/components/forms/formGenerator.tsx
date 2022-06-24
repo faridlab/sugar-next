@@ -8,6 +8,7 @@ import * as FormComponents from '@component/forms/components'
 export interface FormGeneratorProps {
   forms: FormLayoutProps;
   data: Record<string, any>;
+  onDataChanged: Function;
 }
 
 type LayoutProps = Pick<FormGeneratorProps, "forms">
@@ -37,11 +38,16 @@ const FormLayoutGenerator: FunctionComponent<LayoutProps> = (props: LayoutProps)
 }
 
 const FormGenerator: FunctionComponent<FormGeneratorProps> = (props: FormGeneratorProps) => {
-  const { forms } = props
+  const { forms, onDataChanged } = props
   const [ data, setData ] = useState(props.data)
   useEffect(() => {
     setData(props.data)
   }, [props.data])
+
+  useEffect(() => {
+    onDataChanged(data)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data])
 
   if (Object.keys(data).length === 0) return <></>
   return (
