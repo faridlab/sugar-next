@@ -5,8 +5,7 @@ import HomeIcon from '@mui/icons-material/Home'
 import Link from '@mui/material/Link'
 
 import * as dataRepositories from '@data/repositories'
-import { useUpdateMutation } from '@app/services/api/apiRequest'
-import { useFetchQuery } from '@app/services/api/apiRequest'
+import { useUpdateMutation, useFetchQuery, useDeleteMutation } from '@app/services/api/apiRequest'
 
 import Head from 'next/head'
 import Layout from '@app/layouts/layout'
@@ -32,6 +31,7 @@ const CollectionDetailPage: NextPageWithLayout = () => {
   const [ readOnly, setReadOnly ] = useState<boolean>(true)
   const response = useFetchQuery({ url })
   const [ updateData ] = useUpdateMutation()
+  const [ deleteData ] = useDeleteMutation()
   const { openDialog, DialogScreen} = useDialog()
 
   useEffect(() => {
@@ -53,6 +53,37 @@ const CollectionDetailPage: NextPageWithLayout = () => {
 
   const onToggleEdit = async () => {
     setReadOnly(!readOnly)
+  }
+
+  const onDelete = async () => {
+    try {
+      const isOkay = await openDialog({
+        title: 'Delete',
+        content: 'Are you sure want to delete?'
+      })
+      if(!isOkay) return
+
+      setPayload({
+        ...payload,
+        data: {}
+      })
+      const response = await deleteData(payload).unwrap()
+      const { status, message } = response
+      openDialog({
+        title: status,
+        content: message,
+        onOk: () => {
+          router.push(`/${collection}`)
+        }
+      })
+
+    } catch (error) {
+      const { status, message } = (error as any).data
+      openDialog({
+        title: status,
+        content: message
+      })
+    }
   }
 
   const onSubmit = async () => {
@@ -115,7 +146,8 @@ const CollectionDetailPage: NextPageWithLayout = () => {
             <Button onClick={onToggleEdit}>Cancel</Button>
           </Box>
           <Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'flex-end' }}>
-            <Button onClick={onSubmit}>Submit</Button>
+            <Button variant="text" color="error" onClick={onDelete} >Delete</Button>
+            <Button variant="contained" disableElevation onClick={onSubmit}>Submit</Button>
           </Box>
         </Toolbar>): (<Toolbar sx={{ display: 'flex', flexDirection: 'row'}}>
           <Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'flex-end' }}>
