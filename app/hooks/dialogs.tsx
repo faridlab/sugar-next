@@ -20,13 +20,19 @@ const DialogComponent: FunctionComponent<DialogProps> = (props: DialogProps) => 
 
   const handleClose = () => {
     const { onClose } = params
+    setParams({
+      isOpen: false,
+      title: 'Title',
+      content: 'Content'
+    })
     if(!onClose) return
-    onClose()
+    onClose(true) // TODO: adjust to the correct value, if prompt
   }
 
   const handleOnOk = () => {
     const isOpen: boolean = false
     setParams({...params, isOpen})
+    handleClose()
     const { onOk } = params
     if(!onOk) return
     onOk()
@@ -64,9 +70,14 @@ function useDialog() {
   }
   const [props, setProps] = useState<DialogProps>(params)
 
-  const openDialog = (params: Partial<DialogProps>) => {
+  const openDialog = async (params: Partial<DialogProps>) => {
     const isOpen: boolean = true
-    setProps({ ...props, ...params, isOpen })
+    return new Promise(function(resolve) {
+      const onClose = (value?: string | boolean) => {
+        resolve(value)
+      }
+      setProps({ ...props, ...params, isOpen, onClose })
+    });
   }
 
   const DialogScreen: FunctionComponent = () => {
