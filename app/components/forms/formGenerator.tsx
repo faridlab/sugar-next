@@ -48,9 +48,7 @@ const FormGenerator: FunctionComponent<FormGeneratorProps> = ({readOnly = false,
   // TODO: find another way to set readonly props to input
   for (const items of forms) {
     for (const form of items) {
-      form.props['InputProps'] = {
-        readOnly: readOnly,
-      }
+      form.props['disabled'] = readOnly
     }
   }
 
