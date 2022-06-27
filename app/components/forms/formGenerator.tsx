@@ -9,9 +9,10 @@ export interface FormGeneratorProps {
   forms: FormLayoutProps;
   data: Record<string, any>;
   onDataChanged: Function;
+  readOnly?: boolean;
 }
 
-type LayoutProps = Pick<FormGeneratorProps, "forms">
+type LayoutProps = Pick<FormGeneratorProps, 'forms' | 'readOnly'>
 
 const FormInputGenerator: FunctionComponent<FormProps> = (props: FormProps) => {
   const { type } = props
@@ -37,12 +38,21 @@ const FormLayoutGenerator: FunctionComponent<LayoutProps> = (props: LayoutProps)
   return (<>{layout}</>)
 }
 
-const FormGenerator: FunctionComponent<FormGeneratorProps> = (props: FormGeneratorProps) => {
+const FormGenerator: FunctionComponent<FormGeneratorProps> = ({readOnly = false, ...props}: FormGeneratorProps) => {
   const { forms, onDataChanged } = props
   const [ data, setData ] = useState(props.data)
   useEffect(() => {
     setData(props.data)
   }, [props.data])
+
+  // TODO: find another way to set readonly props to input
+  for (const items of forms) {
+    for (const form of items) {
+      form.props['InputProps'] = {
+        readOnly: readOnly,
+      }
+    }
+  }
 
   useEffect(() => {
     onDataChanged(data)
@@ -56,7 +66,10 @@ const FormGenerator: FunctionComponent<FormGeneratorProps> = (props: FormGenerat
         component="form"
         sx={{ flexGrow: 1, m: 2 }}
       >
-        <FormLayoutGenerator forms={forms} />
+        <FormLayoutGenerator
+          forms={forms}
+          readOnly={readOnly}
+        />
       </Box>
     </FormContext.Provider>
   )
