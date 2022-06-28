@@ -3,42 +3,80 @@ import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import CircularProgress from '@mui/material/CircularProgress';
 
-import { useFetchQuery } from '@app/services/api/apiRequest'
+import { useFetchQuery, useQueryMutation } from '@app/services/api/apiRequest'
 import { FunctionComponent, useContext, useEffect, useState } from 'react';
 import { FormProps, FormContext } from '@component/forms'
 
+type ValueType = Record<string, any> | null
+type InputValueType = string
+
 const ReferenceComponent: FunctionComponent<FormProps> = (formProps: FormProps) => {
   const { data, setData } = useContext(FormContext);
-  const { id, props } = formProps
+  const { id, props, reference } = formProps
   const { label } = props
 
   const [options, setOptions] = useState<Record<string, any>[]>([])
+  const [value, setValue] = useState<ValueType>(null)
+  const [inputValue, setInputValue] = useState<InputValueType>('')
+
   const { isLoading, ...queryResponse} = useFetchQuery({ url: '/countries' })
+  const [ fetchQuery ] = useQueryMutation()
 
-  const getOptionLabel = (option: Record<string, any>) => {
-    return option.label
+  const onFetchDataById = async (id: string | number) => {
+    try {
+      const { endpoint } = (reference as any)
+      const payload = {
+        url: `/${endpoint}/${id}`
+      }
+      const response = await fetchQuery(payload).unwrap()
+      const { data } = response
+      setOptions([data])
+      setValue(data)
+    } catch (error) {}
   }
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setData({ ...data, [id]: event.target.value})
-  }
+  useEffect(() => {
+    if(!data[id]) return
+    onFetchDataById(data[id])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data, id])
 
-  const properties = {
-    getOptionLabel,
-    ...props,
-  }
   useEffect(() => {
     if(!queryResponse.data) return
     const { data } = queryResponse.data
     setOptions(data)
   }, [queryResponse])
 
+  const getOptionLabel = (option: Record<string, any>) => {
+    return option.label
+  }
+
+  const handleChange = (event: React.SyntheticEvent, value: any) => {
+    setValue(value)
+    setData({ ...data, [id]: value.id})
+  }
+
+  const properties = {
+    getOptionLabel,
+    ...props,
+  }
+
+  const isOptionEqualToValue = (option: any, value: any) => {
+    return option.id == value.id
+  }
+
   return (
     <Autocomplete
       {...properties}
-      isOptionEqualToValue={(option, value) => option.title === value.title}
+      isOptionEqualToValue={isOptionEqualToValue}
       options={options}
       loading={isLoading}
+      value={value}
+      onChange={handleChange}
+      inputValue={inputValue}
+      onInputChange={(event, newInputValue) => {
+        setInputValue(newInputValue)
+      }}
       renderInput={(params) => (
         <TextField
           {...params}
