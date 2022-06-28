@@ -24,9 +24,13 @@ const forms: FormLayoutProps = [
         id: "form-reference-country",
         label: "Country",
         getOptionLabel: (option: Record<string, any>) => {
-          return option.name
+          return option.name || ''
         }
-      } // used for dynamic props component
+      }, // used for dynamic props component
+      reference: {
+        endpoint: 'countries',
+        params: {}
+      }
     },
   ],
 ]
