@@ -16,7 +16,8 @@ export interface FormProps {
   label?: string;
   type: string;
   component?: FunctionComponent<FormProps> | FormPropsComponent // FIXME: this type arise error on react run time, should i remove this type?
-  props: Record<string, any> // used for dynamic props component
+  props: Record<string, any>, // used for dynamic props component
+  reference?: Record<string, any>,
 }
 
 export type FormLayoutProps = Array<FormProps[]>
