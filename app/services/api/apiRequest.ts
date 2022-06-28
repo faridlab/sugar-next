@@ -26,6 +26,16 @@ export const apiRequest = createApi({
         }
       },
     }),
+    query: builder.mutation({
+      query: ({ url, params = {}, headers = {}, config = {} }: RequestType) => {
+        return {
+          url,
+          method: 'GET',
+          params,
+          headers
+        }
+      },
+    }),
     post: builder.mutation({
       query: ({ url, data, params = {}, headers = {}, config = {} }: RequestDataType) => {
         return {
@@ -75,6 +85,7 @@ export const apiRequest = createApi({
 
 export const {
   useFetchQuery,
+  useQueryMutation,
   usePostMutation,
   useUpdateMutation,
   usePatchMutation,
