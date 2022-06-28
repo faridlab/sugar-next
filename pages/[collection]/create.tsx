@@ -51,7 +51,6 @@ const CollectionCreatePage: NextPageWithLayout = () => {
         data: payloadData
       })
       const response = await createPost(payload).unwrap()
-      console.log(response)
       const { status, message } = response
       openDialog({
         title: status,
@@ -88,7 +87,7 @@ const CollectionCreatePage: NextPageWithLayout = () => {
             <Link underline="hover" color="inherit" href="/">
               <HomeIcon />
             </Link>
-            <Typography color="text.primary">Countries</Typography>
+            <Typography color="text.primary">{collection}</Typography>
           </Breadcrumbs>
         </Stack>
       </Box>
