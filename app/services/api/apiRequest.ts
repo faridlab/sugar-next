@@ -14,6 +14,20 @@ export const apiRequest = createApi({
       }
       return headers
     },
+    paramsSerializer: (params: Record<string, any>) => {
+      const searchParams = new URLSearchParams()
+      for (const key in params) {
+        const param = params[key]
+        if(Array.isArray(param)) {
+          for (const value of param) {
+            searchParams.append(`${key}[]`, value)
+          }
+          continue
+        }
+        searchParams.append(key, param)
+      }
+      return searchParams.toString()
+    },
   }),
   endpoints: (builder) => ({
     fetch: builder.query({
