@@ -3,9 +3,10 @@ import Country from "@domain/entities/country"
 import Province from "@domain/entities/province"
 
 export default interface City extends Resources {
-  name: string
-  country_id: number
-  province_id: number
-  country?: Country
-  province?: Province
+  id: string | number | null;
+  name: string | null;
+  country_id: number | null;
+  province_id: number | null;
+  country?: Country;
+  province?: Province;
 }
