@@ -29,7 +29,7 @@ const forms: FormLayoutProps = [
       }, // used for dynamic props component
       reference: {
         endpoint: 'countries',
-        params: {}
+        updateValues: ['province_id'], // update values to be null on value changed
       }
     },
     {
@@ -47,7 +47,7 @@ const forms: FormLayoutProps = [
       }, // used for dynamic props component
       reference: {
         endpoint: 'provinces',
-        params: {}
+        params: ['country_id'], // additional params on searching
       }
     },
   ],
