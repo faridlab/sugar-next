@@ -11,35 +11,54 @@ type ValueType = Record<string, any> | null
 type InputValueType = string
 
 const ReferenceComponent: FunctionComponent<FormProps> = (formProps: FormProps) => {
-  const { data, setData } = useContext(FormContext);
-  const { id, props, reference } = formProps
-  const { label } = props
+  const { data, setData } = useContext(FormContext)
 
   const [options, setOptions] = useState<Record<string, any>[]>([])
+  const [params, setParams] = useState<Record<string, any>>({})
   const [value, setValue] = useState<ValueType>(null)
   const [inputValue, setInputValue] = useState<InputValueType>('')
+  const [hasFetched, setHasFetched] = useState<boolean>(false)
 
-  const { isLoading, ...queryResponse} = useFetchQuery({ url: '/countries' })
+  const { id, props, reference } = formProps
+  const { endpoint } = (reference as any)
+  const { label } = props
+
+  const { isLoading, ...queryResponse} = useFetchQuery({ url: `/${endpoint}`, params })
   const [ fetchQuery ] = useQueryMutation()
+
+  let debounceTimeout: ReturnType<typeof setTimeout>
 
   const onFetchDataById = async (id: string | number) => {
     try {
-      const { endpoint } = (reference as any)
+      if(hasFetched) return
       const payload = {
         url: `/${endpoint}/${id}`
       }
       const response = await fetchQuery(payload).unwrap()
       const { data } = response
+
       setOptions([data])
       setValue(data)
+      setHasFetched(true)
     } catch (error) {}
+  }
+
+  const valueReset = (parameters: Record<string, any> = {}) => {
+    const { params } = (reference as any)
+    if(params !== undefined && Object.keys(params).length) {
+      for (const key of params) {
+        if(!data[key]) continue
+        parameters[key] = data[key]
+      }
+    }
+    setParams(parameters)
   }
 
   useEffect(() => {
     if(!data[id]) return
     onFetchDataById(data[id])
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data, id])
+  }, [data[id]])
 
   useEffect(() => {
     if(!queryResponse.data) return
@@ -53,8 +72,17 @@ const ReferenceComponent: FunctionComponent<FormProps> = (formProps: FormProps) 
 
   const handleChange = (event: React.SyntheticEvent, value: any) => {
     setValue(value)
-    setData({ ...data, [id]: value.id})
+    let dataValue = { ...data, [id]: value?.id}
+    const { updateValues } = (reference as any)
+    if(updateValues && Array.isArray(updateValues)){
+      for (const key of updateValues) {
+        dataValue = { ...dataValue, [key]: null}
+      }
+    }
+    setData(dataValue)
   }
+
+  const onOpen = () => valueReset()
 
   const properties = {
     getOptionLabel,
@@ -65,6 +93,17 @@ const ReferenceComponent: FunctionComponent<FormProps> = (formProps: FormProps) 
     return option.id == value.id
   }
 
+  const onInputChange = (event: React.SyntheticEvent, value: any) => {
+    clearTimeout(debounceTimeout)
+    debounceTimeout = setTimeout(() => {
+      const parameters: Record<string, any> = {}
+      if(value !== '') {
+        parameters['search'] = value
+      }
+      valueReset(parameters)
+    }, 1200)
+  }
+
   return (
     <Autocomplete
       {...properties}
@@ -73,10 +112,8 @@ const ReferenceComponent: FunctionComponent<FormProps> = (formProps: FormProps) 
       loading={isLoading}
       value={value}
       onChange={handleChange}
-      inputValue={inputValue}
-      onInputChange={(event, newInputValue) => {
-        setInputValue(newInputValue)
-      }}
+      onOpen={onOpen}
+      onInputChange={onInputChange}
       renderInput={(params) => (
         <TextField
           {...params}
@@ -93,7 +130,7 @@ const ReferenceComponent: FunctionComponent<FormProps> = (formProps: FormProps) 
         />
       )}
     />
-  );
+  )
 }
 
 export default ReferenceComponent
