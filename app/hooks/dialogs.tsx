@@ -1,5 +1,16 @@
-import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material";
-import { FunctionComponent, useEffect, useState } from "react";
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle
+} from "@mui/material";
+import {
+  FunctionComponent,
+  useEffect,
+  useState
+} from "react";
 
 interface DialogProps {
   isOpen: boolean;
