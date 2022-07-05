@@ -1,20 +1,24 @@
-import * as React from 'react';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import CssBaseline from '@mui/material/CssBaseline';
-import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import Link from '@mui/material/Link';
-import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import * as React from 'react'
+import Avatar from '@mui/material/Avatar'
+import Button from '@mui/material/Button'
+import CssBaseline from '@mui/material/CssBaseline'
+import TextField from '@mui/material/TextField'
+import FormControlLabel from '@mui/material/FormControlLabel'
+import Checkbox from '@mui/material/Checkbox'
+import Link from '@mui/material/Link'
+import Grid from '@mui/material/Grid'
+import Box from '@mui/material/Box'
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
+import Typography from '@mui/material/Typography'
+import Container from '@mui/material/Container'
+import { createTheme, ThemeProvider } from '@mui/material/styles'
+
+import { useRouter } from 'next/router'
 
 import type { NextPage } from 'next'
 import Head from 'next/head'
+
+import useUserAuthenticate from '@app/hooks/userAuthenticate'
 
 function Copyright(props: any) {
   return (
@@ -29,24 +33,56 @@ function Copyright(props: any) {
   );
 }
 
-const theme = createTheme();
+const theme = createTheme()
 
 const LoginPage: NextPage = () => {
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    // eslint-disable-next-line no-console
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
-  };
+  const router = useRouter()
+  const {
+    isLoggedIn,
+    userLogin,
+    checkUserToken
+  } = useUserAuthenticate()
+
+  React.useEffect(() => {
+    checkUserToken()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  React.useEffect(() => {
+    if(!isLoggedIn) return
+    router.push('/')
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isLoggedIn])
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    try {
+      event.preventDefault()
+      const data = new FormData(event.currentTarget)
+
+      let remember_me = false
+      if(data.get('remember_me')) {
+        remember_me = true
+      }
+
+      const payload = {
+        email: data.get('email'),
+        password: data.get('password'),
+        remember_me: remember_me,
+      }
+
+      const response = await userLogin(payload)
+      console.log(response)
+
+    } catch (error) {
+
+    }
+  }
 
   return (
     <>
       <Head>
         <title>Login</title>
-        <meta name="description" content="New Collection" />
+        <meta name="description" content="Login" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
@@ -67,7 +103,11 @@ const LoginPage: NextPage = () => {
             <Typography component="h1" variant="h5">
               Sign in
             </Typography>
-            <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+            <Box
+              component="form"
+              onSubmit={handleSubmit}
+              noValidate sx={{ mt: 1 }}
+            >
               <TextField
                 margin="normal"
                 required
@@ -89,7 +129,11 @@ const LoginPage: NextPage = () => {
                 autoComplete="current-password"
               />
               <FormControlLabel
-                control={<Checkbox value="remember" color="primary" />}
+                control={<Checkbox
+                            name="remember_me"
+                            value="true"
+                            color="primary"
+                          />}
                 label="Remember me"
               />
               <Button
