@@ -16,8 +16,8 @@ import { FormLayoutProps } from '@component/forms'
 
 import { Box, Breadcrumbs, Button, Stack, Typography } from '@mui/material'
 
-import AppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
+import AppBar from '@mui/material/AppBar'
+import Toolbar from '@mui/material/Toolbar'
 import { RequestDataType } from '@device/utils/axios'
 import { useDialog } from '@app/hooks'
 
