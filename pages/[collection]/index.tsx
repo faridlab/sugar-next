@@ -59,7 +59,7 @@ const CollectionPage: NextPageWithLayout = () => {
     setParams({...params, ...parameters})
     setColumns(columns)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [ router.isReady ])
+  }, [ router.isReady, collection ])
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const open = Boolean(anchorEl)
