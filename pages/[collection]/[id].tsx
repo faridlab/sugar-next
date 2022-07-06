@@ -111,7 +111,7 @@ const CollectionDetailPage: NextPageWithLayout = () => {
     }
   }
 
-  if(!router.isReady) return <>Loading...</>
+  if(!data) return <>Loading...</>
   return (
     <>
       <Head>
