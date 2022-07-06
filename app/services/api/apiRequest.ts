@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import type { RootState } from '@app/store'
 import { RequestType, RequestDataType } from '@device/utils/axios'
+import { getCookie } from 'cookies-next'
 
 const baseUrl = process.env.NEXT_PUBLIC_APIURL
 export const apiRequest = createApi({
@@ -8,7 +8,7 @@ export const apiRequest = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl,
     prepareHeaders: (headers, { getState }) => {
-      const token = (getState() as RootState).auth.authorization_token
+      const token = getCookie('authorization_token')
       if (token) {
         headers.set('authorization', `Bearer ${token}`)
       }
