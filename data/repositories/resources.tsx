@@ -137,13 +137,8 @@ const columns: GridEnrichedColDef[] = [
   {
     field: 'actions',
     type: 'actions',
-    width: 80,
+    width: 50,
     getActions: (params: GridRowParams) => [
-      <GridActionsCellItem
-        key={0}
-        icon={<PageviewIcon sx={{ fontSize: 26 }} />}
-        label="View"
-      />,
       <GridActionsCellItem
         key={1}
         icon={<DeleteIcon />}
