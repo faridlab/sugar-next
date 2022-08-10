@@ -2,7 +2,10 @@ import { FunctionComponent, useEffect, useState } from 'react'
 import {
   DataGrid,
   GridApiRef,
+  GridCellParams,
   GridEnrichedColDef,
+  GridEventListener,
+  GridEvents,
   GridPinnedColumns,
   GridToolbarContainer
 } from '@mui/x-data-grid'
@@ -53,7 +56,8 @@ type PropsType = {
   params: Params;
   onPaginationChanged: Function;
   rowCount: number;
-  onRowClick: Function;
+  onRowClick?: GridEventListener<GridEvents.rowClick>;
+  onCellClick?: GridEventListener<GridEvents.cellClick>;
   rows: Record<string, any>[] | Record<string, any>;
   columns: GridEnrichedColDef[];
   isLoading: boolean;
@@ -61,15 +65,14 @@ type PropsType = {
 
 const DatagridPresenter: FunctionComponent<PropsType> = (props: PropsType) => {
   const {
-    params,
     isLoading,
     onPaginationChanged,
     onRowClick,
+    onCellClick,
     rows,
     columns,
     rowCount
   } = props
-  const { page, limit } = params
   const [currentPage, setCurrentPage] = useState<number>(0)
   const [pageSize, setPageSize] = useState<number>(10)
 
@@ -95,15 +98,17 @@ const DatagridPresenter: FunctionComponent<PropsType> = (props: PropsType) => {
         pageSize={pageSize}
         rowCount={rowCount}
         onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
-        onRowClick={onRowClick}
+        onCellClick={onCellClick}
         rowsPerPageOptions={[5, 10, 25, 50, 100]}
         pagination
         onPageChange={(page) => setCurrentPage(page)}
         components={{
           Toolbar: DatagridToolbar,
         }}
-        initialState={{
-          pinnedColumns,
+        sx={{
+          '& .MuiDataGrid-cell:hover': {
+            cursor: 'pointer',
+          },
         }}
       />
     </div>
