@@ -2,7 +2,6 @@ import { FunctionComponent, useEffect, useState } from 'react'
 import {
   DataGrid,
   GridApiRef,
-  GridCellParams,
   GridEnrichedColDef,
   GridEventListener,
   GridEvents,
@@ -39,11 +38,6 @@ function DatagridToolbar(props: ToolbarProps) {
       </Button>
     </GridToolbarContainer>
   )
-}
-
-
-const pinnedColumns: GridPinnedColumns = {
-  right: ['actions']
 }
 
 export type Params = {
