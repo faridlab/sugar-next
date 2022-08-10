@@ -20,7 +20,7 @@ import { useFetchQuery } from '@app/services/api/apiRequest'
 import { Box, Breadcrumbs, Button, IconButton, Stack, Typography } from '@mui/material'
 
 import { DatagridPresenter } from '@app/components/presenter'
-import { GridEnrichedColDef, GridRowParams } from '@mui/x-data-grid'
+import { GridCellParams, GridEnrichedColDef, GridEventListener, GridEvents, GridRowParams } from '@mui/x-data-grid'
 
 import { Params } from '@component/presenter/datagrid'
 
@@ -46,8 +46,15 @@ const CollectionPage: NextPageWithLayout = () => {
     setRowCount(meta.recordsTotal)
   }, [data, isLoading])
 
-  const onRowClick = (params: GridRowParams) => {
-    const { id } = params
+  const onCellClick: GridEventListener<GridEvents.cellClick> = (params: GridCellParams) => {
+    const { isEditable, id, colDef } = params
+    const { type } = colDef
+
+    if(type === 'actions') return
+    if(isEditable) {
+      // TODO: doing editable handler
+      return
+    }
     router.push(`/${collection}/${id}`)
   }
 
@@ -139,7 +146,7 @@ const CollectionPage: NextPageWithLayout = () => {
           params={params}
           isLoading={isLoading}
           onPaginationChanged={onPaginationChanged}
-          onRowClick={onRowClick}
+          onCellClick={onCellClick}
         />
       </Box>
     </>
