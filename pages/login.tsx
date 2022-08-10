@@ -1,4 +1,3 @@
-import * as React from 'react'
 import Avatar from '@mui/material/Avatar'
 import Button from '@mui/material/Button'
 import CssBaseline from '@mui/material/CssBaseline'
@@ -19,6 +18,7 @@ import type { NextPage } from 'next'
 import Head from 'next/head'
 
 import useUserAuthenticate from '@app/hooks/userAuthenticate'
+import { useEffect, FormEvent } from 'react'
 
 function Copyright(props: any) {
   return (
@@ -43,18 +43,18 @@ const LoginPage: NextPage = () => {
     checkUserToken
   } = useUserAuthenticate()
 
-  React.useEffect(() => {
+  useEffect(() => {
     checkUserToken()
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  React.useEffect(() => {
+  useEffect(() => {
     if(!isLoggedIn) return
     router.push('/')
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoggedIn])
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     try {
       event.preventDefault()
       const data = new FormData(event.currentTarget)
@@ -70,12 +70,11 @@ const LoginPage: NextPage = () => {
         remember_me: remember_me,
       }
 
-      const response = await userLogin(payload)
-      console.log(response)
+      await userLogin(payload)
 
-    } catch (error) {
-
-    }
+      if(!isLoggedIn) return
+      router.push('/')
+    } catch (error) { }
   }
 
   return (
@@ -97,7 +96,7 @@ const LoginPage: NextPage = () => {
               alignItems: 'center',
             }}
           >
-            <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+            <Avatar sx={{ m: 1 }}>
               <LockOutlinedIcon />
             </Avatar>
             <Typography component="h1" variant="h5">
