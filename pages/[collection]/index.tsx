@@ -49,12 +49,8 @@ const CollectionPage: NextPageWithLayout = () => {
   const onCellClick: GridEventListener<GridEvents.cellClick> = (params: GridCellParams) => {
     const { isEditable, id, colDef } = params
     const { type } = colDef
-
     if(type === 'actions') return
-    if(isEditable) {
-      // TODO: doing editable handler
-      return
-    }
+    if(isEditable) return
     router.push(`/${collection}/${id}`)
   }
 
