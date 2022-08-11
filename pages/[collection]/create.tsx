@@ -5,7 +5,10 @@ import HomeIcon from '@mui/icons-material/Home'
 import Link from '@mui/material/Link'
 
 import * as dataRepositories from '@data/repositories'
-import { usePostMutation } from '@app/services/api/apiRequest'
+import {
+  usePostMutation,
+  useQueryMutation
+} from '@app/services/api/apiRequest'
 
 import Head from 'next/head'
 import Layout from '@app/layouts/layout'
@@ -23,11 +26,12 @@ import { useDialog } from '@app/hooks'
 
 const CollectionCreatePage: NextPageWithLayout = () => {
   const router = useRouter()
-  const { collection } = router.query
+  const { collection, duplicate_from_id } = router.query
   const url = `/${collection}`
   const [ forms, setForms ] = useState<FormLayoutProps>([])
   const [ data, setData ] = useState<Record<string, any>>({})
   const [ createPost, response ] = usePostMutation()
+  const [ fetchQuery ] = useQueryMutation()
   const [ payload, setPayload ] = useState<RequestDataType>({ url, data: {}})
 
   const { openDialog, DialogScreen} = useDialog()
@@ -36,12 +40,32 @@ const CollectionCreatePage: NextPageWithLayout = () => {
     if(!router.isReady) return
     const { resources } = dataRepositories // as default
     const forms = (dataRepositories as any)[collection as string]?.forms || resources.forms
-    const data = (dataRepositories as any)[collection as string]?.data || resources.data
+    const formData = (dataRepositories as any)[collection as string]?.data || resources.data
     setForms(forms)
-    setData(data)
+    setData(formData)
     setPayload({ ...payload, url: `/${collection}`})
+    if(duplicate_from_id) {
+      fetchDataById((duplicate_from_id as string))
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ router.isReady ])
+
+  const fetchDataById = async (id: string | number) => {
+    try {
+      const { resources } = dataRepositories // as default
+      const payload = {
+        url: `/${collection}/${id}`
+      }
+      const response = await fetchQuery(payload).unwrap()
+      const formData = (dataRepositories as any)[collection as string]?.data || resources.data
+      const [ _, ...keys] = Object.keys(formData)
+      const newData: Record<string, any> = {}
+      for (const key of keys) {
+        newData[key] = response.data[key]
+      }
+      setData({ ...newData })
+    } catch (error) {}
+  }
 
   const onSubmit = async () => {
     try {
