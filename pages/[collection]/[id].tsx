@@ -52,6 +52,10 @@ const CollectionDetailPage: NextPageWithLayout = () => {
     setData(data.data)
   }, [response])
 
+  const onBack = () => {
+    router.push(`/${collection}`)
+  }
+
   const onToggleEdit = async () => {
     setReadOnly(!readOnly)
   }
@@ -151,6 +155,9 @@ const CollectionDetailPage: NextPageWithLayout = () => {
             <Button variant="contained" disableElevation onClick={onSubmit}>Submit</Button>
           </Box>
         </Toolbar>): (<Toolbar sx={{ display: 'flex', flexDirection: 'row'}}>
+          <Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'flex-start' }}>
+            <Button onClick={onBack}>Back</Button>
+          </Box>
           <Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'flex-end' }}>
             <Button onClick={onToggleEdit}>Edit</Button>
           </Box>
