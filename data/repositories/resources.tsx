@@ -43,7 +43,7 @@ const columns: GridEnrichedColDef[] = [
         icon={<ContentCopyIcon />}
         label="Duplicate"
         showInMenu
-        onClick={() => Router.push(`/${Router.query.collection}/create?duplicate_from=${params.id}`)}
+        onClick={() => Router.push(`/${Router.query.collection}/create?duplicate_from_id=${params.id}`)}
       />,
       <GridActionsCellItem
         key={4}
