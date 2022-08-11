@@ -5,7 +5,6 @@ import {
   GridEnrichedColDef,
   GridEventListener,
   GridEvents,
-  GridPinnedColumns,
   GridToolbarContainer
 } from '@mui/x-data-grid'
 import AddIcon from '@mui/icons-material/Add'
