@@ -23,7 +23,7 @@ import { RequestDataType } from '@device/utils/axios'
 
 const CollectionDetailPage: NextPageWithLayout = () => {
   const router = useRouter()
-  const { collection, id } = router.query
+  const { collection, id, editable } = router.query
   const url = `/${collection}/${id}`
   const [ forms, setForms ] = useState<FormLayoutProps>([])
   const [ data, setData ] = useState<Record<string, any>>({})
@@ -42,6 +42,7 @@ const CollectionDetailPage: NextPageWithLayout = () => {
     setForms(forms)
     setData(data)
     setPayload({ ...payload, url: `/${collection}/${id}`})
+    if(editable) setReadOnly(false)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ router.isReady ])
 
