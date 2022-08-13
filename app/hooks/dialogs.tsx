@@ -5,14 +5,15 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle
-} from "@mui/material";
+} from "@mui/material"
+import { DialogProps } from '@mui/material/Dialog'
 import {
   FunctionComponent,
   useEffect,
   useState
 } from "react";
 
-interface DialogProps {
+interface DialogComponentProps {
   isOpen: boolean;
   title: string;
   content: string;
@@ -20,8 +21,10 @@ interface DialogProps {
   onClose?: Function;
 }
 
-const DialogComponent: FunctionComponent<DialogProps> = (props: DialogProps) => {
-  const [params, setParams] = useState<DialogProps>(props)
+const DialogComponent: FunctionComponent<DialogComponentProps> = (props: DialogComponentProps) => {
+  const [params, setParams] = useState<DialogComponentProps>(props)
+  const [fullWidth, setFullWidth] = useState(true)
+  const [maxWidth, setMaxWidth] = useState<DialogProps['maxWidth']>('xs')
   const { title, content } = params
 
   useEffect(() => {
@@ -31,11 +34,7 @@ const DialogComponent: FunctionComponent<DialogProps> = (props: DialogProps) => 
 
   const handleClose = () => {
     const { onClose } = params
-    setParams({
-      isOpen: false,
-      title: 'Title',
-      content: 'Content'
-    })
+    setParams({ ...params, isOpen: false })
     if(!onClose) return
     onClose(true) // TODO: adjust to the correct value, if prompt
   }
@@ -53,6 +52,8 @@ const DialogComponent: FunctionComponent<DialogProps> = (props: DialogProps) => 
     <Dialog
       open={params.isOpen}
       onClose={handleClose}
+      fullWidth={fullWidth}
+      maxWidth={maxWidth}
       aria-labelledby="alert-dialog-title"
       aria-describedby="alert-dialog-description"
     >
@@ -67,21 +68,21 @@ const DialogComponent: FunctionComponent<DialogProps> = (props: DialogProps) => 
       <DialogActions>
         {/* <Button onClick={handleClose}>Disagree</Button> */}
         <Button onClick={handleOnOk} autoFocus>
-          Ok
+          OK
         </Button>
       </DialogActions>
     </Dialog>)
 }
 
 function useDialog() {
-  const params: DialogProps = {
+  const params: DialogComponentProps = {
     isOpen: false,
     title: 'Title',
     content: 'Content'
   }
-  const [props, setProps] = useState<DialogProps>(params)
+  const [props, setProps] = useState<DialogComponentProps>(params)
 
-  const openDialog = async (params: Partial<DialogProps>) => {
+  const openDialog = async (params: Partial<DialogComponentProps>) => {
     const isOpen: boolean = true
     return new Promise(function(resolve) {
       const onClose = (value?: string | boolean) => {
