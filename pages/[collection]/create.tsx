@@ -64,7 +64,13 @@ const CollectionCreatePage: NextPageWithLayout = () => {
         newData[key] = response.data[key]
       }
       setData({ ...newData })
-    } catch (error) {}
+    } catch (error) {
+      const { status, message } = (error as any).data
+      openDialog({
+        title: status,
+        content: message
+      })
+    }
   }
 
   const onSubmit = async () => {
