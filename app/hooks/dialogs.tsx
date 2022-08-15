@@ -86,6 +86,7 @@ function useDialog() {
     const isOpen: boolean = true
     return new Promise(function(resolve) {
       const onClose = (value?: string | boolean) => {
+        setProps({ ...props, isOpen: false})
         resolve(value)
       }
       setProps({ ...props, ...params, isOpen, onClose })
