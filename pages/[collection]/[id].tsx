@@ -98,7 +98,10 @@ const CollectionDetailPage: NextPageWithLayout = () => {
         ...payload,
         data: payloadData
       })
-      const response = await updateData(payload).unwrap()
+      const response = await updateData({
+        url: payload.url,
+        data: payloadData
+      }).unwrap()
       const { status, message } = response
       openDialog({
         title: status,
