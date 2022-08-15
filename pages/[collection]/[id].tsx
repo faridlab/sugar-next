@@ -68,10 +68,6 @@ const CollectionDetailPage: NextPageWithLayout = () => {
       })
       if(!isOkay) return
 
-      setPayload({
-        ...payload,
-        data: {}
-      })
       const response = await deleteData(payload).unwrap()
       const { status, message } = response
       openDialog({
@@ -81,7 +77,6 @@ const CollectionDetailPage: NextPageWithLayout = () => {
           router.push(`/${collection}`)
         }
       })
-
     } catch (error) {
       const { status, message } = (error as any).data
       openDialog({
