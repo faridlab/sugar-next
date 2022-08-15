@@ -78,9 +78,13 @@ const CollectionCreatePage: NextPageWithLayout = () => {
       const {id, ...payloadData} = data;
       setPayload({
         ...payload,
-        data: payloadData
+        data
       })
-      const response = await createPost(payload).unwrap()
+
+      const response = await createPost({
+        url: payload.url,
+        data: payloadData
+      }).unwrap()
       const { status, message } = response
       openDialog({
         title: status,
