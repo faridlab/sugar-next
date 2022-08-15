@@ -32,17 +32,24 @@ const DialogComponent: FunctionComponent<DialogComponentProps> = (props: DialogC
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props])
 
-  const handleClose = () => {
+  const handleClose = (): void => {
+    setParams({ ...params, isOpen: false })
+  }
+
+  const handleCancel = () => {
     const { onClose } = params
     setParams({ ...params, isOpen: false })
     if(!onClose) return
-    onClose(true) // TODO: adjust to the correct value, if prompt
+    onClose(false)
   }
 
   const handleOnOk = () => {
+    const { onClose } = params
     const isOpen: boolean = false
     setParams({...params, isOpen})
-    handleClose()
+    if(onClose) {
+      onClose(true)
+    }
     const { onOk } = params
     if(!onOk) return
     onOk()
@@ -66,7 +73,7 @@ const DialogComponent: FunctionComponent<DialogComponentProps> = (props: DialogC
         </DialogContentText>
       </DialogContent>
       <DialogActions>
-        {/* <Button onClick={handleClose}>Disagree</Button> */}
+        <Button onClick={handleCancel}>Cancel</Button>
         <Button onClick={handleOnOk} autoFocus>
           OK
         </Button>
