@@ -13,24 +13,32 @@ import Head from 'next/head'
 import Layout from '@app/layouts/layout'
 import { NextPageWithLayout } from '@app/utils/pageTypes'
 
-import * as dataRepositories from '@data/repositories'
-
-import { useFetchQuery } from '@app/services/api/apiRequest'
-
 import { Box, Breadcrumbs, Button, IconButton, Stack, Typography } from '@mui/material'
 
-import { DatagridPresenter } from '@app/components/presenter'
-import { GridCellParams, GridEnrichedColDef, GridEventListener, GridEvents, GridRowParams } from '@mui/x-data-grid'
+import {
+  GridCellParams,
+  GridEnrichedColDef,
+  GridEventListener,
+  GridEvents,
+} from '@mui/x-data-grid'
 
+import { useDeleteMutation } from '@app/services/api/apiRequest'
+import * as dataRepositories from '@data/repositories'
+import { useFetchQuery } from '@app/services/api/apiRequest'
+import { DatagridPresenter } from '@app/components/presenter'
 import { Params } from '@component/presenter/datagrid'
+import { useDialog } from '@app/hooks'
+import { RequestDataType } from '@device/utils/axios'
 
 const CollectionPage: NextPageWithLayout = () => {
   const router = useRouter()
-  const { collection } = router.query
+  const { collection, delete_id } = router.query
   const url = `/${collection}`
   const [ columns, setColumns ] = useState<GridEnrichedColDef[]>([])
   const [ rows, setRows ] = useState([])
   const [ rowCount, setRowCount ] = useState(0)
+  const [ deleteData ] = useDeleteMutation()
+  const { openDialog, DialogScreen} = useDialog()
 
   const [ params, setParams ] = useState({
     page: 1,
@@ -63,6 +71,46 @@ const CollectionPage: NextPageWithLayout = () => {
     setColumns(columns)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ router.isReady, collection ])
+
+  useEffect(() => {
+    if(!delete_id) return
+    onDelete(delete_id as string)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [delete_id])
+
+  const onDelete = async (id: string) => {
+    try {
+      const isOkay = await openDialog({
+        title: 'Delete',
+        content: 'Are you sure want to delete?'
+      })
+      if(!isOkay) {
+        router.push(`/${collection}`)
+        return
+      }
+
+      const payload: RequestDataType = {
+        url: `/${collection}/${id}`,
+        data: {}
+      }
+
+      const response = await deleteData(payload).unwrap()
+      const { status, message } = response
+      openDialog({
+        title: status,
+        content: message,
+        onOk: () => {
+          router.push(`/${collection}`)
+        }
+      })
+    } catch (error) {
+      const { status, message } = (error as any).data
+      openDialog({
+        title: status,
+        content: message
+      })
+    }
+  }
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const open = Boolean(anchorEl)
@@ -145,6 +193,7 @@ const CollectionPage: NextPageWithLayout = () => {
           onCellClick={onCellClick}
         />
       </Box>
+      <DialogScreen />
     </>
   )
 }
