@@ -50,7 +50,7 @@ const columns: GridEnrichedColDef[] = [
         icon={<DeleteIcon />}
         label="Delete"
         showInMenu
-        onClick={() => alert(`Delete data ${params.id} not implemented yet.`)}
+        onClick={() => Router.push(`/${Router.query.collection}?delete_id=${params.id}`)}
       />,
 
     ],
