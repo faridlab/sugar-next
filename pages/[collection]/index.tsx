@@ -13,7 +13,14 @@ import Head from 'next/head'
 import Layout from '@app/layouts/layout'
 import { NextPageWithLayout } from '@app/utils/pageTypes'
 
-import { Box, Breadcrumbs, Button, IconButton, Stack, Typography } from '@mui/material'
+import {
+  Box,
+  Breadcrumbs,
+  Button,
+  IconButton,
+  Stack,
+  Typography
+} from '@mui/material'
 
 import {
   GridCellParams,
@@ -24,7 +31,7 @@ import {
 
 import { useDeleteMutation } from '@app/services/api/apiRequest'
 import * as dataRepositories from '@data/repositories'
-import { useFetchQuery } from '@app/services/api/apiRequest'
+import { useQueryMutation } from '@app/services/api/apiRequest'
 import { DatagridPresenter } from '@app/components/presenter'
 import { Params } from '@component/presenter/datagrid'
 import { useDialog } from '@app/hooks'
@@ -36,6 +43,7 @@ const CollectionPage: NextPageWithLayout = () => {
   const url = `/${collection}`
   const [ columns, setColumns ] = useState<GridEnrichedColDef[]>([])
   const [ rows, setRows ] = useState([])
+  const [ loading, setLoading ] = useState<boolean>(false)
   const [ rowCount, setRowCount ] = useState(0)
   const [ deleteData ] = useDeleteMutation()
   const { openDialog, DialogScreen} = useDialog()
@@ -45,14 +53,21 @@ const CollectionPage: NextPageWithLayout = () => {
     limit: 10,
   })
 
-  const { data, error, isLoading } = useFetchQuery({ url, params })
-  useEffect(() => {
-    if(!data) return
-    const rows = data.data
-    setRows(rows)
-    const { meta } = data
-    setRowCount(meta.recordsTotal)
-  }, [data, isLoading])
+  const [ fetchQuery ] = useQueryMutation()
+  const onFetchData = async (url: string, params: Record<string, any> = {}) => {
+    try {
+      setLoading(true)
+      const payload = {
+        url,
+        params
+      }
+      const response = await fetchQuery(payload).unwrap()
+      const { data, meta } = response
+      setRows(data)
+      setRowCount(meta.recordsTotal)
+      setLoading(false)
+    } catch (error) {}
+  }
 
   const onCellClick: GridEventListener<GridEvents.cellClick> = (params: GridCellParams) => {
     const { isEditable, id, colDef } = params
@@ -64,11 +79,13 @@ const CollectionPage: NextPageWithLayout = () => {
 
   useEffect(() => {
     if(!router.isReady) return
+    const { collection } = router.query
     const { resources } = dataRepositories // as default
     const columns = (dataRepositories as any)[collection as string]?.columns || resources.columns
     const parameters = (dataRepositories as any)[collection as string]?.params || resources.params
     setParams({...params, ...parameters})
     setColumns(columns)
+    onFetchData(`/${collection}`, {...params, ...parameters})
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ router.isReady, collection ])
 
@@ -101,6 +118,7 @@ const CollectionPage: NextPageWithLayout = () => {
         content: message,
         onOk: () => {
           router.push(`/${collection}`)
+          onFetchData(url, params)
         }
       })
     } catch (error) {
@@ -124,6 +142,8 @@ const CollectionPage: NextPageWithLayout = () => {
 
   const onPaginationChanged = (parameters: Params) => {
     setParams({...params, ...parameters})
+    if(!collection) return
+    onFetchData(url, {...params, ...parameters})
   }
 
   return (
@@ -188,7 +208,7 @@ const CollectionPage: NextPageWithLayout = () => {
           rows={rows}
           rowCount={rowCount}
           params={params}
-          isLoading={isLoading}
+          isLoading={loading}
           onPaginationChanged={onPaginationChanged}
           onCellClick={onCellClick}
         />
