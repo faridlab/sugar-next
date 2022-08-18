@@ -64,7 +64,7 @@ const CollectionPage: NextPageWithLayout = () => {
       const response = await fetchQuery(payload).unwrap()
       const { data, meta } = response
       setRows(data)
-      setRowCount(meta.recordsTotal)
+      setRowCount(meta.recordsFiltered)
       setLoading(false)
     } catch (error) {}
   }
