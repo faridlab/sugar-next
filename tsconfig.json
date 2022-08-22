@@ -27,6 +27,7 @@
       "@store/*": ["app/stores/*"],
       "@service/*": ["app/services/*"],
       "@data/*": ["data/*"],
+      "@i18n/*": ["data/i18n/*"],
       "@device/*": ["device/*"],
       "@domain/*": ["domain/*"]
     }
