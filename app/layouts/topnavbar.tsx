@@ -1,6 +1,4 @@
 import type { NextPage } from 'next'
-
-import * as React from 'react'
 import { styled, alpha } from '@mui/material/styles'
 import AppBar from '@mui/material/AppBar'
 import Box from '@mui/material/Box'
@@ -17,6 +15,8 @@ import AccountCircle from '@mui/icons-material/AccountCircle'
 import MailIcon from '@mui/icons-material/Mail'
 import NotificationsIcon from '@mui/icons-material/Notifications'
 import MoreIcon from '@mui/icons-material/MoreVert'
+import { useState, MouseEvent } from 'react'
+import TopbarMenu from '@app/components/layouts/topBarMenu'
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -61,14 +61,14 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 const TopnavComponent: NextPage = (props) => {
   // const { open } = props
 
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
-    React.useState<null | HTMLElement>(null)
+    useState<null | HTMLElement>(null)
 
   const isMenuOpen = Boolean(anchorEl)
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl)
 
-  const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
+  const handleProfileMenuOpen = (event: MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget)
   }
 
@@ -81,31 +81,10 @@ const TopnavComponent: NextPage = (props) => {
     handleMobileMenuClose()
   }
 
-  const handleMobileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
+  const handleMobileMenuOpen = (event: MouseEvent<HTMLElement>) => {
     setMobileMoreAnchorEl(event.currentTarget)
   }
-
   const menuId = 'primary-search-account-menu'
-  const renderMenu = (
-    <Menu
-      anchorEl={anchorEl}
-      anchorOrigin={{
-        vertical: 'top',
-        horizontal: 'right',
-      }}
-      id={menuId}
-      keepMounted
-      transformOrigin={{
-        vertical: 'top',
-        horizontal: 'right',
-      }}
-      open={isMenuOpen}
-      onClose={handleMenuClose}
-    >
-      <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-      <MenuItem onClick={handleMenuClose}>My account</MenuItem>
-    </Menu>
-  )
 
   const mobileMenuId = 'primary-search-account-menu-mobile'
   const renderMobileMenu = (
@@ -228,7 +207,7 @@ const TopnavComponent: NextPage = (props) => {
               size="large"
               edge="end"
               aria-label="account of current user"
-              aria-controls={menuId}
+              // aria-controls={menuId}
               aria-haspopup="true"
               onClick={handleProfileMenuOpen}
               color="inherit"
@@ -251,7 +230,11 @@ const TopnavComponent: NextPage = (props) => {
         </Toolbar>
       </AppBar>
       {renderMobileMenu}
-      {renderMenu}
+      <TopbarMenu
+        anchorEl={anchorEl}
+        isMenuOpen={isMenuOpen}
+        handleMenuClose={handleMenuClose}
+      />
     </>
   )
 }
