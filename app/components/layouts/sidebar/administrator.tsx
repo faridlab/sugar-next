@@ -11,8 +11,10 @@ import SettingsIcon from '@mui/icons-material/Settings'
 import ExpandLess from '@mui/icons-material/ExpandLess'
 import ExpandMore from '@mui/icons-material/ExpandMore'
 import { useState } from 'react'
+import { useRouter } from 'next/router'
 
 export default function AdministratorMenu() {
+  const router = useRouter()
   const [open, setOpen] = useState<Record<string, boolean>>({
     users: false,
     data: false,
@@ -23,6 +25,10 @@ export default function AdministratorMenu() {
   const handleClick = (key: string) => {
     const value: boolean = !open[key]
     setOpen({...open, [key]: value})
+  }
+
+  const linkTo = (path: string) => {
+    router.push(path)
   }
 
   return (
@@ -45,13 +51,13 @@ export default function AdministratorMenu() {
       </ListItemButton>
       <Collapse in={open['users']} timeout="auto" unmountOnExit>
         <List component="div" disablePadding>
-          <ListItemButton>
+          <ListItemButton onClick={() => linkTo('/users')}>
             <ListItemText inset primary="Users" />
           </ListItemButton>
-          <ListItemButton>
+          <ListItemButton onClick={() => linkTo('/roles')}>
             <ListItemText inset primary="Roles" />
           </ListItemButton>
-          <ListItemButton>
+          <ListItemButton onClick={() => linkTo('/permissions')}>
             <ListItemText inset primary="Permissions" />
           </ListItemButton>
         </List>
@@ -66,13 +72,13 @@ export default function AdministratorMenu() {
       </ListItemButton>
       <Collapse in={open['data']} timeout="auto" unmountOnExit>
         <List component="div" disablePadding>
-          <ListItemButton>
+          <ListItemButton onClick={() => linkTo('/contacts')}>
             <ListItemText inset primary="Contacts" />
           </ListItemButton>
-          <ListItemButton>
+          <ListItemButton onClick={() => linkTo('/addresses')}>
             <ListItemText inset primary="Addresses" />
           </ListItemButton>
-          <ListItemButton>
+          <ListItemButton onClick={() => linkTo('/files')}>
             <ListItemText inset primary="Files &amp; Media" />
           </ListItemButton>
         </List>
@@ -87,13 +93,13 @@ export default function AdministratorMenu() {
       </ListItemButton>
       <Collapse in={open['countries']} timeout="auto" unmountOnExit>
         <List component="div" disablePadding>
-          <ListItemButton>
+          <ListItemButton onClick={() => linkTo('/countries')}>
             <ListItemText inset primary="Countries" />
           </ListItemButton>
-          <ListItemButton>
+          <ListItemButton onClick={() => linkTo('/provinces')}>
             <ListItemText inset primary="Provinces" />
           </ListItemButton>
-          <ListItemButton>
+          <ListItemButton onClick={() => linkTo('/cities')}>
             <ListItemText inset primary="Cities" />
           </ListItemButton>
         </List>
@@ -108,7 +114,7 @@ export default function AdministratorMenu() {
       </ListItemButton>
       <Collapse in={open['settings']} timeout="auto" unmountOnExit>
         <List component="div" disablePadding>
-          <ListItemButton>
+          <ListItemButton onClick={() => linkTo('/sysparams')}>
             <ListItemText inset primary="Sysparams" />
           </ListItemButton>
         </List>
