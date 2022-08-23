@@ -15,6 +15,7 @@ import Divider from '@mui/material/Divider'
 import { useState } from 'react'
 
 import AdministratorMenu from '@component/layouts/sidebar/administrator'
+import MarketingsMenu from '@component/layouts/sidebar/marketings'
 
 const SidemenuComponent: NextPage = () => {
   const [open, setOpen] = useState(true)
@@ -59,27 +60,7 @@ const SidemenuComponent: NextPage = () => {
         </ListItem>
       </List>
       <Divider />
-      <List>
-        <ListSubheader>Saved reports</ListSubheader>
-        <ListItem button>
-          <ListItemIcon>
-            <AssignmentIcon />
-          </ListItemIcon>
-          <ListItemText primary="Current month" />
-        </ListItem>
-        <ListItem button>
-          <ListItemIcon>
-            <AssignmentIcon />
-          </ListItemIcon>
-          <ListItemText primary="Last quarter" />
-        </ListItem>
-        <ListItem button>
-          <ListItemIcon>
-            <AssignmentIcon />
-          </ListItemIcon>
-          <ListItemText primary="Year-end sale" />
-        </ListItem>
-      </List>
+      <MarketingsMenu />
       <Divider />
       <AdministratorMenu />
     </>
