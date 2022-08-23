@@ -3,7 +3,7 @@ import {
   useDispatch,
   useSelector,
 } from 'react-redux'
-import useDialog from '@app/hooks/dialogs'
+import useDialog from '@app/hooks/useDialogs'
 
 import type {
   AppDispatch,
