@@ -2,6 +2,9 @@ import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import { PersonAdd, Settings, Logout, Person } from '@mui/icons-material'
 import { Divider, ListItemIcon } from '@mui/material'
+import { useDialog } from '@app/hooks'
+import useUserAuthenticate from '@app/hooks/userAuthenticate'
+import { useRouter } from 'next/router'
 
 interface MenuProps {
   anchorEl: null | HTMLElement;
@@ -10,6 +13,12 @@ interface MenuProps {
 }
 
 export default function TopbarMenu(props: MenuProps) {
+  const { openDialog, DialogScreen} = useDialog()
+  const router = useRouter()
+  const {
+    logout
+  } = useUserAuthenticate()
+
   const {
     anchorEl,
     isMenuOpen,
@@ -17,7 +26,18 @@ export default function TopbarMenu(props: MenuProps) {
   } = props
   const menuId = 'primary-search-account-menu'
 
-  return (
+  const onLogout = async () => {
+    handleMenuClose()
+    const isOkay = await openDialog({
+      title: 'Logout',
+      content: 'Are you sure want to Logout?'
+    })
+    if(!isOkay) return
+    logout()
+    router.push('/login')
+  }
+
+  return (<>
     <Menu
       anchorEl={anchorEl}
       anchorOrigin={{
@@ -63,12 +83,13 @@ export default function TopbarMenu(props: MenuProps) {
         sx={{
           color: 'error.main'
         }}
-        onClick={handleMenuClose}>
+        onClick={onLogout}>
         <ListItemIcon>
           <Logout color='error' fontSize="small" />
         </ListItemIcon>
         Logout
       </MenuItem>
     </Menu>
-  )
+    <DialogScreen />
+    </>)
 }
