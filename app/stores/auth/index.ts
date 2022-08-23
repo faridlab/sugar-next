@@ -1,4 +1,12 @@
-import resourceReducer, { setUser, setToken, checkToken } from "./reducers"
+import resourceReducer,
+{
+  setUser,
+  setToken,
+  checkToken,
+  removeUser,
+  removeToken,
+  userLogout
+} from "./reducers"
 
 export {
   selectResource
@@ -7,7 +15,10 @@ export {
 export {
   setUser,
   setToken,
-  checkToken
+  checkToken,
+  removeUser,
+  removeToken,
+  userLogout
 }
 
 export default resourceReducer

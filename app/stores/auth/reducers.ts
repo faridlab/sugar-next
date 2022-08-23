@@ -1,5 +1,10 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { setCookies, getCookie, checkCookies } from 'cookies-next'
+import {
+  setCookies,
+  getCookie,
+  checkCookies,
+  removeCookies
+} from 'cookies-next'
 
 export type InitState = {
   user: Record<string, any> | null,
@@ -23,6 +28,21 @@ export const authSlice = createSlice({
       state.user = action.payload
       setCookies('user', action.payload)
     },
+    removeUser: (state) => {
+      state.user = null
+      removeCookies('user')
+    },
+    removeToken: (state) => {
+      state.authorization_token = null
+      removeCookies('authorization_token')
+    },
+    userLogout: (state) => {
+      // TODO: this should call dispatch removeUser and removeToken
+      state.user = null
+      state.authorization_token = null
+      removeCookies('user')
+      removeCookies('authorization_token')
+    },
     checkToken: (state) => {
       if(!checkCookies('authorization_token')) return
       const token = getCookie('authorization_token')
@@ -34,6 +54,13 @@ export const authSlice = createSlice({
 })
 
 // Action creators are generated for each case reducer function
-export const { setUser, setToken, checkToken } = authSlice.actions
+export const {
+  setUser,
+  setToken,
+  checkToken,
+  removeUser,
+  removeToken,
+  userLogout
+} = authSlice.actions
 
 export default authSlice.reducer
