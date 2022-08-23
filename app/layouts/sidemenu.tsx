@@ -1,21 +1,28 @@
 import type { NextPage } from 'next'
 
-import * as React from 'react';
-import ListItem from '@mui/material/ListItem';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import ListSubheader from '@mui/material/ListSubheader';
-import DashboardIcon from '@mui/icons-material/Dashboard';
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import PeopleIcon from '@mui/icons-material/People';
-import BarChartIcon from '@mui/icons-material/BarChart';
-import LayersIcon from '@mui/icons-material/Layers';
-import AssignmentIcon from '@mui/icons-material/Assignment';
+import ListItem from '@mui/material/ListItem'
+import ListItemIcon from '@mui/material/ListItemIcon'
+import ListItemText from '@mui/material/ListItemText'
+import ListSubheader from '@mui/material/ListSubheader'
+import DashboardIcon from '@mui/icons-material/Dashboard'
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
+import PeopleIcon from '@mui/icons-material/People'
+import BarChartIcon from '@mui/icons-material/BarChart'
+import LayersIcon from '@mui/icons-material/Layers'
+import AssignmentIcon from '@mui/icons-material/Assignment'
 import List from '@mui/material/List'
-import Typography from '@mui/material/Typography'
 import Divider from '@mui/material/Divider'
+import { useState } from 'react'
+
+import AdministratorMenu from '@component/layouts/sidebar/administrator'
 
 const SidemenuComponent: NextPage = () => {
+  const [open, setOpen] = useState(true)
+
+  const handleClick = () => {
+    setOpen(!open);
+  }
+
   return (
     <>
       <Divider />
@@ -53,7 +60,7 @@ const SidemenuComponent: NextPage = () => {
       </List>
       <Divider />
       <List>
-        <ListSubheader inset>Saved reports</ListSubheader>
+        <ListSubheader>Saved reports</ListSubheader>
         <ListItem button>
           <ListItemIcon>
             <AssignmentIcon />
@@ -73,6 +80,8 @@ const SidemenuComponent: NextPage = () => {
           <ListItemText primary="Year-end sale" />
         </ListItem>
       </List>
+      <Divider />
+      <AdministratorMenu />
     </>
   )
 }
