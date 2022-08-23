@@ -21,7 +21,8 @@ import {
 import {
   setUser,
   setToken,
-  checkToken
+  checkToken,
+  userLogout
 } from '@app/stores/auth'
 
 function useUserAuthenticate() {
@@ -59,11 +60,17 @@ function useUserAuthenticate() {
     setLoggedIn(true)
   }
 
+  const logout = async () => {
+    setLoggedIn(false)
+    dispatch(userLogout())
+  }
+
   return {
     user,
     authorization_token,
     isLoggedIn,
     userLogin,
+    logout,
     checkUserToken
   }
 }
