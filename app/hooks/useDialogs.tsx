@@ -19,9 +19,11 @@ interface DialogComponentProps {
   content: string;
   onOk?: Function;
   onClose?: Function;
+  onBackdropClose?(): void;
 }
 
 const DialogComponent: FunctionComponent<DialogComponentProps> = (props: DialogComponentProps) => {
+  const { onBackdropClose } = props
   const [params, setParams] = useState<DialogComponentProps>(props)
   const [fullWidth, setFullWidth] = useState(true)
   const [maxWidth, setMaxWidth] = useState<DialogProps['maxWidth']>('xs')
@@ -34,6 +36,9 @@ const DialogComponent: FunctionComponent<DialogComponentProps> = (props: DialogC
 
   const handleClose = (): void => {
     setParams({ ...params, isOpen: false })
+    if(onBackdropClose) {
+      onBackdropClose()
+    }
   }
 
   const handleCancel = () => {
@@ -96,7 +101,10 @@ function useDialog() {
         setProps({ ...props, isOpen: false})
         resolve(value)
       }
-      setProps({ ...props, ...params, isOpen, onClose })
+      const onBackdropClose = () => {
+        setProps({ ...props, isOpen: false})
+      }
+      setProps({ ...props, ...params, isOpen, onClose, onBackdropClose })
     });
   }
 
