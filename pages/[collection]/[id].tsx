@@ -143,7 +143,7 @@ const CollectionDetailPage: NextPageWithLayout = () => {
         onDataChanged={setData}
         readOnly={readOnly}
       />
-      <AppBar position="fixed" color="inherit" sx={{ top: 'auto', bottom: 0, left: 240, width: 'calc(100vw - 240px)'}}>
+      <AppBar position="fixed" color="inherit" sx={{ top: 'auto', bottom: 0, left: 280, width: 'calc(100vw - 280px)'}}>
         {(!readOnly)? (<Toolbar sx={{ display: 'flex', flexDirection: 'row'}}>
           <Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'flex-start' }}>
             <Button onClick={onToggleEdit}>Cancel</Button>
