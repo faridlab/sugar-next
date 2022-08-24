@@ -46,7 +46,7 @@ export default function AdministratorMenu() {
         <ListItemIcon>
           <PeopleAltIcon />
         </ListItemIcon>
-        <ListItemText primary="Users Management" />
+        <ListItemText primary="Users" />
         {open['users'] ? <ExpandLess /> : <ExpandMore />}
       </ListItemButton>
       <Collapse in={open['users']} timeout="auto" unmountOnExit>
