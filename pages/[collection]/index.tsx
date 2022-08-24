@@ -83,9 +83,11 @@ const CollectionPage: NextPageWithLayout = () => {
     const { resources } = dataRepositories // as default
     const columns = (dataRepositories as any)[collection as string]?.columns || resources.columns
     const parameters = (dataRepositories as any)[collection as string]?.params || resources.params
-    setParams({...params, ...parameters})
+    // setParams({...params, ...parameters})
+    setParams(parameters)
     setColumns(columns)
-    onFetchData(`/${collection}`, {...params, ...parameters})
+    setRows([])
+    onFetchData(`/${collection}`, parameters)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ router.isReady, collection ])
 
