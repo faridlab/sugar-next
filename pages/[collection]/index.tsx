@@ -44,6 +44,8 @@ const CollectionPage: NextPageWithLayout = () => {
   const [ columns, setColumns ] = useState<GridEnrichedColDef[]>([])
   const [ rows, setRows ] = useState([])
   const [ loading, setLoading ] = useState<boolean>(false)
+  // NOTE: i don't like this approach use ready state, please find ahother cool way
+  const [ ready, setReady ] = useState<boolean>(false)
   const [ rowCount, setRowCount ] = useState(0)
   const [ deleteData ] = useDeleteMutation()
   const { openDialog, DialogScreen} = useDialog()
@@ -56,6 +58,7 @@ const CollectionPage: NextPageWithLayout = () => {
   const [ fetchQuery ] = useQueryMutation()
   const onFetchData = async (url: string, params: Record<string, any> = {}) => {
     try {
+      if(loading) return
       setLoading(true)
       const payload = {
         url,
@@ -88,6 +91,7 @@ const CollectionPage: NextPageWithLayout = () => {
     setColumns(columns)
     setRows([])
     onFetchData(`/${collection}`, parameters)
+    setReady(true)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ router.isReady, collection ])
 
@@ -144,7 +148,7 @@ const CollectionPage: NextPageWithLayout = () => {
 
   const onPaginationChanged = (parameters: Params) => {
     setParams({...params, ...parameters})
-    if(!collection) return
+    if(!ready) return
     onFetchData(url, {...params, ...parameters})
   }
 
