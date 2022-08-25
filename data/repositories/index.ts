@@ -4,6 +4,7 @@ import * as provinces from '@data/repositories/provinces'
 import * as cities from '@data/repositories/cities'
 import * as users from '@data/repositories/users'
 import * as roles from '@data/repositories/roles'
+import * as permissions from '@data/repositories/permissions'
 
 export {
   resources,
@@ -11,5 +12,6 @@ export {
   provinces,
   cities,
   users,
-  roles
+  roles,
+  permissions,
 }
