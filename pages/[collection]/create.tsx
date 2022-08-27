@@ -102,6 +102,10 @@ const CollectionCreatePage: NextPageWithLayout = () => {
     }
   }
 
+  const onBack = () => {
+    router.push(`/${collection}`)
+  }
+
   if(!router.isReady) return <>Loading...</>
   return (
     <>
@@ -133,7 +137,7 @@ const CollectionCreatePage: NextPageWithLayout = () => {
       <AppBar position="fixed" color="inherit" sx={{ top: 'auto', bottom: 0, left: 280, width: 'calc(100vw - 280px)'}}>
         <Toolbar sx={{ display: 'flex', flexDirection: 'row'}}>
           <Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'flex-start' }}>
-            <Button href={`/${collection}`}>Cancel</Button>
+            <Button onClick={onBack}>Back</Button>
           </Box>
           <Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'flex-end' }}>
             <Button
