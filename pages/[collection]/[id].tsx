@@ -29,6 +29,7 @@ const CollectionDetailPage: NextPageWithLayout = () => {
   const [ data, setData ] = useState<Record<string, any>>({})
   const [ payload, setPayload ] = useState<RequestDataType>({ url, data: {}})
   const [ readOnly, setReadOnly ] = useState<boolean>(true)
+  const [ ready, setReady ] = useState<boolean>(false)
   const response = useFetchQuery({ url })
   const [ updateData ] = useUpdateMutation()
   const [ deleteData ] = useDeleteMutation()
@@ -43,13 +44,23 @@ const CollectionDetailPage: NextPageWithLayout = () => {
     setData(data)
     setPayload({ ...payload, url: `/${collection}/${id}`})
     if(editable) setReadOnly(false)
+    setReady(true)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ router.isReady ])
 
   useEffect(() => {
-    const { data } = response
+    if(!ready) return
+    const { data, isError, error } = response
+    if(isError) {
+      const { status, message } = (error as any).data
+      openDialog({
+        title: status,
+        content: message
+      })
+    }
     if(!data) return
     setData(data.data)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [response])
 
   const onBack = () => {
