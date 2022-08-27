@@ -73,7 +73,7 @@ const CollectionTrashPage: NextPageWithLayout = () => {
     const { type } = colDef
     if(type === 'actions') return
     if(isEditable) return
-    router.push(`/${collection}/${id}`)
+    router.push(`/${collection}/${id}/trashed`)
   }
 
   useEffect(() => {
