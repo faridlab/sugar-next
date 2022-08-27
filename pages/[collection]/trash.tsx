@@ -24,7 +24,7 @@ import {
   GridEvents,
 } from '@mui/x-data-grid'
 
-import { useDeleteMutation } from '@app/services/api/apiRequest'
+import { useDeleteMutation, usePostMutation } from '@app/services/api/apiRequest'
 import * as dataRepositories from '@data/repositories'
 import { useQueryMutation } from '@app/services/api/apiRequest'
 import { DatagridPresenter } from '@app/components/presenter'
@@ -43,6 +43,7 @@ const CollectionTrashPage: NextPageWithLayout = () => {
   const [ ready, setReady ] = useState<boolean>(false)
   const [ rowCount, setRowCount ] = useState(0)
   const [ deleteData ] = useDeleteMutation()
+  const [ restoreData ] = usePostMutation()
   const { openDialog, DialogScreen} = useDialog()
 
   const [ params, setParams ] = useState({
@@ -131,16 +132,6 @@ const CollectionTrashPage: NextPageWithLayout = () => {
     }
   }
 
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
-  const open = Boolean(anchorEl)
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget)
-  }
-
-  const handleClose = () => {
-    setAnchorEl(null)
-  }
-
   const onPaginationChanged = (parameters: Params) => {
     setParams({...params, ...parameters})
     if(!ready) return
@@ -149,6 +140,38 @@ const CollectionTrashPage: NextPageWithLayout = () => {
 
   const linkTo = (path: string): void => {
     router.push(path)
+  }
+
+  const onRestore = async () => {
+    try {
+      const isOkay = await openDialog({
+        title: 'Restore All',
+        content: 'Are you sure to restore all?'
+      })
+      if(!isOkay) return
+
+      const payload: RequestDataType = {
+        url: `/${collection}/all/restore`,
+        data: {}
+      }
+
+      const response = await restoreData(payload).unwrap()
+      const { status, message } = response
+      openDialog({
+        title: status,
+        content: message,
+        onOk: () => {
+          router.push(`/${collection}/trash`)
+          onFetchData(url, params)
+        }
+      })
+    } catch (error) {
+      const { status, message } = (error as any).data
+      openDialog({
+        title: status,
+        content: message
+      })
+    }
   }
 
   return (
@@ -179,8 +202,8 @@ const CollectionTrashPage: NextPageWithLayout = () => {
             <Typography color="text.primary">{collection}</Typography>
           </Breadcrumbs>
           <Stack spacing={2} direction="row">
-            <Button onClick={() => linkTo(`/${collection}/create`)} variant="text" color="error" startIcon={<DeleteForeverIcon />}>Empty</Button>
-            <Button onClick={() => linkTo(`/${collection}/create`)} variant="contained" color="success" startIcon={<RestoreFromTrashIcon />}>Restore</Button>
+            <Button variant="text" color="error" startIcon={<DeleteForeverIcon />}>Empty</Button>
+            <Button onClick={onRestore} variant="contained" color="success" startIcon={<RestoreFromTrashIcon />}>Restore</Button>
           </Stack>
         </Stack>
         <DatagridPresenter
