@@ -1,4 +1,7 @@
 # TASKS
+
+## BACKLOGS
+
 - [ ] APP
   - [ ] ???
 - [ ] DATA
@@ -18,33 +21,15 @@
   - [ ] Page(): `/reset-password/{token}` -> User reset password with new one
   - [ ] Page(): `/profile` -> User profile
   - [ ] Page(): `/settings` -> Settings page
-  - [ ] Page(): `/{collection}` -> List of all items in collection
-  - [ ] Page(): `/{collection}/create` -> Create new item in collection
-  - [ ] Page(): `/{collection}/{id}` -> Detail item by ID
-  - [ ] Page(): `/{collection}/{id}/edit` -> Edit item by ID
+  - [X] Page(): `/{collection}` -> List of all items in collection
+  - [X] Page(): `/{collection}/create` -> Create new item in collection
+  - [X] Page(): `/{collection}/{id}` -> Detail item by ID
+  - [X] Page(): `/{collection}/{id}/edit` -> Edit item by ID
   - [ ] Page(): `/{collection}/report` -> report page
   - [ ] Page(): `/{collection}/import` -> Import new data in collection
   - [ ] Page(): `/{collection}/export` -> Export data in collection
   - [ ] Page(): `/{collection}/trash` -> List of all trashed/deleted items in collection
   - [ ] Page(): `/{collection}/{id}/trashed` -> Detail trashed item by ID
-- [ ] ROUTE
-  - [X] Route(): `/` -> homepage
-  - [X] Route(): `/dashboard` -> dashboard page
-  - [X] Route(): `/login` -> User login
-  - [X] Route(): `/register` -> User registration
-  - [X] Route(): `/forgot-password` -> User forgot password
-  - [X] Route(): `/reset-password/{token}` -> User reset password with new one
-  - [X] Route(): `/profile` -> User profile
-  - [X] Route(): `/settings` -> Settings page
-  - [X] Route(): `/{collection}` -> List of all items in collection
-  - [X] Route(): `/{collection}/create` -> Create new item in collection
-  - [X] Route(): `/{collection}/{id}` -> Detail item by ID
-  - [X] Route(): `/{collection}/{id}/edit` -> Edit item by ID
-  - [X] Route(): `/{collection}/report` -> report page
-  - [X] Route(): `/{collection}/import` -> Import new data in collection
-  - [X] Route(): `/{collection}/export` -> Export data in collection
-  - [X] Route(): `/{collection}/trash` -> List of all trashed/deleted items in collection
-  - [X] Route(): `/{collection}/{id}/trashed` -> Detail trashed item by ID
 - [ ] CRUD
   - [ ] Resources(List): List data with datatables
   - [ ] Resources(Create): Create new data
@@ -57,6 +42,11 @@
   - [ ] Resources(Export): Export data from DB
   - [ ] Resources(Import): Import data to DB
 - [ ] Data Presenter
+  - [ ] Presenter(Datagrid): Present collection of data
+  - [ ] Presenter(Board): Present collection of data
+  - [ ] Presenter(Calendar): Present collection of data
+  - [ ] Presenter(List): Present collection of data
+  - [ ] Presenter(Timeline): Present collection of data
   - [ ] Presenter(Collection): Show collection data on Datatable
   - [ ] Presenter(Collection): Show collection data on Datatable and editable
   - [ ] Datatype(Text): Forminput type text (create|edit|show)
@@ -82,6 +72,25 @@
   - [ ] Datatype(Datetimepicker): Forminput type datetimepicker (create|edit|show)
   - [ ] Datatype(Timepicker): Forminput type Timepicker (create|edit|show)
 
-# INPROGRESS
+## IN PROGRESS
 
-# DONE
+## DONE
+
+- [X] ROUTE
+  - [X] Route(): `/` -> homepage
+  - [X] Route(): `/dashboard` -> dashboard page
+  - [X] Route(): `/login` -> User login
+  - [X] Route(): `/register` -> User registration
+  - [X] Route(): `/forgot-password` -> User forgot password
+  - [X] Route(): `/reset-password/{token}` -> User reset password with new one
+  - [X] Route(): `/profile` -> User profile
+  - [X] Route(): `/settings` -> Settings page
+  - [X] Route(): `/{collection}` -> List of all items in collection
+  - [X] Route(): `/{collection}/create` -> Create new item in collection
+  - [X] Route(): `/{collection}/{id}` -> Detail item by ID
+  - [X] Route(): `/{collection}/{id}/edit` -> Edit item by ID
+  - [X] Route(): `/{collection}/report` -> report page
+  - [X] Route(): `/{collection}/import` -> Import new data in collection
+  - [X] Route(): `/{collection}/export` -> Export data in collection
+  - [X] Route(): `/{collection}/trash` -> List of all trashed/deleted items in collection
+  - [X] Route(): `/{collection}/{id}/trashed` -> Detail trashed item by ID
