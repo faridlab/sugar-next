@@ -13,6 +13,8 @@ import Head from 'next/head'
 import Layout from '@app/layouts/layout'
 import { NextPageWithLayout } from '@app/utils/pageTypes'
 
+import gridActions from '@data/repositories/datagrid/actions'
+
 import {
   Box,
   Breadcrumbs,
@@ -87,6 +89,8 @@ const CollectionPage: NextPageWithLayout = () => {
     const columns = (dataRepositories as any)[collection as string]?.columns || resources.columns
     const parameters = (dataRepositories as any)[collection as string]?.params || resources.params
     // setParams({...params, ...parameters})
+    columns.push(gridActions)
+
     setParams(parameters)
     setColumns(columns)
     setRows([])
