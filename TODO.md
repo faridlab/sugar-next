@@ -28,7 +28,7 @@
   - [ ] Page(): `/{collection}/report` -> report page
   - [ ] Page(): `/{collection}/import` -> Import new data in collection
   - [ ] Page(): `/{collection}/export` -> Export data in collection
-  - [ ] Page(): `/{collection}/trash` -> List of all trashed/deleted items in collection
+  - [X] Page(): `/{collection}/trash` -> List of all trashed/deleted items in collection
   - [X] Page(): `/{collection}/{id}/trashed` -> Detail trashed item by ID
 - [ ] CRUD
   - [ ] Resources(List): List data with datatables
