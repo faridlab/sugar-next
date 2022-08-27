@@ -174,6 +174,38 @@ const CollectionTrashPage: NextPageWithLayout = () => {
     }
   }
 
+  const onEmpty = async () => {
+    try {
+      const isOkay = await openDialog({
+        title: 'Empty Trash',
+        content: 'Are you sure to empty trash?'
+      })
+      if(!isOkay) return
+
+      const payload: RequestDataType = {
+        url: `/${collection}/all/delete`,
+        data: {}
+      }
+
+      const response = await deleteData(payload).unwrap()
+      const { status, message } = response
+      openDialog({
+        title: status,
+        content: message,
+        onOk: () => {
+          router.push(`/${collection}/trash`)
+          onFetchData(url, params)
+        }
+      })
+    } catch (error) {
+      const { status, message } = (error as any).data
+      openDialog({
+        title: status,
+        content: message
+      })
+    }
+  }
+
   return (
     <>
       <Head>
@@ -202,7 +234,7 @@ const CollectionTrashPage: NextPageWithLayout = () => {
             <Typography color="text.primary">{collection}</Typography>
           </Breadcrumbs>
           <Stack spacing={2} direction="row">
-            <Button variant="text" color="error" startIcon={<DeleteForeverIcon />}>Empty</Button>
+            <Button onClick={onEmpty} variant="text" color="error" startIcon={<DeleteForeverIcon />}>Empty</Button>
             <Button onClick={onRestore} variant="contained" color="success" startIcon={<RestoreFromTrashIcon />}>Restore</Button>
           </Stack>
         </Stack>
