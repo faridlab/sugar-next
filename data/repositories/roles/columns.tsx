@@ -1,5 +1,4 @@
-import { GridEnrichedColDef, GridValueGetterParams } from "@mui/x-data-grid"
-import { columns as cols } from '@data/repositories/resources'
+import { GridEnrichedColDef } from "@mui/x-data-grid"
 
 const columns: GridEnrichedColDef[] = [
   {
@@ -15,7 +14,6 @@ const columns: GridEnrichedColDef[] = [
     width: 200,
     flex: 1,
   },
-  ...cols
 ]
 
 export default columns
