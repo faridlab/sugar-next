@@ -152,6 +152,10 @@ const CollectionPage: NextPageWithLayout = () => {
     onFetchData(url, {...params, ...parameters})
   }
 
+  const linkTo = (path: string): void => {
+    router.push(path)
+  }
+
   return (
     <>
       <Head>
@@ -180,7 +184,7 @@ const CollectionPage: NextPageWithLayout = () => {
             <Typography color="text.primary">{collection}</Typography>
           </Breadcrumbs>
           <Stack spacing={2} direction="row">
-            <Button href={`/${collection}/create`} variant="text" startIcon={<AddIcon />}>New</Button>
+            <Button onClick={() => linkTo(`/${collection}/create`)} variant="text" startIcon={<AddIcon />}>New</Button>
             <IconButton
               aria-label="more"
               id="long-button"
@@ -203,7 +207,7 @@ const CollectionPage: NextPageWithLayout = () => {
               <MenuItem>
                 Quick Add
               </MenuItem>
-              <MenuItem>
+              <MenuItem onClick={() => linkTo(`/${collection}/trash`)}>
                 <Typography color="error">Trash</Typography>
               </MenuItem>
             </Menu>
