@@ -138,10 +138,6 @@ const CollectionTrashPage: NextPageWithLayout = () => {
     onFetchData(url, {...params, ...parameters})
   }
 
-  const linkTo = (path: string): void => {
-    router.push(path)
-  }
-
   const onRestore = async () => {
     try {
       const isOkay = await openDialog({
