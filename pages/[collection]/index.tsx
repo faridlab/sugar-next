@@ -86,7 +86,7 @@ const CollectionPage: NextPageWithLayout = () => {
     if(!router.isReady) return
     const { collection } = router.query
     const { resources } = dataRepositories // as default
-    const columns = (dataRepositories as any)[collection as string]?.columns || resources.columns
+    const columns = (dataRepositories as any)[collection as string]?.columns || []
     const parameters = (dataRepositories as any)[collection as string]?.params || resources.params
     // setParams({...params, ...parameters})
     columns.push(gridActions)
