@@ -8,6 +8,7 @@ import Link from '@mui/material/Link'
 import Head from 'next/head'
 import Layout from '@app/layouts/layout'
 import { NextPageWithLayout } from '@app/utils/pageTypes'
+import gridActions from '@data/repositories/datagrid/trashActions'
 
 import {
   Box,
@@ -34,7 +35,7 @@ import { RequestDataType } from '@device/utils/axios'
 
 const CollectionTrashPage: NextPageWithLayout = () => {
   const router = useRouter()
-  const { collection, delete_id } = router.query
+  const { collection, delete_id, restore_id } = router.query
   const url = `/${collection}/trash`
   const [ columns, setColumns ] = useState<GridEnrichedColDef[]>([])
   const [ rows, setRows ] = useState([])
@@ -80,9 +81,11 @@ const CollectionTrashPage: NextPageWithLayout = () => {
     if(!router.isReady) return
     const { collection } = router.query
     const { resources } = dataRepositories // as default
-    const columns = (dataRepositories as any)[collection as string]?.columns || resources.columns
+    const columns = (dataRepositories as any)[collection as string]?.columns || []
     const parameters = (dataRepositories as any)[collection as string]?.params || resources.params
     // setParams({...params, ...parameters})
+    columns.push(gridActions)
+
     setParams(parameters)
     setColumns(columns)
     setRows([])
@@ -97,11 +100,17 @@ const CollectionTrashPage: NextPageWithLayout = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [delete_id])
 
+  useEffect(() => {
+    if(!restore_id) return
+    onRestoreData(restore_id as string)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [restore_id])
+
   const onDelete = async (id: string) => {
     try {
       const isOkay = await openDialog({
         title: 'Delete',
-        content: 'Are you sure want to delete?'
+        content: 'Are you sure want to delete forever?'
       })
       if(!isOkay) {
         router.push(`/${collection}/trash`)
@@ -109,7 +118,7 @@ const CollectionTrashPage: NextPageWithLayout = () => {
       }
 
       const payload: RequestDataType = {
-        url: `/${collection}/${id}`,
+        url: `/${collection}/${id}/delete`,
         data: {}
       }
 
@@ -138,13 +147,52 @@ const CollectionTrashPage: NextPageWithLayout = () => {
     onFetchData(url, {...params, ...parameters})
   }
 
+  const onRestoreData = async (id: string) => {
+    try {
+      const isOkay = await openDialog({
+        title: 'Restore',
+        content: 'Are you sure to restore?'
+      })
+      if(!isOkay) {
+        router.push(`/${collection}/trash`)
+        onFetchData(url, params)
+        return
+      }
+
+      const payload: RequestDataType = {
+        url: `/${collection}/${id}/restore`,
+        data: {}
+      }
+
+      const response = await restoreData(payload).unwrap()
+      const { status, message } = response
+      openDialog({
+        title: status,
+        content: message,
+        onOk: () => {
+          router.push(`/${collection}/trash`)
+          onFetchData(url, params)
+        }
+      })
+    } catch (error) {
+      const { status, message } = (error as any).data
+      openDialog({
+        title: status,
+        content: message
+      })
+    }
+  }
+
   const onRestore = async () => {
     try {
       const isOkay = await openDialog({
         title: 'Restore All',
         content: 'Are you sure to restore all?'
       })
-      if(!isOkay) return
+      if(!isOkay) {
+        router.push(`/${collection}/trash`)
+        return
+      }
 
       const payload: RequestDataType = {
         url: `/${collection}/all/restore`,
@@ -176,7 +224,10 @@ const CollectionTrashPage: NextPageWithLayout = () => {
         title: 'Empty Trash',
         content: 'Are you sure to empty trash?'
       })
-      if(!isOkay) return
+      if(!isOkay) {
+        router.push(`/${collection}/trash`)
+        return
+      }
 
       const payload: RequestDataType = {
         url: `/${collection}/all/delete`,
