@@ -1,6 +1,12 @@
 import { FunctionComponent } from "react"
 import FormGenerator from "@component/forms/formGenerator"
 import TextField from '@component/forms/components/textField'
+import Checkbox from '@component/forms/components/checkbox'
+import Radio from '@component/forms/components/radio'
+import Rating from '@component/forms/components/rating'
+import Switch from '@component/forms/components/switch'
+import Slider from '@component/forms/components/slider'
+import Select from '@component/forms/components/select'
 import FormContext from '@component/forms/contexts'
 
 export interface FormPropsComponent {
@@ -26,5 +32,11 @@ export default FormGenerator
 export {
   FormContext,
 
-  TextField
+  TextField,
+  Checkbox,
+  Radio,
+  Rating,
+  Switch,
+  Slider,
+  Select
 }
