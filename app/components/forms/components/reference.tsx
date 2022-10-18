@@ -107,6 +107,7 @@ const ReferenceComponent: FunctionComponent<FormProps> = (formProps: FormProps) 
   return (
     <Autocomplete
       {...properties}
+      name={id}
       isOptionEqualToValue={isOptionEqualToValue}
       options={options}
       loading={isLoading}

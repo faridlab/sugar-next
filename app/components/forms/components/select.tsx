@@ -37,7 +37,7 @@ const FormSelect: FunctionComponent<FormProps> = (formProps: FormProps) => {
     <FormControl component="fieldset" >
       <InputLabel shrink={true}>{label}</InputLabel>
       <Select
-        id={`form-select-${id}`}
+        name={id}
         label={label}
         value={data[id]}
         onChange={handleChange}

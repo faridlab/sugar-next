@@ -41,8 +41,7 @@ const FormRadio: FunctionComponent<FormProps> = (formProps: FormProps) => {
       <FormLabel component="legend">{label}</FormLabel>
       <RadioGroup
         row={properties.row}
-        aria-labelledby="demo-controlled-radio-buttons-group"
-        name="controlled-radio-buttons-group"
+        name={id}
         value={data[id]}
         onChange={handleChange}
       >

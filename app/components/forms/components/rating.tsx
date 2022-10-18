@@ -23,6 +23,7 @@ const FormRating: FunctionComponent<FormProps> = (formProps: FormProps) => {
       <FormLabel component="legend">{label}</FormLabel>
       <Rating
         {...properties}
+        name={id}
         value={data[id]}
         onChange={handleChange}
       />

@@ -9,6 +9,7 @@ export interface FormGeneratorProps {
   forms: FormLayoutProps;
   data: Record<string, any>;
   onDataChanged: Function;
+  onSubmit?: Function;
   readOnly?: boolean;
 }
 
@@ -39,7 +40,7 @@ const FormLayoutGenerator: FunctionComponent<LayoutProps> = (props: LayoutProps)
 }
 
 const FormGenerator: FunctionComponent<FormGeneratorProps> = ({readOnly = false, ...props}: FormGeneratorProps) => {
-  const { forms, onDataChanged } = props
+  const { forms, onDataChanged, onSubmit } = props
   const [ data, setData ] = useState(props.data)
   useEffect(() => {
     setData(props.data)
@@ -61,7 +62,9 @@ const FormGenerator: FunctionComponent<FormGeneratorProps> = ({readOnly = false,
   return (
     <FormContext.Provider value={{data, setData}}>
       <Box
+        id='form-generator'
         component="form"
+        onSubmit={onSubmit}
         sx={{ flexGrow: 1, m: 2 }}
       >
         <FormLayoutGenerator

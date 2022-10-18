@@ -23,6 +23,7 @@ const FormSlider: FunctionComponent<FormProps> = (formProps: FormProps) => {
       <FormLabel component="legend">{label}</FormLabel>
       <Slider
         {...properties}
+        name={id}
         value={data[id]}
         onChange={handleChange}
       />

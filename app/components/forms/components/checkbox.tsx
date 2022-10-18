@@ -52,7 +52,11 @@ const FormCheckbox: FunctionComponent<FormProps> = (formProps: FormProps) => {
   return (
     <FormControl component="fieldset">
       <FormLabel component="legend">{label}</FormLabel>
-      <FormGroup aria-label="position" row={properties.row} >
+      <FormGroup
+        aria-label="position"
+        row={properties.row}
+        name={id}
+      >
         {renderOptions()}
       </FormGroup>
     </FormControl>

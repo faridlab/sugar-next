@@ -19,9 +19,10 @@ const FormTextField: FunctionComponent<FormProps> = (formProps: FormProps) => {
   return (
     <TextField
       InputLabelProps={{ shrink: true }}
+      {...properties}
+      name={id}
       value={data[id]}
       onChange={handleChange}
-      {...properties}
     />
   )
 }
