@@ -73,32 +73,28 @@ const CollectionCreatePage: NextPageWithLayout = () => {
     }
   }
 
-  const onSubmit = async () => {
+  const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
     try {
-      const {id, ...payloadData} = data;
-      setPayload({
-        ...payload,
-        data
-      })
-
-      const response = await createPost({
-        url: payload.url,
-        data: payloadData
-      }).unwrap()
-      const { status, message } = response
-      openDialog({
-        title: status,
-        content: message,
-        onOk: () => {
-          router.push(`/${collection}`)
-        }
-      })
+        event.preventDefault()
+        const data = new FormData(event.target)
+        const response = await createPost({
+            url: payload.url,
+            data
+        }).unwrap()
+        const { status, message } = response
+        openDialog({
+            title: status,
+            content: message,
+            onOk: () => {
+                router.push(`/${collection}`)
+            }
+        })
     } catch (error) {
-      const { status, message } = (error as any).data
-      openDialog({
-        title: status,
-        content: message
-      })
+        const { status, message } = (error as any).data
+        openDialog({
+            title: status,
+            content: message
+        })
     }
   }
 
@@ -133,6 +129,7 @@ const CollectionCreatePage: NextPageWithLayout = () => {
         forms={forms}
         data={data}
         onDataChanged={setData}
+        onSubmit={onSubmit}
       />
       <AppBar position="fixed" color="inherit" sx={{ top: 'auto', bottom: 0, left: 280, width: 'calc(100vw - 280px)'}}>
         <Toolbar sx={{ display: 'flex', flexDirection: 'row'}}>
@@ -140,9 +137,7 @@ const CollectionCreatePage: NextPageWithLayout = () => {
             <Button onClick={onBack}>Back</Button>
           </Box>
           <Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'flex-end' }}>
-            <Button
-              onClick={onSubmit}
-            >Submit</Button>
+            <Button form='form-generator' type="submit">Submit</Button>
           </Box>
         </Toolbar>
       </AppBar>
