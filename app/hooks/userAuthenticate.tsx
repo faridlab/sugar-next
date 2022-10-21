@@ -55,9 +55,14 @@ function useUserAuthenticate() {
   }
 
   const checkUserToken = async () => {
-    dispatch(checkToken())
-    if(authorization_token === '') return
-    setLoggedIn(true)
+    const promise = new Promise((resolve) => {
+      dispatch(checkToken())
+      if(authorization_token !== '') {
+        setLoggedIn(true)
+      }
+      resolve(true)
+    })
+    return promise
   }
 
   const logout = async () => {
