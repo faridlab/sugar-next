@@ -13,4 +13,6 @@ export default interface Users extends Resources {
   email_verified_at?: string;
   password?: string;
   status?: UserStatus;
+
+  dob?: any;
 }
