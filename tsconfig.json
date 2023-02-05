@@ -1,11 +1,7 @@
 {
   "compilerOptions": {
     "target": "es5",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -18,26 +14,26 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
     "baseUrl": ".",
     "paths": {
-      "@app/*": ["app/*"],
-      "@component/*": ["app/components/*"],
-      "@layout/*": ["app/layouts/*"],
-      "@screen/*": ["app/screens/*"],
-      "@store/*": ["app/stores/*"],
-      "@service/*": ["app/services/*"],
-      "@data/*": ["data/*"],
-      "@i18n/*": ["data/i18n/*"],
-      "@device/*": ["device/*"],
-      "@domain/*": ["domain/*"]
+      "@/*": ["./src/*"],
+      "@app/*": ["./src/app/*"],
+      "@component/*": ["./src/app/components/*"],
+      "@layout/*": ["./src/app/layouts/*"],
+      "@screen/*": ["./src/app/screens/*"],
+      "@store/*": ["./src/app/stores/*"],
+      "@service/*": ["./src/app/services/*"],
+      "@data/*": ["./src/data/*"],
+      "@i18n/*": ["./src/data/i18n/*"],
+      "@device/*": ["./src/device/*"],
+      "@domain/*": ["./src/domain/*"]
     }
   },
-  "include": [
-    "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx"
-  ],
-  "exclude": [
-    "node_modules"
-  ]
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "exclude": ["node_modules"]
 }

@@ -1,7 +1,8 @@
 /** @type {import('next').NextConfig} */
-module.exports = {
-  reactStrictMode: true,
-  images: {
-    domains: ['localhost'],
+const nextConfig = {
+  experimental: {
+    appDir: true,
   },
 }
+
+module.exports = nextConfig
