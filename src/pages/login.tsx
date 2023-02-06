@@ -40,7 +40,7 @@ const LoginPage: NextPage = () => {
   const {
     isLoggedIn,
     userLogin,
-    checkUserToken
+    checkUserToken,
   } = useUserAuthenticate()
 
   useEffect(() => {

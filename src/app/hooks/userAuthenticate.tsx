@@ -34,6 +34,11 @@ function useUserAuthenticate() {
     authorization_token
   } = useAppSelector(selectResource)
 
+  useEffect(() => {
+    if(!authorization_token) return
+    setLoggedIn(true)
+  }, [authorization_token])
+
   const [ submitUserLogin, response ] = usePostMutation()
 
   const userLogin = async (data: Record<string, any>) => {
@@ -57,7 +62,7 @@ function useUserAuthenticate() {
   const checkUserToken = async () => {
     const promise = new Promise((resolve) => {
       dispatch(checkToken())
-      if(authorization_token !== '') {
+      if(authorization_token) {
         setLoggedIn(true)
       }
       resolve(true)
