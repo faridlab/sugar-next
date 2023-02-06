@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import {
   setCookies,
   getCookie,
-  checkCookies,
+  hasCookie,
   removeCookies
 } from 'cookies-next'
 
@@ -44,7 +44,7 @@ export const authSlice = createSlice({
       removeCookies('authorization_token')
     },
     checkToken: (state) => {
-      if(!checkCookies('authorization_token')) return
+      if(!hasCookie('authorization_token')) return
       const token = getCookie('authorization_token')
       const user = getCookie('user')
       state.authorization_token = (token as string)
