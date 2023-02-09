@@ -12,6 +12,8 @@
   - [ ] ???
 - [ ] COMPONENTS
   - [ ] ???
+- [ ] Layouts
+  - [ ] Layout(): Layout dashboard
 - [ ] PAGES
   - [ ] Page(): `/` -> homepage
   - [X] Page(): `/dashboard` -> dashboard page
