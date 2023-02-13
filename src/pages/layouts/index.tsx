@@ -25,8 +25,13 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
-import { Grid } from '@mui/material';
+import { InputAdornment, ListSubheader, OutlinedInput, SelectChangeEvent } from '@mui/material';
+import { Select } from '@mui/material';
 import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft'
+import ArticleIcon from '@mui/icons-material/Article'
+import FindInPageIcon from '@mui/icons-material/FindInPage'
+import MenuOpenIcon from '@mui/icons-material/MenuOpen'
+import FilterAltIcon from '@mui/icons-material/FilterAlt'
 
 const drawerWidth = 260;
 
@@ -41,7 +46,7 @@ const Search = styled('div')(({ theme }) => ({
   marginLeft: 0,
   width: '100%',
   [theme.breakpoints.up('sm')]: {
-    marginLeft: theme.spacing(20),
+    marginLeft: theme.spacing(16),
     width: 'auto',
   },
 }));
@@ -71,6 +76,13 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 export default function PrimarySearchAppBar() {
+  const [dateRange, setDateRange] = React.useState('');
+  const [openFilter, setOpenFilter] = React.useState<boolean>(false)
+
+  const handleDateRangeChange = (event: SelectChangeEvent) => {
+    setDateRange(event.target.value)
+  };
+
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
     React.useState<null | HTMLElement>(null);
@@ -286,23 +298,48 @@ export default function PrimarySearchAppBar() {
       <Box sx={{ flexGrow: 1 }}>
 
         <Toolbar sx={{marginTop: 8, marginLeft: -1}}>
-          <Grid
-            container
-            rowSpacing={1}
-            direction="row"
-            justifyContent="space-between"
-            alignItems="center"
+          <IconButton size="small">
+            <KeyboardArrowLeftIcon />
+          </IconButton>
+          <Select
+            id="form-filter-date"
+            displayEmpty
+            sx={{ m: 1,}}
+            variant="outlined"
+            size="small"
+            value={dateRange}
+            onChange={handleDateRangeChange}
           >
-            <Grid item xs={6}>
-              <IconButton size="small">
-                <KeyboardArrowLeftIcon />
-              </IconButton>
+            <MenuItem disabled value="">
+              <em>Date range</em>
+            </MenuItem>
+            <MenuItem value={10}>Today</MenuItem>
+            <MenuItem value={20}>Last 30 days</MenuItem>
+            <MenuItem value={30}>This month</MenuItem>
+            <MenuItem value={40}>Last month</MenuItem>
+            <MenuItem value={50}>Last 90 days</MenuItem>
+            <MenuItem value={60}>Last 6 months</MenuItem>
+            <MenuItem value={70}>Last year</MenuItem>
+            <MenuItem value={80}>Custom range</MenuItem>
+          </Select>
+          <OutlinedInput
+            id="form-filter-search"
+            type="search"
+            size='small'
+            startAdornment={
+              <InputAdornment position="start">
+                <IconButton edge="start" >
+                  <SearchIcon />
+                </IconButton>
+              </InputAdornment>
+            }
+          />
 
-            </Grid>
-            <Grid item xs={6} justifyContent="end">
-              xs=6
-            </Grid>
-          </Grid>
+
+          <Box sx={{ flexGrow: 1 }} />
+          <IconButton size="small" onClick={() => setOpenFilter(true)}>
+            <FilterAltIcon />
+          </IconButton>
         </Toolbar>
         <Divider />
 
@@ -337,7 +374,7 @@ export default function PrimarySearchAppBar() {
         </Box>
 
       </Box>
-
+      {/*
       <Drawer
         variant="permanent"
         anchor='right'
@@ -374,6 +411,53 @@ export default function PrimarySearchAppBar() {
               </ListItem>
             ))}
           </List>
+        </Box>
+      </Drawer>
+      */}
+
+      {/* FILTER DRAWER */}
+      <Drawer
+        anchor='right'
+        variant="temporary"
+        open={openFilter}
+        onClose={() => setOpenFilter(false)}
+        sx={{
+          minWidth: drawerWidth,
+          flexShrink: 0,
+          [`& .MuiDrawer-paper`]: { minWidth: drawerWidth, boxSizing: 'border-box' },
+        }}
+      >
+        <Toolbar />
+        <Box sx={{ overflow: 'auto' }}>
+        <List
+          sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
+          component="nav"
+          aria-labelledby="menu-filter"
+          subheader={
+            <ListSubheader component="div" id="menu-filter">
+              Filter
+            </ListSubheader>
+          }
+        >
+          <ListItem>
+            <ListItemIcon>
+              <ArticleIcon />
+            </ListItemIcon>
+            <ListItemText primary="Posts" />
+          </ListItem>
+          <ListItem>
+            <ListItemIcon>
+              <FindInPageIcon />
+            </ListItemIcon>
+            <ListItemText primary="Pages" />
+          </ListItem>
+          <ListItem>
+            <ListItemIcon>
+              <MenuOpenIcon />
+            </ListItemIcon>
+            <ListItemText primary="Menus" />
+          </ListItem>
+        </List>
         </Box>
       </Drawer>
 
