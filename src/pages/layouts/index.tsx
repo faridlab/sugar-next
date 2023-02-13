@@ -35,6 +35,25 @@ import FilterAltIcon from '@mui/icons-material/FilterAlt'
 import DeleteIcon from '@mui/icons-material/Delete'
 import AddIcon from '@mui/icons-material/Add';
 
+import { useEffect, useState } from 'react'
+import { useRouter } from 'next/router'
+import gridActions from '@data/repositories/datagrid/actions'
+
+import {
+  GridCellParams,
+  GridEnrichedColDef,
+  GridEventListener,
+  GridEvents,
+} from '@mui/x-data-grid'
+
+import { useDeleteMutation } from '@app/services/api/apiRequest'
+import * as dataRepositories from '@data/repositories'
+import { useQueryMutation } from '@app/services/api/apiRequest'
+import { DatagridPresenter } from '@app/components/presenter'
+import { Params } from '@component/presenter/datagrid'
+import { useDialog } from '@app/hooks'
+import { RequestDataType } from '@device/utils/axios'
+
 const drawerWidth = 260;
 
 const Search = styled('div')(({ theme }) => ({
@@ -78,6 +97,127 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 export default function PrimarySearchAppBar() {
+
+  const router = useRouter()
+  const { delete_id } = router.query
+  const collection = 'provinces'
+  const url = `/${collection}`
+  const [ columns, setColumns ] = useState<GridEnrichedColDef[]>([])
+  const [ rows, setRows ] = useState([])
+  const [ loading, setLoading ] = useState<boolean>(false)
+  // NOTE: i don't like this approach use ready state, please find ahother cool way
+  const [ ready, setReady ] = useState<boolean>(false)
+  const [ rowCount, setRowCount ] = useState(0)
+  const [ deleteData ] = useDeleteMutation()
+  const { openDialog, DialogScreen} = useDialog()
+
+  const [ params, setParams ] = useState({
+    page: 1,
+    limit: 10,
+  })
+
+  const [ fetchQuery ] = useQueryMutation()
+  const onFetchData = async (url: string, params: Record<string, any> = {}) => {
+    try {
+      if(loading) return
+      setLoading(true)
+      const payload = {
+        url,
+        params
+      }
+      const response = await fetchQuery(payload).unwrap()
+      const { data, meta } = response
+      setRows(data)
+      setRowCount(meta.recordsFiltered)
+      setLoading(false)
+    } catch (error) {}
+  }
+
+  const onCellClick: GridEventListener<GridEvents.cellClick> = (params: GridCellParams) => {
+    const { isEditable, id, colDef } = params
+    const { type } = colDef
+    if(type === 'actions') return
+    if(isEditable) return
+    router.push(`/${collection}/${id}`)
+  }
+
+  useEffect(() => {
+    if(!router.isReady) return
+    console.log(collection)
+    // const { collection } = router.query
+    const { resources } = dataRepositories // as default
+    const columns = (dataRepositories as any)[collection as string]?.columns || []
+    const parameters = (dataRepositories as any)[collection as string]?.params || resources.params
+    // setParams({...params, ...parameters})
+    columns.push(gridActions)
+
+    setParams(parameters)
+    setColumns(columns)
+    setRows([])
+    onFetchData(`/${collection}`, parameters)
+    setReady(true)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [ router.isReady, collection ])
+
+  useEffect(() => {
+    if(!delete_id) return
+    onDelete(delete_id as string)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [delete_id])
+
+  const onDelete = async (id: string) => {
+    try {
+      const isOkay = await openDialog({
+        title: 'Delete',
+        content: 'Are you sure want to delete?'
+      })
+      if(!isOkay) {
+        router.push(`/${collection}`)
+        return
+      }
+
+      const payload: RequestDataType = {
+        url: `/${collection}/${id}`,
+        data: {}
+      }
+
+      const response = await deleteData(payload).unwrap()
+      const { status, message } = response
+      openDialog({
+        title: status,
+        content: message,
+        onOk: () => {
+          router.push(`/${collection}`)
+          onFetchData(url, params)
+        }
+      })
+    } catch (error) {
+      const { status, message } = (error as any).data
+      openDialog({
+        title: status,
+        content: message
+      })
+    }
+  }
+
+  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget)
+  }
+
+  const handleClose = () => {
+    setAnchorEl(null)
+  }
+
+  const onPaginationChanged = (parameters: Params) => {
+    setParams({...params, ...parameters})
+    if(!ready) return
+    onFetchData(url, {...params, ...parameters})
+  }
+
+  const linkTo = (path: string): void => {
+    router.push(path)
+  }
+
   const [dateRange, setDateRange] = React.useState('');
   const [openFilter, setOpenFilter] = React.useState<boolean>(false)
 
@@ -381,34 +521,16 @@ export default function PrimarySearchAppBar() {
           </Grid>
         </Box>
 
-        <Box component="main" sx={{ p: 2 }}>
-          <Typography paragraph>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-            tempor incididunt ut labore et dolore magna aliqua. Rhoncus dolor purus non
-            enim praesent elementum facilisis leo vel. Risus at ultrices mi tempus
-            imperdiet. Semper risus in hendrerit gravida rutrum quisque non tellus.
-            Convallis convallis tellus id interdum velit laoreet id donec ultrices.
-            Odio morbi quis commodo odio aenean sed adipiscing. Amet nisl suscipit
-            adipiscing bibendum est ultricies integer quis. Cursus euismod quis viverra
-            nibh cras. Metus vulputate eu scelerisque felis imperdiet proin fermentum
-            leo. Mauris commodo quis imperdiet massa tincidunt. Cras tincidunt lobortis
-            feugiat vivamus at augue. At augue eget arcu dictum varius duis at
-            consectetur lorem. Velit sed ullamcorper morbi tincidunt. Lorem donec massa
-            sapien faucibus et molestie ac.
-          </Typography>
-          <Typography paragraph>
-            Consequat mauris nunc congue nisi vitae suscipit. Fringilla est ullamcorper
-            eget nulla facilisi etiam dignissim diam. Pulvinar elementum integer enim
-            neque volutpat ac tincidunt. Ornare suspendisse sed nisi lacus sed viverra
-            tellus. Purus sit amet volutpat consequat mauris. Elementum eu facilisis
-            sed odio morbi. Euismod lacinia at quis risus sed vulputate odio. Morbi
-            tincidunt ornare massa eget egestas purus viverra accumsan in. In hendrerit
-            gravida rutrum quisque non tellus orci ac. Pellentesque nec nam aliquam sem
-            et tortor. Habitant morbi tristique senectus et. Adipiscing elit duis
-            tristique sollicitudin nibh sit. Ornare aenean euismod elementum nisi quis
-            eleifend. Commodo viverra maecenas accumsan lacus vel facilisis. Nulla
-            posuere sollicitudin aliquam ultrices sagittis orci a.
-          </Typography>
+        <Box component="main" sx={{ paddingX: 2 }}>
+          <DatagridPresenter
+            columns={columns}
+            rows={rows}
+            rowCount={rowCount}
+            params={params}
+            isLoading={loading}
+            onPaginationChanged={onPaginationChanged}
+            onCellClick={onCellClick}
+          />
         </Box>
 
       </Box>
