@@ -25,13 +25,15 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
-import { InputAdornment, ListSubheader, OutlinedInput, SelectChangeEvent } from '@mui/material';
+import { Button, Grid, InputAdornment, ListSubheader, OutlinedInput, SelectChangeEvent, Stack } from '@mui/material';
 import { Select } from '@mui/material';
 import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft'
 import ArticleIcon from '@mui/icons-material/Article'
 import FindInPageIcon from '@mui/icons-material/FindInPage'
 import MenuOpenIcon from '@mui/icons-material/MenuOpen'
 import FilterAltIcon from '@mui/icons-material/FilterAlt'
+import DeleteIcon from '@mui/icons-material/Delete'
+import AddIcon from '@mui/icons-material/Add';
 
 const drawerWidth = 260;
 
@@ -343,7 +345,43 @@ export default function PrimarySearchAppBar() {
         </Toolbar>
         <Divider />
 
-        <Box component="main" sx={{ p: 3 }}>
+        <Box sx={{ flexGrow: 1 }}>
+          <Grid
+            container
+            direction="row"
+            justifyContent="space-between"
+            alignItems="center"
+          >
+            <Grid
+              item
+              xs={6}
+              p={2}
+            ></Grid>
+            <Grid
+              item
+              xs={6}
+              p={2}
+              justifyContent="flex-end"
+              alignItems="flex-end"
+            >
+              <Stack
+                direction="row"
+                justifyContent="flex-end"
+                alignItems="flex-end"
+                spacing={1}
+              >
+                <Button startIcon={<AddIcon />} color="success">
+                  New
+                </Button>
+                <IconButton aria-label="trash" color="error">
+                  <DeleteIcon />
+                </IconButton>
+              </Stack>
+            </Grid>
+          </Grid>
+        </Box>
+
+        <Box component="main" sx={{ p: 2 }}>
           <Typography paragraph>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
             tempor incididunt ut labore et dolore magna aliqua. Rhoncus dolor purus non
@@ -374,6 +412,7 @@ export default function PrimarySearchAppBar() {
         </Box>
 
       </Box>
+
       {/*
       <Drawer
         variant="permanent"
