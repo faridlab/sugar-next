@@ -58,8 +58,12 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }))
 
-const TopnavComponent: NextPage = (props) => {
-  // const { open } = props
+export interface NavProps {
+  onToggleDrawer: Function;
+}
+
+const TopnavComponent: NextPage<NavProps> = (props: NavProps) => {
+  const { onToggleDrawer } = props
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
@@ -164,6 +168,7 @@ const TopnavComponent: NextPage = (props) => {
               color="inherit"
               aria-label="open drawer"
               sx={{ mr: 2 }}
+              onClick={onToggleDrawer}
             >
               <MenuIcon />
             </IconButton>
