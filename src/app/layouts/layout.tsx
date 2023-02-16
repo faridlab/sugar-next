@@ -1,23 +1,19 @@
 import type { NextPage } from 'next'
 
 import * as React from 'react'
-import { styled, createTheme, ThemeProvider } from '@mui/material/styles'
+import { styled } from '@mui/material/styles'
 import CssBaseline from '@mui/material/CssBaseline'
 import MuiDrawer from '@mui/material/Drawer'
 import Box from '@mui/material/Box'
-import { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar'
 import Toolbar from '@mui/material/Toolbar'
 import IconButton from '@mui/material/IconButton'
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
 
 import SidemenuComponent from './sidemenu'
 import TopnavComponent from './topnavbar'
+import { PropsWithChildren } from 'react'
 
 const drawerWidth: number = 280;
-interface AppBarProps extends MuiAppBarProps {
-  open?: boolean;
-}
-
 
 const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' })(
   ({ theme, open }) => ({
@@ -45,9 +41,7 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
   }),
 );
 
-const mdTheme = createTheme();
-
-const DashboardPage: NextPage = ({ children }) => {
+const DashboardPage: NextPage<PropsWithChildren> = ({ children }) => {
   const [open, setOpen] = React.useState(true);
   const toggleDrawer = () => {
     setOpen(!open);
@@ -57,48 +51,46 @@ const DashboardPage: NextPage = ({ children }) => {
 
   return (
     <>
-      <ThemeProvider theme={mdTheme}>
-        <Box sx={{ display: 'flex' }}>
-          <CssBaseline />
-          <TopnavComponent />
-          <Drawer
-            variant="permanent"
+      <Box sx={{ display: 'flex' }}>
+        <CssBaseline />
+        <TopnavComponent onToggleDrawer={() => {}} />
+        <Drawer
+          variant="permanent"
+          sx={{
+            width: drawerWidth,
+            flexShrink: 0,
+            [`& .MuiDrawer-paper`]: { width: drawerWidth, boxSizing: 'border-box' },
+          }}
+        >
+          <Toolbar
             sx={{
-              width: drawerWidth,
-              flexShrink: 0,
-              [`& .MuiDrawer-paper`]: { width: drawerWidth, boxSizing: 'border-box' },
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'flex-end',
+              px: [1],
             }}
           >
-            <Toolbar
-              sx={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'flex-end',
-                px: [1],
-              }}
-            >
-              <IconButton onClick={toggleDrawer}>
-                <ChevronLeftIcon />
-              </IconButton>
-            </Toolbar>
-            <SidemenuComponent />
-          </Drawer>
-          <Box
-            component="main"
-            sx={{
-              backgroundColor: (theme) =>
-                theme.palette.mode === 'light'
-                  ? theme.palette.grey[100]
-                  : theme.palette.grey[900],
-              flexGrow: 1,
-              height: '100vh',
-              overflow: 'auto',
-            }}
-          >
-            {children}
-          </Box>
+            <IconButton onClick={toggleDrawer}>
+              <ChevronLeftIcon />
+            </IconButton>
+          </Toolbar>
+          <SidemenuComponent />
+        </Drawer>
+        <Box
+          component="main"
+          sx={{
+            backgroundColor: (theme) =>
+              theme.palette.mode === 'light'
+                ? theme.palette.grey[100]
+                : theme.palette.grey[900],
+            flexGrow: 1,
+            height: '100vh',
+            overflow: 'auto',
+          }}
+        >
+          {children}
         </Box>
-      </ThemeProvider>
+      </Box>
     </>
   )
 }
