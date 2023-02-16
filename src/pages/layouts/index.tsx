@@ -54,7 +54,7 @@ import { Params } from '@component/presenter/datagrid'
 import { useDialog } from '@app/hooks'
 import { RequestDataType } from '@device/utils/axios'
 
-const drawerWidth = 260;
+const drawerWidth = 280;
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -97,6 +97,11 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 export default function PrimarySearchAppBar() {
+  const [ isOpenDrawer, setOpenDrawer ] = useState<boolean>(true)
+  const toggleOpenDrawer = () => {
+    console.log(isOpenDrawer)
+    setOpenDrawer(!isOpenDrawer)
+  }
 
   const router = useRouter()
   const { delete_id } = router.query
@@ -109,7 +114,7 @@ export default function PrimarySearchAppBar() {
   const [ ready, setReady ] = useState<boolean>(false)
   const [ rowCount, setRowCount ] = useState(0)
   const [ deleteData ] = useDeleteMutation()
-  const { openDialog, DialogScreen} = useDialog()
+  const { openDialog} = useDialog()
 
   const [ params, setParams ] = useState({
     page: 1,
@@ -200,22 +205,10 @@ export default function PrimarySearchAppBar() {
     }
   }
 
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget)
-  }
-
-  const handleClose = () => {
-    setAnchorEl(null)
-  }
-
   const onPaginationChanged = (parameters: Params) => {
     setParams({...params, ...parameters})
     if(!ready) return
     onFetchData(url, {...params, ...parameters})
-  }
-
-  const linkTo = (path: string): void => {
-    router.push(path)
   }
 
   const [dateRange, setDateRange] = React.useState('');
@@ -334,6 +327,7 @@ export default function PrimarySearchAppBar() {
             color="inherit"
             aria-label="open drawer"
             sx={{ mr: 2 }}
+            onClick={toggleOpenDrawer}
           >
             <MenuIcon />
           </IconButton>
@@ -400,12 +394,13 @@ export default function PrimarySearchAppBar() {
       {renderMenu}
 
       <Drawer
-        variant="permanent"
+        variant="persistent"
         sx={{
-          width: drawerWidth,
+          width: isOpenDrawer? drawerWidth: 0,
           flexShrink: 0,
           [`& .MuiDrawer-paper`]: { width: drawerWidth, boxSizing: 'border-box' },
         }}
+        open={isOpenDrawer}
       >
         <Toolbar />
         <Box sx={{ overflow: 'auto' }}>
@@ -437,9 +432,16 @@ export default function PrimarySearchAppBar() {
         </Box>
       </Drawer>
 
-      <Box sx={{ flexGrow: 1 }}>
+      <Box
+        sx={{
+          flexGrow: 1,
+          backgroundColor: (theme) =>
+            theme.palette.mode === 'light'
+              ? theme.palette.grey[100]
+              : theme.palette.grey[900],
+        }}>
 
-        <Toolbar sx={{marginTop: 8, marginLeft: -1}}>
+        <Toolbar sx={{marginTop: 8, marginLeft: -1, backgroundColor: '#fff'}}>
           <IconButton size="small">
             <KeyboardArrowLeftIcon />
           </IconButton>
@@ -521,7 +523,13 @@ export default function PrimarySearchAppBar() {
           </Grid>
         </Box>
 
-        <Box component="main" sx={{ paddingX: 2 }}>
+        <Box
+          component="main"
+          sx={{
+            paddingX: 2,
+            paddingBottom: 6
+          }}
+        >
           <DatagridPresenter
             columns={columns}
             rows={rows}
