@@ -99,7 +99,6 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 export default function PrimarySearchAppBar() {
   const [ isOpenDrawer, setOpenDrawer ] = useState<boolean>(true)
   const toggleOpenDrawer = () => {
-    console.log(isOpenDrawer)
     setOpenDrawer(!isOpenDrawer)
   }
 
