@@ -134,9 +134,9 @@ const DatagridPresenter: FunctionComponent<PropsType> = (props: PropsType) => {
         rowsPerPageOptions={[5, 10, 25, 50, 100]}
         pagination
         onPageChange={(page) => setCurrentPage(page)}
-        components={{
-          Toolbar: DatagridToolbar,
-        }}
+        // components={{
+        //   Toolbar: DatagridToolbar,
+        // }}
         sx={{
           '& .MuiDataGrid-cell:hover': {
             cursor: 'pointer',
