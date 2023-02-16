@@ -29,7 +29,6 @@ import AddIcon from '@mui/icons-material/Add';
 import { PropsWithChildren } from 'react';
 
 const drawerWidth = 280;
-const mdTheme = createTheme();
 
 const DashboardLayout: NextPage<PropsWithChildren> = ({ children }) => {
 
