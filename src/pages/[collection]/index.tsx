@@ -10,13 +10,12 @@ import MoreVertIcon from '@mui/icons-material/MoreVert'
 import Link from '@mui/material/Link'
 
 import Head from 'next/head'
-import Layout from '@app/layouts/layout'
+import DashboardLayout from '@app/layouts/dashboard'
 import { NextPageWithLayout } from '@app/utils/pageTypes'
 
 import gridActions from '@data/repositories/datagrid/actions'
 
 import {
-  Box,
   Breadcrumbs,
   Button,
   IconButton,
@@ -140,24 +139,10 @@ const CollectionPage: NextPageWithLayout = () => {
     }
   }
 
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
-  const open = Boolean(anchorEl)
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget)
-  }
-
-  const handleClose = () => {
-    setAnchorEl(null)
-  }
-
   const onPaginationChanged = (parameters: Params) => {
     setParams({...params, ...parameters})
     if(!ready) return
     onFetchData(url, {...params, ...parameters})
-  }
-
-  const linkTo = (path: string): void => {
-    router.push(path)
   }
 
   return (
@@ -167,72 +152,23 @@ const CollectionPage: NextPageWithLayout = () => {
         <meta name="description" content="Collection" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Box sx={{ p: 2, mt: 8, display: 'flex', flexDirection: 'column', }}>
-        <Stack
-          direction="row"
-          justifyContent="space-between"
-          alignItems="baseline"
-          spacing={2}
-        >
-          <Breadcrumbs aria-label="breadcrumb">
-            <Link underline="hover" color="inherit" href="/">
-              <HomeIcon />
-            </Link>
-            {/* <Link
-              underline="hover"
-              color="inherit"
-              href="/getting-started/installation/"
-            >
-              Core
-            </Link> */}
-            <Typography color="text.primary">{collection}</Typography>
-          </Breadcrumbs>
-          <Stack spacing={2} direction="row">
-            <Button onClick={() => linkTo(`/${collection}/create`)} variant="text" startIcon={<AddIcon />}>New</Button>
-            <IconButton
-              aria-label="more"
-              id="long-button"
-              aria-controls={open ? 'long-menu' : undefined}
-              aria-expanded={open ? 'true' : undefined}
-              aria-haspopup="true"
-              onClick={handleClick}
-            >
-              <MoreVertIcon />
-            </IconButton>
-            <Menu
-              id="long-menu"
-              MenuListProps={{
-                'aria-labelledby': 'long-button',
-              }}
-              anchorEl={anchorEl}
-              open={open}
-              onClose={handleClose}
-            >
-              <MenuItem>
-                Quick Add
-              </MenuItem>
-              <MenuItem onClick={() => linkTo(`/${collection}/trash`)}>
-                <Typography color="error">Trash</Typography>
-              </MenuItem>
-            </Menu>
-          </Stack>
-        </Stack>
-        <DatagridPresenter
-          columns={columns}
-          rows={rows}
-          rowCount={rowCount}
-          params={params}
-          isLoading={loading}
-          onPaginationChanged={onPaginationChanged}
-          onCellClick={onCellClick}
-        />
-      </Box>
+
+      <DatagridPresenter
+        columns={columns}
+        rows={rows}
+        rowCount={rowCount}
+        params={params}
+        isLoading={loading}
+        onPaginationChanged={onPaginationChanged}
+        onCellClick={onCellClick}
+      />
+
       <DialogScreen />
     </>
   )
 }
 
 CollectionPage.getLayout = function getLayout(page: ReactElement) {
-  return <Layout>{page}</Layout>
+  return <DashboardLayout>{page}</DashboardLayout>
 }
 export default CollectionPage
