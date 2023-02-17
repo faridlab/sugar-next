@@ -15,7 +15,7 @@ import AccountCircle from '@mui/icons-material/AccountCircle'
 import MailIcon from '@mui/icons-material/Mail'
 import NotificationsIcon from '@mui/icons-material/Notifications'
 import MoreIcon from '@mui/icons-material/MoreVert'
-import { useState, MouseEvent } from 'react'
+import { useState, MouseEvent, MouseEventHandler } from 'react'
 import TopbarMenu from '@app/components/layouts/topBarMenu'
 
 const Search = styled('div')(({ theme }) => ({
@@ -59,7 +59,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }))
 
 export interface NavProps {
-  onToggleDrawer: Function;
+  onToggleDrawer: React.MouseEventHandler<HTMLButtonElement>;
 }
 
 const TopnavComponent: NextPage<NavProps> = (props: NavProps) => {
