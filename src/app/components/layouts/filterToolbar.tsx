@@ -12,10 +12,11 @@ import Divider from '@mui/material/Divider';
 import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import { Button, InputAdornment, ListSubheader, OutlinedInput, SelectChangeEvent, Stack } from '@mui/material';
+import { Button, InputAdornment, OutlinedInput, SelectChangeEvent, Stack } from '@mui/material';
 import { Select } from '@mui/material';
 import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft'
 import ArticleIcon from '@mui/icons-material/Article'
+import ClearIcon from '@mui/icons-material/Clear'
 import FindInPageIcon from '@mui/icons-material/FindInPage'
 import MenuOpenIcon from '@mui/icons-material/MenuOpen'
 import FilterAltIcon from '@mui/icons-material/FilterAlt'
@@ -24,18 +25,20 @@ import AddIcon from '@mui/icons-material/Add';
 import { PropsWithChildren } from 'react';
 import { useRouter } from 'next/router';
 
+import useFilterParams from '@app/hooks/useFilterParams'
 const drawerWidth = 280;
 
 const FilterToolbar: NextPage<PropsWithChildren> = ({ children }) => {
   const router = useRouter()
   const { collection } = router.query
-
-  const [dateRange, setDateRange] = React.useState('');
   const [openFilter, setOpenFilter] = React.useState<boolean>(false)
 
-  const handleDateRangeChange = (event: SelectChangeEvent) => {
-    setDateRange(event.target.value)
-  };
+  const {
+    params,
+    dateOptions,
+    handleDateOptionChanged,
+    handleSearchChanged
+  } = useFilterParams()
 
   const linkTo = (path: string): void => {
     router.push(path)
@@ -53,24 +56,19 @@ const FilterToolbar: NextPage<PropsWithChildren> = ({ children }) => {
           sx={{ m: 1,}}
           variant="outlined"
           size="small"
-          value={dateRange}
-          onChange={handleDateRangeChange}
+          value={params.dateOption}
+          onChange={handleDateOptionChanged}
         >
           <MenuItem disabled value="">
             <em>Date range</em>
           </MenuItem>
-          <MenuItem value={10}>Today</MenuItem>
-          <MenuItem value={20}>Last 30 days</MenuItem>
-          <MenuItem value={30}>This month</MenuItem>
-          <MenuItem value={40}>Last month</MenuItem>
-          <MenuItem value={50}>Last 90 days</MenuItem>
-          <MenuItem value={60}>Last 6 months</MenuItem>
-          <MenuItem value={70}>Last year</MenuItem>
-          <MenuItem value={80}>Custom range</MenuItem>
+          {dateOptions.map((item) => <MenuItem key={item.value} value={item.value}>{item.label}</MenuItem>)}
         </Select>
         <OutlinedInput
           id="form-filter-search"
           type="search"
+          value={params.search}
+          onChange={handleSearchChanged}
           size='small'
           startAdornment={
             <InputAdornment position="start">
@@ -135,15 +133,22 @@ const FilterToolbar: NextPage<PropsWithChildren> = ({ children }) => {
       >
         <Toolbar />
         <Box sx={{ overflow: 'auto' }}>
+        <List>
+          <ListItem>
+            <ListItemIcon>
+              <FilterAltIcon />
+            </ListItemIcon>
+            <ListItemText primary="Filters" />
+            <IconButton size="small">
+              <ClearIcon />
+            </IconButton>
+          </ListItem>
+        </List>
+        <Divider />
         <List
           sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
           component="nav"
           aria-labelledby="menu-filter"
-          subheader={
-            <ListSubheader component="div" id="menu-filter">
-              Filter
-            </ListSubheader>
-          }
         >
           <ListItem>
             <ListItemIcon>
