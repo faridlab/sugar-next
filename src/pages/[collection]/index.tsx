@@ -1,33 +1,12 @@
 import { ReactElement, useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
-
-import AddIcon from '@mui/icons-material/Add'
-import HomeIcon from '@mui/icons-material/Home'
-
-import Menu from '@mui/material/Menu'
-import MenuItem from '@mui/material/MenuItem'
-import MoreVertIcon from '@mui/icons-material/MoreVert'
-import Link from '@mui/material/Link'
-
 import Head from 'next/head'
 import DashboardLayout from '@app/layouts/dashboard'
 import { NextPageWithLayout } from '@app/utils/pageTypes'
-
 import gridActions from '@data/repositories/datagrid/actions'
 
 import {
-  Breadcrumbs,
-  Button,
-  IconButton,
-  Stack,
-  Typography
-} from '@mui/material'
-
-import {
-  GridCellParams,
   GridEnrichedColDef,
-  GridEventListener,
-  GridEvents,
 } from '@mui/x-data-grid'
 
 import { useDeleteMutation } from '@app/services/api/apiRequest'
@@ -71,14 +50,6 @@ const CollectionPage: NextPageWithLayout = () => {
       setRowCount(meta.recordsFiltered)
       setLoading(false)
     } catch (error) {}
-  }
-
-  const onCellClick: GridEventListener<GridEvents.cellClick> = (params: GridCellParams) => {
-    const { isEditable, id, colDef } = params
-    const { type } = colDef
-    if(type === 'actions') return
-    if(isEditable) return
-    router.push(`/${collection}/${id}`)
   }
 
   useEffect(() => {
@@ -152,23 +123,20 @@ const CollectionPage: NextPageWithLayout = () => {
         <meta name="description" content="Collection" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-
-      <DatagridPresenter
-        columns={columns}
-        rows={rows}
-        rowCount={rowCount}
-        params={params}
-        isLoading={loading}
-        onPaginationChanged={onPaginationChanged}
-        onCellClick={onCellClick}
-      />
-
+      <DashboardLayout>
+        <DatagridPresenter
+          columns={columns}
+          rows={rows}
+          rowCount={rowCount}
+          params={params}
+          isLoading={loading}
+          onPaginationChanged={onPaginationChanged}
+          // onCellClick={onCellClick}
+        />
+      </DashboardLayout>
       <DialogScreen />
     </>
   )
 }
 
-CollectionPage.getLayout = function getLayout(page: ReactElement) {
-  return <DashboardLayout>{page}</DashboardLayout>
-}
 export default CollectionPage
