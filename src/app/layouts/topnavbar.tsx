@@ -145,7 +145,7 @@ const TopnavComponent: NextPage<NavProps> = (props: NavProps) => {
   return (
     <>
       <AppBar
-        position="absolute"
+        position="fixed"
         sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
       >
         <Toolbar
