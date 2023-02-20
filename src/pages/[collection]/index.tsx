@@ -31,10 +31,11 @@ const CollectionPage: NextPageWithLayout = () => {
   const [ deleteData ] = useDeleteMutation()
   const { openDialog, DialogScreen} = useDialog()
 
+  const filterParams = useFilterParams()
   const {
     parameters,
     setParameters
-  } = useFilterParams()
+  } = filterParams
 
   const [ fetchQuery ] = useQueryMutation()
   const onFetchData = async (url: string, params: Record<string, any> = {}) => {
@@ -78,7 +79,6 @@ const CollectionPage: NextPageWithLayout = () => {
   useEffect(() => {
     if(!ready) return
     onFetchData(`/${collection}`, parameters)
-    console.log(parameters)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ready, collection, parameters])
 
@@ -124,7 +124,7 @@ const CollectionPage: NextPageWithLayout = () => {
         <meta name="description" content="Collection" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <DashboardLayout>
+      <DashboardLayout filterParams={filterParams}>
         <DatagridPresenter
           columns={columns}
           rows={rows}
