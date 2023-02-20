@@ -1,4 +1,4 @@
-import { ReactElement, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import Head from 'next/head'
 import DashboardLayout from '@app/layouts/dashboard'
@@ -16,6 +16,7 @@ import { DatagridPresenter } from '@app/components/presenter'
 import { Params } from '@component/presenter/datagrid'
 import { useDialog } from '@app/hooks'
 import { RequestDataType } from '@device/utils/axios'
+import useFilterParams from '@app/hooks/useFilterParams'
 
 const CollectionPage: NextPageWithLayout = () => {
   const router = useRouter()
@@ -30,10 +31,10 @@ const CollectionPage: NextPageWithLayout = () => {
   const [ deleteData ] = useDeleteMutation()
   const { openDialog, DialogScreen} = useDialog()
 
-  const [ params, setParams ] = useState({
-    page: 1,
-    limit: 10,
-  })
+  const {
+    parameters,
+    setParameters
+  } = useFilterParams()
 
   const [ fetchQuery ] = useQueryMutation()
   const onFetchData = async (url: string, params: Record<string, any> = {}) => {
@@ -57,14 +58,13 @@ const CollectionPage: NextPageWithLayout = () => {
     const { collection } = router.query
     const { resources } = dataRepositories // as default
     const columns = (dataRepositories as any)[collection as string]?.columns || []
-    const parameters = (dataRepositories as any)[collection as string]?.params || resources.params
+    const params = (dataRepositories as any)[collection as string]?.params || resources.params
     // setParams({...params, ...parameters})
     columns.push(gridActions)
 
-    setParams(parameters)
+    setParameters({...parameters, ...params})
     setColumns(columns)
     setRows([])
-    onFetchData(`/${collection}`, parameters)
     setReady(true)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ router.isReady, collection ])
@@ -74,6 +74,13 @@ const CollectionPage: NextPageWithLayout = () => {
     onDelete(delete_id as string)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [delete_id])
+
+  useEffect(() => {
+    if(!ready) return
+    onFetchData(`/${collection}`, parameters)
+    console.log(parameters)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [ready, collection, parameters])
 
   const onDelete = async (id: string) => {
     try {
@@ -110,12 +117,6 @@ const CollectionPage: NextPageWithLayout = () => {
     }
   }
 
-  const onPaginationChanged = (parameters: Params) => {
-    setParams({...params, ...parameters})
-    if(!ready) return
-    onFetchData(url, {...params, ...parameters})
-  }
-
   return (
     <>
       <Head>
@@ -128,10 +129,9 @@ const CollectionPage: NextPageWithLayout = () => {
           columns={columns}
           rows={rows}
           rowCount={rowCount}
-          params={params}
+          params={parameters}
+          setParams={setParameters}
           isLoading={loading}
-          onPaginationChanged={onPaginationChanged}
-          // onCellClick={onCellClick}
         />
       </DashboardLayout>
       <DialogScreen />
