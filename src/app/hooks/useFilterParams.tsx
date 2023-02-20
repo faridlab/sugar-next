@@ -2,7 +2,8 @@ import { SelectChangeEvent } from "@mui/material"
 import {
   ChangeEvent,
   useEffect,
-  useState
+  useState,
+  useRef
 } from "react"
 
 interface DateValue {
@@ -32,8 +33,15 @@ interface DateOptionValue {
   label: string;
 }
 
-const useFilterParams = () => {
+interface RequestParams {
+  search: string;
+  page: number;
+  limit: number;
+  [key: string]: any;
+}
 
+const useFilterParams = () => {
+  const debounceTimeout = useRef<ReturnType<typeof setTimeout>>();
   const filterParams: FilterParams = {
     search: '',
     dateOption: '',
@@ -42,7 +50,13 @@ const useFilterParams = () => {
       endDate: ''
     }
   }
+
   const [params, setParams] = useState<FilterParams>(filterParams)
+  const [parameters, setParameters] = useState<RequestParams>({
+    search: '',
+    page: 1,
+    limit: 25,
+  })
 
   const dateOptions: DateOptionValue[] = [
     { value: DateOption.Today, label: 'Today'},
@@ -62,6 +76,12 @@ const useFilterParams = () => {
 
   const handleSearchChanged = (event: ChangeEvent<HTMLInputElement>) => {
     setParams({...params, search: event.target.value})
+    clearTimeout(debounceTimeout.current)
+    debounceTimeout.current = setTimeout(() => {
+      console.log(new Date().getTime())
+      console.log('search text::', params.search)
+      setParameters({...parameters, search: params.search})
+    }, 600)
   }
 
   return {
@@ -69,7 +89,9 @@ const useFilterParams = () => {
     setParams,
     dateOptions,
     handleDateOptionChanged,
-    handleSearchChanged
+    handleSearchChanged,
+    parameters,
+    setParameters
   }
 }
 
