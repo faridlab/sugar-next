@@ -22,13 +22,17 @@ import MenuOpenIcon from '@mui/icons-material/MenuOpen'
 import FilterAltIcon from '@mui/icons-material/FilterAlt'
 import DeleteIcon from '@mui/icons-material/Delete'
 import AddIcon from '@mui/icons-material/Add';
-import { PropsWithChildren } from 'react';
+import { FunctionComponent, PropsWithChildren } from 'react';
 import { useRouter } from 'next/router';
 
 import useFilterParams from '@app/hooks/useFilterParams'
+interface FilterParams extends PropsWithChildren {
+  filterParams?: ReturnType<typeof useFilterParams>;
+}
 const drawerWidth = 280;
 
-const FilterToolbar: NextPage<PropsWithChildren> = ({ children }) => {
+const FilterToolbar: FunctionComponent<FilterParams> = (props: FilterParams) => {
+  const { children, filterParams } = props
   const router = useRouter()
   const { collection } = router.query
   const [openFilter, setOpenFilter] = React.useState<boolean>(false)
@@ -38,7 +42,7 @@ const FilterToolbar: NextPage<PropsWithChildren> = ({ children }) => {
     dateOptions,
     handleDateOptionChanged,
     handleSearchChanged
-  } = useFilterParams()
+  } = filterParams
 
   const linkTo = (path: string): void => {
     router.push(path)
