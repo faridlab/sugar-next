@@ -9,11 +9,16 @@ import TopnavComponent from './topnavbar'
 
 import Drawer from '@mui/material/Drawer';
 import { PropsWithChildren } from 'react';
+import useFilterParams from '@app/hooks/useFilterParams'
 import FilterToolbar from '@component/layouts/filterToolbar';
+interface FilterParams extends PropsWithChildren {
+  filterParams?: ReturnType<typeof useFilterParams>;
+}
 
 const drawerWidth = 280;
 
-const DashboardLayout: NextPage<PropsWithChildren> = ({ children }) => {
+const DashboardLayout: NextPage<FilterParams> = (props: FilterParams) => {
+  const { children, filterParams } = props
 
   const [ isOpenDrawer, setOpenDrawer ] = React.useState<boolean>(true)
   const toggleOpenDrawer = () => {
@@ -49,7 +54,7 @@ const DashboardLayout: NextPage<PropsWithChildren> = ({ children }) => {
               : theme.palette.grey[900],
         }}>
 
-        <FilterToolbar />
+        <FilterToolbar filterParams={filterParams} />
 
         <Box
           component="main"
