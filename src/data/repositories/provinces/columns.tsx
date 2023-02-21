@@ -1,4 +1,5 @@
-import { GridEnrichedColDef, GridValueGetterParams } from "@mui/x-data-grid"
+import { GridEnrichedColDef, GridRenderCellParams } from "@mui/x-data-grid"
+import Link from 'next/link'
 
 const columns: GridEnrichedColDef[] = [
   {
@@ -6,14 +7,14 @@ const columns: GridEnrichedColDef[] = [
     headerName: 'Country',
     editable: false,
     width: 160,
-    valueGetter: (params: GridValueGetterParams) =>
-      `${params.row.country.name || ''}`,
+    renderCell: (params: GridRenderCellParams) => <Link href={`/countries/${params.value.id}`}>{params.value.name || ''}</Link>,
   },
   {
     field: 'name',
     headerName: 'Province',
     editable: false,
-    flex: 1
+    flex: 1,
+    renderCell: (params: GridRenderCellParams) => <Link href={`/provinces/${params.id}`}>{params.value || ''}</Link>,
   },
 ]
 
