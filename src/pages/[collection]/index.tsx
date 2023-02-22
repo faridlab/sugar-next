@@ -123,7 +123,10 @@ const CollectionPage: NextPageWithLayout = () => {
         <meta name="description" content="Collection" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <DashboardLayout filterParams={filterParams}>
+      <DashboardLayout
+        filterParams={filterParams}
+        title={`${collection||''}`}
+      >
         <DatagridPresenter
           columns={columns}
           rows={rows}
