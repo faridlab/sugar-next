@@ -13,7 +13,6 @@ import { useDeleteMutation } from '@app/services/api/apiRequest'
 import * as dataRepositories from '@data/repositories'
 import { useQueryMutation } from '@app/services/api/apiRequest'
 import { DatagridPresenter } from '@app/components/presenter'
-import { Params } from '@component/presenter/datagrid'
 import { useDialog } from '@app/hooks'
 import { RequestDataType } from '@device/utils/axios'
 import useFilterParams from '@app/hooks/useFilterParams'
@@ -105,7 +104,7 @@ const CollectionPage: NextPageWithLayout = () => {
         content: message,
         onOk: () => {
           router.push(`/${collection}`)
-          onFetchData(url, params)
+          onFetchData(url, parameters)
         }
       })
     } catch (error) {
