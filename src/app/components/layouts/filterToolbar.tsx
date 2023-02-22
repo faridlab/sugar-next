@@ -1,4 +1,3 @@
-import type { NextPage } from 'next'
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -12,7 +11,7 @@ import Divider from '@mui/material/Divider';
 import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import { Button, InputAdornment, OutlinedInput, SelectChangeEvent, Stack } from '@mui/material';
+import { Button, InputAdornment, OutlinedInput, Stack } from '@mui/material';
 import { Select } from '@mui/material';
 import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft'
 import ArticleIcon from '@mui/icons-material/Article'
