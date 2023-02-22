@@ -13,12 +13,13 @@ import useFilterParams from '@app/hooks/useFilterParams'
 import FilterToolbar from '@component/layouts/filterToolbar';
 interface FilterParams extends PropsWithChildren {
   filterParams?: ReturnType<typeof useFilterParams>;
+  title?: string;
 }
 
 const drawerWidth = 280;
 
 const DashboardLayout: NextPage<FilterParams> = (props: FilterParams) => {
-  const { children, filterParams } = props
+  const { children, filterParams, title } = props
 
   const [ isOpenDrawer, setOpenDrawer ] = React.useState<boolean>(true)
   const toggleOpenDrawer = () => {
@@ -28,7 +29,7 @@ const DashboardLayout: NextPage<FilterParams> = (props: FilterParams) => {
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
-      <TopnavComponent onToggleDrawer={toggleOpenDrawer} />
+      <TopnavComponent onToggleDrawer={toggleOpenDrawer} title={title} />
 
       <Drawer
         variant="persistent"

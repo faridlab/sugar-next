@@ -18,10 +18,11 @@ import { Divider } from '@mui/material'
 
 export interface NavProps {
   onToggleDrawer: React.MouseEventHandler<HTMLButtonElement>;
+  title?: string;
 }
 
 const TopnavComponent: NextPage<NavProps> = (props: NavProps) => {
-  const { onToggleDrawer } = props
+  const { onToggleDrawer, title } = props
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
@@ -149,19 +150,9 @@ const TopnavComponent: NextPage<NavProps> = (props: NavProps) => {
               sx={{ display: { xs: 'none', sm: 'block' }, alignSelf: 'center' }}
               id="page-title"
             >
+              {title}
             </Typography>
           </Box>
-          {/* <Search
-            sx={{ml: '200px'}}
-          >
-            <SearchIconWrapper>
-              <SearchIcon />
-            </SearchIconWrapper>
-            <StyledInputBase
-              placeholder="Search…"
-              inputProps={{ 'aria-label': 'search' }}
-            />
-          </Search> */}
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
             <IconButton size="large" aria-label="show 4 new mails" color="inherit">
