@@ -119,8 +119,8 @@ const CollectionPage: NextPageWithLayout = () => {
   return (
     <>
       <Head>
-        <title>Collection</title>
-        <meta name="description" content="Collection" />
+        <title>{`${collection||''}`}</title>
+        <meta name="description" content="{`${collection||''}`}" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <DashboardLayout
