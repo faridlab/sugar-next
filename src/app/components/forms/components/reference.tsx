@@ -1,14 +1,13 @@
-import * as React from 'react';
-import TextField from '@mui/material/TextField';
-import Autocomplete from '@mui/material/Autocomplete';
-import CircularProgress from '@mui/material/CircularProgress';
+import * as React from 'react'
+import TextField from '@mui/material/TextField'
+import Autocomplete from '@mui/material/Autocomplete'
+import CircularProgress from '@mui/material/CircularProgress'
 
 import { useFetchQuery, useQueryMutation } from '@app/services/api/apiRequest'
-import { FunctionComponent, useContext, useEffect, useState } from 'react';
+import { FunctionComponent, useContext, useEffect, useRef, useState } from 'react'
 import { FormProps, FormContext } from '@component/forms'
 
 type ValueType = Record<string, any> | null
-type InputValueType = string
 
 const ReferenceComponent: FunctionComponent<FormProps> = (formProps: FormProps) => {
   const { data, setData } = useContext(FormContext)
@@ -16,7 +15,6 @@ const ReferenceComponent: FunctionComponent<FormProps> = (formProps: FormProps) 
   const [options, setOptions] = useState<Record<string, any>[]>([])
   const [params, setParams] = useState<Record<string, any>>({})
   const [value, setValue] = useState<ValueType>(null)
-  const [inputValue, setInputValue] = useState<InputValueType>('')
   const [hasFetched, setHasFetched] = useState<boolean>(false)
 
   const { id, props, reference } = formProps
@@ -26,7 +24,7 @@ const ReferenceComponent: FunctionComponent<FormProps> = (formProps: FormProps) 
   const { isLoading, ...queryResponse} = useFetchQuery({ url: `/${endpoint}`, params })
   const [ fetchQuery ] = useQueryMutation()
 
-  let debounceTimeout: ReturnType<typeof setTimeout>
+  const debounceTimeout = useRef<ReturnType<typeof setTimeout>>()
 
   const onFetchDataById = async (id: string | number) => {
     try {
@@ -94,20 +92,19 @@ const ReferenceComponent: FunctionComponent<FormProps> = (formProps: FormProps) 
   }
 
   const onInputChange = (event: React.SyntheticEvent, value: any) => {
-    clearTimeout(debounceTimeout)
-    debounceTimeout = setTimeout(() => {
+    clearTimeout(debounceTimeout.current)
+    debounceTimeout.current = setTimeout(() => {
       const parameters: Record<string, any> = {}
       if(value !== '') {
         parameters['search'] = value
       }
       valueReset(parameters)
-    }, 1200)
+    }, 600)
   }
 
   return (
     <Autocomplete
       {...properties}
-      name={id}
       isOptionEqualToValue={isOptionEqualToValue}
       options={options}
       loading={isLoading}
