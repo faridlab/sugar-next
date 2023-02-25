@@ -1,21 +1,13 @@
-import { ReactElement, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
-
-import HomeIcon from '@mui/icons-material/Home'
-import Link from '@mui/material/Link'
-
 import * as dataRepositories from '@data/repositories'
 import { useUpdateMutation, useFetchQuery, useDeleteMutation } from '@app/services/api/apiRequest'
-
 import Head from 'next/head'
-import Layout from '@app/layouts/layout'
+import DashboardDetailLayout from '@app/layouts/dashboardDetail'
 import { NextPageWithLayout } from '@app/utils/pageTypes'
-
 import FormGenerator from '@component/forms'
 import { FormLayoutProps } from '@component/forms'
-
-import { Box, Breadcrumbs, Button, Stack, Typography } from '@mui/material'
-
+import { Box, Button } from '@mui/material'
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import { useDialog } from '@app/hooks'
@@ -62,10 +54,6 @@ const CollectionDetailPage: NextPageWithLayout = () => {
     setData(data.data)
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [response])
-
-  const onBack = () => {
-    router.push(`/${collection}`)
-  }
 
   const onToggleEdit = async () => {
     setReadOnly(!readOnly)
@@ -133,51 +121,32 @@ const CollectionDetailPage: NextPageWithLayout = () => {
         <meta name="description" content="New Data" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Box sx={{ p: 2, mt: 8, display: 'flex', flexDirection: 'column', }}>
-        <Stack
-          direction="row"
-          justifyContent="space-between"
-          alignItems="baseline"
-          spacing={2}
-        >
-          <Breadcrumbs aria-label="breadcrumb">
-            <Link underline="hover" color="inherit" href="/">
-              <HomeIcon />
-            </Link>
-            <Typography color="text.primary">Countries</Typography>
-          </Breadcrumbs>
-        </Stack>
-      </Box>
-      <FormGenerator
-        forms={forms}
-        data={data}
-        onDataChanged={setData}
-        readOnly={readOnly}
-      />
-      <AppBar position="fixed" color="inherit" sx={{ top: 'auto', bottom: 0, left: 280, width: 'calc(100vw - 280px)'}}>
-        {(!readOnly)? (<Toolbar sx={{ display: 'flex', flexDirection: 'row'}}>
-          <Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'flex-start' }}>
-            <Button onClick={onToggleEdit}>Cancel</Button>
-          </Box>
-          <Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'flex-end' }}>
-            <Button variant="text" color="error" onClick={onDelete} >Delete</Button>
-            <Button variant="contained" disableElevation onClick={onSubmit}>Submit</Button>
-          </Box>
-        </Toolbar>): (<Toolbar sx={{ display: 'flex', flexDirection: 'row'}}>
-          <Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'flex-start' }}>
-            <Button onClick={onBack}>Back</Button>
-          </Box>
-          <Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'flex-end' }}>
+      <DashboardDetailLayout
+        title={`${collection||''}`}
+      >
+        <FormGenerator
+          forms={forms}
+          data={data}
+          onDataChanged={setData}
+          readOnly={readOnly}
+        />
+        <AppBar position="fixed" color="inherit" sx={{ top: 'auto', bottom: 0, left: 280, width: 'calc(100vw - 280px)'}}>
+          {(!readOnly)? (<Toolbar sx={{ display: 'flex', flexDirection: 'row'}}>
+            <Box sx={{ flexGrow: 1, display: 'flex' }}>
+              <Button onClick={onToggleEdit}>Cancel</Button>
+            </Box>
+            <Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'flex-end' }}>
+              <Button variant="text" color="error" onClick={onDelete} >Delete</Button>
+              <Button variant="contained" disableElevation onClick={onSubmit}>Submit</Button>
+            </Box>
+          </Toolbar>): (<Toolbar sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-end'}}>
             <Button onClick={onToggleEdit}>Edit</Button>
-          </Box>
-        </Toolbar>)}
-      </AppBar>
+          </Toolbar>)}
+        </AppBar>
+      </DashboardDetailLayout>
       <DialogScreen />
     </>
   )
 }
 
-CollectionDetailPage.getLayout = function getLayout(page: ReactElement) {
-  return <Layout>{page}</Layout>
-}
 export default CollectionDetailPage
