@@ -8,18 +8,19 @@ import SidemenuComponent from './sidemenu'
 import TopnavComponent from './topnavbar'
 
 import Drawer from '@mui/material/Drawer';
-import { PropsWithChildren } from 'react';
+import { FunctionComponent, PropsWithChildren } from 'react';
 import useFilterParams from '@app/hooks/useFilterParams'
 import FilterToolbar from '@component/layouts/filterToolbar';
 interface FilterParams extends PropsWithChildren {
   filterParams?: ReturnType<typeof useFilterParams>;
   title?: string;
+  ToolbarActions?: FunctionComponent;
 }
 
 const drawerWidth = 280;
 
 const DashboardLayout: NextPage<FilterParams> = (props: FilterParams) => {
-  const { children, filterParams, title } = props
+  const { children, filterParams, title, ToolbarActions } = props
 
   const [ isOpenDrawer, setOpenDrawer ] = React.useState<boolean>(true)
   const toggleOpenDrawer = () => {
@@ -29,7 +30,10 @@ const DashboardLayout: NextPage<FilterParams> = (props: FilterParams) => {
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
-      <TopnavComponent onToggleDrawer={toggleOpenDrawer} title={title} />
+      <TopnavComponent
+        title={title}
+        onToggleDrawer={toggleOpenDrawer}
+      />
 
       <Drawer
         variant="persistent"
@@ -55,7 +59,10 @@ const DashboardLayout: NextPage<FilterParams> = (props: FilterParams) => {
               : theme.palette.grey[900],
         }}>
 
-        <FilterToolbar filterParams={filterParams} />
+        <FilterToolbar
+          filterParams={filterParams}
+          ToolbarActions={ToolbarActions}
+        />
 
         <Box
           component="main"

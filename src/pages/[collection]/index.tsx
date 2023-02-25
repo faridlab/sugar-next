@@ -1,9 +1,12 @@
-import { useEffect, useState } from 'react'
+import { FunctionComponent, useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import Head from 'next/head'
 import DashboardLayout from '@app/layouts/dashboard'
 import { NextPageWithLayout } from '@app/utils/pageTypes'
 import gridActions from '@data/repositories/datagrid/actions'
+
+import DeleteIcon from '@mui/icons-material/Delete'
+import AddIcon from '@mui/icons-material/Add'
 
 import {
   GridEnrichedColDef,
@@ -16,6 +19,7 @@ import { DatagridPresenter } from '@app/components/presenter'
 import { useDialog } from '@app/hooks'
 import { RequestDataType } from '@device/utils/axios'
 import useFilterParams from '@app/hooks/useFilterParams'
+import { Box, Stack, Button, IconButton } from '@mui/material'
 
 const CollectionPage: NextPageWithLayout = () => {
   const router = useRouter()
@@ -116,6 +120,40 @@ const CollectionPage: NextPageWithLayout = () => {
     }
   }
 
+  const ToolbarActions: FunctionComponent = () => {
+    return <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+      }}
+      p={2}
+    >
+      <Box></Box>
+      <Stack
+        direction="row"
+        justifyContent="flex-end"
+        alignItems="flex-end"
+        spacing={1}
+      >
+        <Button
+          startIcon={<AddIcon />}
+          color="success"
+          onClick={() => router.push(`/${collection}/create`)}
+        >
+          New
+        </Button>
+        <IconButton
+          aria-label="trash"
+          color="error"
+          onClick={() => router.push(`/${collection}/trash`)}
+        >
+          <DeleteIcon />
+        </IconButton>
+      </Stack>
+    </Box>
+  }
+
   return (
     <>
       <Head>
@@ -126,6 +164,7 @@ const CollectionPage: NextPageWithLayout = () => {
       <DashboardLayout
         filterParams={filterParams}
         title={`${collection||''}`}
+        ToolbarActions={ToolbarActions}
       >
         <DatagridPresenter
           columns={columns}

@@ -1,39 +1,37 @@
-import * as React from 'react';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import MenuItem from '@mui/material/MenuItem';
-import SearchIcon from '@mui/icons-material/Search';
+import * as React from 'react'
+import Box from '@mui/material/Box'
+import Toolbar from '@mui/material/Toolbar'
+import IconButton from '@mui/material/IconButton'
+import MenuItem from '@mui/material/MenuItem'
+import SearchIcon from '@mui/icons-material/Search'
 
-import Drawer from '@mui/material/Drawer';
-import List from '@mui/material/List';
-import Divider from '@mui/material/Divider';
-import ListItem from '@mui/material/ListItem';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import { Button, InputAdornment, OutlinedInput, Stack } from '@mui/material';
-import { Select } from '@mui/material';
+import Drawer from '@mui/material/Drawer'
+import List from '@mui/material/List'
+import Divider from '@mui/material/Divider'
+import ListItem from '@mui/material/ListItem'
+import ListItemIcon from '@mui/material/ListItemIcon'
+import ListItemText from '@mui/material/ListItemText'
+import { InputAdornment, OutlinedInput } from '@mui/material'
+import { Select } from '@mui/material'
 import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft'
 import ArticleIcon from '@mui/icons-material/Article'
 import ClearIcon from '@mui/icons-material/Clear'
 import FindInPageIcon from '@mui/icons-material/FindInPage'
 import MenuOpenIcon from '@mui/icons-material/MenuOpen'
 import FilterAltIcon from '@mui/icons-material/FilterAlt'
-import DeleteIcon from '@mui/icons-material/Delete'
-import AddIcon from '@mui/icons-material/Add';
-import { FunctionComponent, PropsWithChildren } from 'react';
-import { useRouter } from 'next/router';
+import { FunctionComponent, PropsWithChildren } from 'react'
+import { useRouter } from 'next/router'
 
 import useFilterParams from '@app/hooks/useFilterParams'
 interface FilterParams extends PropsWithChildren {
   filterParams?: ReturnType<typeof useFilterParams>;
+  ToolbarActions?: FunctionComponent
 }
-const drawerWidth = 280;
+const drawerWidth = 280
 
 const FilterToolbar: FunctionComponent<FilterParams> = (props: FilterParams) => {
-  const { children, filterParams } = props
+  const { children, filterParams, ToolbarActions } = props
   const router = useRouter()
-  const { collection } = router.query
   const [openFilter, setOpenFilter] = React.useState<boolean>(false)
 
   const {
@@ -42,10 +40,6 @@ const FilterToolbar: FunctionComponent<FilterParams> = (props: FilterParams) => 
     handleDateOptionChanged,
     handleSearchChanged
   } = filterParams
-
-  const linkTo = (path: string): void => {
-    router.push(path)
-  }
 
   return (
     <>
@@ -91,37 +85,7 @@ const FilterToolbar: FunctionComponent<FilterParams> = (props: FilterParams) => 
 
       <Divider />
 
-      <Box
-        sx={{
-          display: 'flex',
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-        }}
-        p={2}
-      >
-        <Box></Box>
-        <Stack
-          direction="row"
-          justifyContent="flex-end"
-          alignItems="flex-end"
-          spacing={1}
-        >
-          <Button
-            startIcon={<AddIcon />}
-            color="success"
-            onClick={() => linkTo(`/${collection}/create`)}
-          >
-            New
-          </Button>
-          <IconButton
-            aria-label="trash"
-            color="error"
-            onClick={() => linkTo(`/${collection}/trash`)}
-          >
-            <DeleteIcon />
-          </IconButton>
-        </Stack>
-      </Box>
+      {ToolbarActions && <ToolbarActions />}
 
       <Drawer
         anchor='right'
