@@ -1,28 +1,19 @@
-import { ReactElement, useEffect, useState } from 'react'
+import { FunctionComponent, useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
-import HomeIcon from '@mui/icons-material/Home'
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever'
 import RestoreFromTrashIcon from '@mui/icons-material/RestoreFromTrash'
-import Link from '@mui/material/Link'
-
+import DashboardLayout from '@app/layouts/dashboard'
 import Head from 'next/head'
-import Layout from '@app/layouts/layout'
 import { NextPageWithLayout } from '@app/utils/pageTypes'
 import gridActions from '@data/repositories/datagrid/trashActions'
-
+import useFilterParams from '@app/hooks/useFilterParams'
 import {
   Box,
-  Breadcrumbs,
   Button,
-  Stack,
-  Typography
-} from '@mui/material'
+  Stack} from '@mui/material'
 
 import {
-  GridCellParams,
   GridEnrichedColDef,
-  GridEventListener,
-  GridEvents,
 } from '@mui/x-data-grid'
 
 import { useDeleteMutation, usePostMutation } from '@app/services/api/apiRequest'
@@ -32,6 +23,7 @@ import { DatagridPresenter } from '@app/components/presenter'
 import { Params } from '@component/presenter/datagrid'
 import { useDialog } from '@app/hooks'
 import { RequestDataType } from '@device/utils/axios'
+import { params } from '@/data/repositories/resources'
 
 const CollectionTrashPage: NextPageWithLayout = () => {
   const router = useRouter()
@@ -47,10 +39,11 @@ const CollectionTrashPage: NextPageWithLayout = () => {
   const [ restoreData ] = usePostMutation()
   const { openDialog, DialogScreen} = useDialog()
 
-  const [ params, setParams ] = useState({
-    page: 1,
-    limit: 10,
-  })
+  const filterParams = useFilterParams()
+  const {
+    parameters,
+    setParameters
+  } = filterParams
 
   const [ fetchQuery ] = useQueryMutation()
   const onFetchData = async (url: string, params: Record<string, any> = {}) => {
@@ -69,14 +62,6 @@ const CollectionTrashPage: NextPageWithLayout = () => {
     } catch (error) {}
   }
 
-  const onCellClick: GridEventListener<GridEvents.cellClick> = (params: GridCellParams) => {
-    const { isEditable, id, colDef } = params
-    const { type } = colDef
-    if(type === 'actions') return
-    if(isEditable) return
-    router.push(`/${collection}/${id}/trashed`)
-  }
-
   useEffect(() => {
     if(!router.isReady) return
     const { collection } = router.query
@@ -86,10 +71,9 @@ const CollectionTrashPage: NextPageWithLayout = () => {
     // setParams({...params, ...parameters})
     columns.push(gridActions)
 
-    setParams(parameters)
+    setParameters({...parameters, ...params})
     setColumns(columns)
     setRows([])
-    onFetchData(`/${collection}/trash`, parameters)
     setReady(true)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ router.isReady, collection ])
@@ -139,12 +123,6 @@ const CollectionTrashPage: NextPageWithLayout = () => {
         content: message
       })
     }
-  }
-
-  const onPaginationChanged = (parameters: Params) => {
-    setParams({...params, ...parameters})
-    if(!ready) return
-    onFetchData(url, {...params, ...parameters})
   }
 
   const onRestoreData = async (id: string) => {
@@ -253,54 +231,64 @@ const CollectionTrashPage: NextPageWithLayout = () => {
     }
   }
 
+  const ToolbarActions: FunctionComponent = () => {
+    return <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+      }}
+      p={2}
+    >
+      <Box></Box>
+      <Stack
+        direction="row"
+        justifyContent="flex-end"
+        alignItems="flex-end"
+        spacing={1}
+      >
+        <Button
+          startIcon={<DeleteForeverIcon />}
+          color="error"
+          onClick={onEmpty}
+        >
+          Empty
+        </Button>
+        <Button
+          startIcon={<RestoreFromTrashIcon />}
+          color="success"
+          onClick={onRestore}
+        >
+          Restore
+        </Button>
+      </Stack>
+    </Box>
+  }
+
   return (
     <>
       <Head>
-        <title>Trash Collection</title>
-        <meta name="description" content="Collection" />
+        <title>Trash {`${collection||''}`}</title>
+        <meta name="description" content="{`${collection||''}`}" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Box sx={{ p: 2, mt: 8, display: 'flex', flexDirection: 'column', }}>
-        <Stack
-          direction="row"
-          justifyContent="space-between"
-          alignItems="baseline"
-          spacing={2}
-        >
-          <Breadcrumbs aria-label="breadcrumb">
-            <Link underline="hover" color="inherit" href="/">
-              <HomeIcon />
-            </Link>
-            {/* <Link
-              underline="hover"
-              color="inherit"
-              href="/getting-started/installation/"
-            >
-              Core
-            </Link> */}
-            <Typography color="text.primary">{collection}</Typography>
-          </Breadcrumbs>
-          <Stack spacing={2} direction="row">
-            <Button onClick={onEmpty} variant="text" color="error" startIcon={<DeleteForeverIcon />}>Empty</Button>
-            <Button onClick={onRestore} variant="contained" color="success" startIcon={<RestoreFromTrashIcon />}>Restore</Button>
-          </Stack>
-        </Stack>
+      <DashboardLayout
+        filterParams={filterParams}
+        title={`${collection||''}`}
+        ToolbarActions={ToolbarActions}
+      >
         <DatagridPresenter
           columns={columns}
           rows={rows}
           rowCount={rowCount}
-          params={params}
+          params={parameters}
+          setParams={setParameters}
           isLoading={loading}
-          onPaginationChanged={onPaginationChanged}
-          onCellClick={onCellClick}
         />
-      </Box>
+      </DashboardLayout>
       <DialogScreen />
     </>
   )
 }
 
-CollectionTrashPage.getLayout = function getLayout(page: ReactElement) {
-  return <Layout>{page}</Layout>
-}
 export default CollectionTrashPage
