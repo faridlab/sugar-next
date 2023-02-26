@@ -13,7 +13,6 @@ import ListItemIcon from '@mui/material/ListItemIcon'
 import ListItemText from '@mui/material/ListItemText'
 import { InputAdornment, OutlinedInput } from '@mui/material'
 import { Select } from '@mui/material'
-import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft'
 import ArticleIcon from '@mui/icons-material/Article'
 import ClearIcon from '@mui/icons-material/Clear'
 import FindInPageIcon from '@mui/icons-material/FindInPage'
@@ -31,7 +30,6 @@ const drawerWidth = 280
 
 const FilterToolbar: FunctionComponent<FilterParams> = (props: FilterParams) => {
   const { children, filterParams, ToolbarActions } = props
-  const router = useRouter()
   const [openFilter, setOpenFilter] = React.useState<boolean>(false)
 
   const {
@@ -44,9 +42,6 @@ const FilterToolbar: FunctionComponent<FilterParams> = (props: FilterParams) => 
   return (
     <>
       <Toolbar sx={{marginTop: 8, marginLeft: -1, backgroundColor: '#fff'}}>
-        <IconButton size="small" onClick={() => router.back()}>
-          <KeyboardArrowLeftIcon />
-        </IconButton>
         <Select
           id="form-filter-date"
           displayEmpty
