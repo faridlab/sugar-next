@@ -11,7 +11,7 @@ const forms: FormLayoutProps = [
       // used for dynamic props component
       props: {
         id: "form-provinces-name",
-        label: "Province Name"
+        label: "Province"
       }
     },
     {
