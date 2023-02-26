@@ -27,6 +27,7 @@ const CollectionCreatePage: NextPageWithLayout = () => {
   const url = `/${collection}`
   const [ forms, setForms ] = useState<FormLayoutProps>([])
   const [ data, setData ] = useState<Record<string, any>>({})
+  const [ pageTitle, setPageTitle ] = useState<string>('')
   const [ createPost, response ] = usePostMutation()
   const [ fetchQuery ] = useQueryMutation()
   const [ payload, setPayload ] = useState<RequestDataType>({ url, data: {}})
@@ -44,6 +45,7 @@ const CollectionCreatePage: NextPageWithLayout = () => {
     if(duplicate_from_id) {
       fetchDataById((duplicate_from_id as string))
     }
+    setPageTitle(collection as string)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ router.isReady ])
 
@@ -104,7 +106,7 @@ const CollectionCreatePage: NextPageWithLayout = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <DashboardDetailLayout
-        title={`${collection||''}`}
+        title={pageTitle}
       >
         <FormGenerator
           forms={forms}

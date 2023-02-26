@@ -31,6 +31,7 @@ const CollectionPage: NextPageWithLayout = () => {
   // NOTE: i don't like this approach use ready state, please find ahother cool way
   const [ ready, setReady ] = useState<boolean>(false)
   const [ rowCount, setRowCount ] = useState(0)
+  const [ pageTitle, setPageTitle ] = useState<string>('')
   const [ deleteData ] = useDeleteMutation()
   const { openDialog, DialogScreen} = useDialog()
 
@@ -70,6 +71,7 @@ const CollectionPage: NextPageWithLayout = () => {
     setColumns(columns)
     setRows([])
     setReady(true)
+    setPageTitle(collection as string)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ router.isReady, collection ])
 
@@ -163,7 +165,7 @@ const CollectionPage: NextPageWithLayout = () => {
       </Head>
       <DashboardLayout
         filterParams={filterParams}
-        title={`${collection||''}`}
+        title={pageTitle}
         ToolbarActions={ToolbarActions}
       >
         <DatagridPresenter

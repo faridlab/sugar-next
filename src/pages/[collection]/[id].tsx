@@ -22,6 +22,7 @@ const CollectionDetailPage: NextPageWithLayout = () => {
   const [ payload, setPayload ] = useState<RequestDataType>({ url, data: {}})
   const [ readOnly, setReadOnly ] = useState<boolean>(true)
   const [ ready, setReady ] = useState<boolean>(false)
+  const [ pageTitle, setPageTitle ] = useState<string>('')
   const response = useFetchQuery({ url })
   const [ updateData ] = useUpdateMutation()
   const [ deleteData ] = useDeleteMutation()
@@ -37,6 +38,7 @@ const CollectionDetailPage: NextPageWithLayout = () => {
     setPayload({ ...payload, url: `/${collection}/${id}`})
     if(editable) setReadOnly(false)
     setReady(true)
+    setPageTitle(collection as string)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ router.isReady ])
 
@@ -122,7 +124,7 @@ const CollectionDetailPage: NextPageWithLayout = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <DashboardDetailLayout
-        title={`${collection||''}`}
+        title={pageTitle}
       >
         <FormGenerator
           forms={forms}
