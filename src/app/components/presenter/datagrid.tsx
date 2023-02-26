@@ -1,7 +1,6 @@
-import { FunctionComponent, useEffect, useState } from 'react'
+import { FunctionComponent, useState } from 'react'
 import {
   DataGrid,
-  GridCallbackDetails,
   GridEnrichedColDef
 } from '@mui/x-data-grid'
 
@@ -15,7 +14,8 @@ type PropsType = {
   params: Params;
   setParams: Function;
   rowCount: number;
-  rows: Record<string, any>[] | Record<string, any>;
+  // rows: Record<string, any>[] | Record<string, any>;
+  rows: any[];
   columns: GridEnrichedColDef[];
   isLoading: boolean;
 }
