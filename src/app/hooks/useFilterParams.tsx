@@ -78,8 +78,6 @@ const useFilterParams = () => {
     setParams({...params, search: event.target.value})
     clearTimeout(debounceTimeout.current)
     debounceTimeout.current = setTimeout(() => {
-      console.log(new Date().getTime())
-      console.log('search text::', params.search)
       setParameters({...parameters, search: params.search})
     }, 600)
   }
