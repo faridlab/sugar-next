@@ -44,7 +44,7 @@ const FilterToolbar: FunctionComponent<FilterParams> = (props: FilterParams) => 
   return (
     <>
       <Toolbar sx={{marginTop: 8, marginLeft: -1, backgroundColor: '#fff'}}>
-        <IconButton size="small">
+        <IconButton size="small" onClick={() => router.back()}>
           <KeyboardArrowLeftIcon />
         </IconButton>
         <Select
