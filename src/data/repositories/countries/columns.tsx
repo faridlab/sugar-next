@@ -5,18 +5,18 @@ const columns: GridEnrichedColDef[] = [
   {
     field: 'name',
     headerName: 'Country',
-    editable: false,
+    editable: true,
     renderCell: (params: GridRenderCellParams) => <Link href={`/countries/${params.id}`}>{params.value || ''}</Link>,
   },
   {
     field: 'isocode',
     headerName: 'ISO Code',
-    editable: false,
+    editable: true,
   },
   {
     field: 'phonecode',
     headerName: 'Phone Code',
-    editable: false,
+    editable: true,
     flex: 1
   },
 ]
