@@ -3,7 +3,6 @@ import { useRouter } from 'next/router'
 import Head from 'next/head'
 import DashboardLayout from '@app/layouts/dashboard'
 import { NextPageWithLayout } from '@app/utils/pageTypes'
-import gridActions from '@data/repositories/datagrid/actions'
 
 import DeleteIcon from '@mui/icons-material/Delete'
 import AddIcon from '@mui/icons-material/Add'
@@ -19,6 +18,7 @@ import { DatagridPresenter } from '@app/components/presenter'
 import { useDialog } from '@app/hooks'
 import { RequestDataType } from '@device/utils/axios'
 import useFilterParams from '@app/hooks/useFilterParams'
+import useActionsPresenter from '@app/hooks/countries/useActionsPresenter'
 import { Box, Stack, Button, IconButton } from '@mui/material'
 
 const CollectionPage: NextPageWithLayout = () => {
@@ -27,8 +27,15 @@ const CollectionPage: NextPageWithLayout = () => {
   const { delete_id } = router.query
   const url = `/${collection}`
   const [ columns, setColumns ] = useState<GridEnrichedColDef[]>([])
-  const [ rows, setRows ] = useState([])
+  // const [ rows, setRows ] = useState<GridRowsProp[]>([])
+  const [ rows, setRows ] = useState<any[]>([])
   const [ loading, setLoading ] = useState<boolean>(false)
+
+  const {
+    actions,
+    presenterProps
+  } = useActionsPresenter({rows, setRows})
+
   // NOTE: i don't like this approach use ready state, please find ahother cool way
   const [ ready, setReady ] = useState<boolean>(false)
   const [ rowCount, setRowCount ] = useState(0)
@@ -63,8 +70,7 @@ const CollectionPage: NextPageWithLayout = () => {
     const { resources } = dataRepositories // as default
     const columns = (dataRepositories as any)[collection as string]?.columns || []
     const params = (dataRepositories as any)[collection as string]?.params || resources.params
-    // setParams({...params, ...parameters})
-    columns.push(gridActions)
+    columns.push(actions)
 
     setParameters({...parameters, ...params})
     setColumns(columns)
@@ -174,6 +180,7 @@ const CollectionPage: NextPageWithLayout = () => {
           params={parameters}
           setParams={setParameters}
           isLoading={loading}
+          props={presenterProps}
         />
       </DashboardLayout>
       <DialogScreen />
