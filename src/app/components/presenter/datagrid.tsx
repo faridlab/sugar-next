@@ -18,6 +18,7 @@ type PropsType = {
   rows: any[];
   columns: GridEnrichedColDef[];
   isLoading: boolean;
+  props?: Record<string, any>, // used for dynamic props component
 }
 
 const DatagridPresenter: FunctionComponent<PropsType> = (props: PropsType) => {
@@ -37,6 +38,10 @@ const DatagridPresenter: FunctionComponent<PropsType> = (props: PropsType) => {
     setParams({...params, page: (page + 1), limit: pageSize})
   }
 
+  const properties = () => {
+    return props.props || {}
+  }
+
   return(
     <div style={{ width: '100%' }}>
       <DataGrid
@@ -53,6 +58,7 @@ const DatagridPresenter: FunctionComponent<PropsType> = (props: PropsType) => {
         rowsPerPageOptions={[5, 10, 25, 50, 100]}
         pagination
         onPageChange={onPageChange}
+        { ...properties() }
       />
     </div>
   )
