@@ -6,7 +6,10 @@ const columns: GridEnrichedColDef[] = [
     field: 'name',
     headerName: 'Country',
     editable: true,
-    renderCell: (params: GridRenderCellParams) => <Link href={`/countries/${params.id}`}>{params.value || ''}</Link>,
+    renderCell: (params: GridRenderCellParams) => <Link href={`/countries/${params.id}`}>
+        <strong>{params.value || ''}</strong>
+      </Link>,
+    // renderEditCell
   },
   {
     field: 'isocode',
