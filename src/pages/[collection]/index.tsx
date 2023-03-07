@@ -12,27 +12,24 @@ import {
   GridEnrichedColDef,
 } from '@mui/x-data-grid'
 
-import { useDeleteMutation } from '@app/services/api/apiRequest'
 import * as dataRepositories from '@data/repositories'
-import { useQueryMutation } from '@app/services/api/apiRequest'
 import { DatagridPresenter } from '@app/components/presenter'
 import { useDialog } from '@app/hooks'
-import { RequestDataType } from '@device/utils/axios'
 import useFilterParams from '@app/hooks/useFilterParams'
 import { Box, Stack, Button, IconButton } from '@mui/material'
+import useQuery from '@app/hooks/useQuery'
+import useDestruction from '@/app/hooks/useDestruction'
 
 const CollectionPage: NextPageWithLayout = () => {
   const router = useRouter()
   const { collection, delete_id } = router.query
-  const url = `/${collection}`
   const [ columns, setColumns ] = useState<GridEnrichedColDef[]>([])
-  const [ rows, setRows ] = useState([])
+  const [ rows, setRows ] = useState<any[]>([])
   const [ loading, setLoading ] = useState<boolean>(false)
   // NOTE: i don't like this approach use ready state, please find ahother cool way
   const [ ready, setReady ] = useState<boolean>(false)
   const [ rowCount, setRowCount ] = useState(0)
   const [ pageTitle, setPageTitle ] = useState<string>('')
-  const [ deleteData ] = useDeleteMutation()
   const { openDialog, DialogScreen} = useDialog()
 
   const filterParams = useFilterParams()
@@ -41,22 +38,14 @@ const CollectionPage: NextPageWithLayout = () => {
     setParameters
   } = filterParams
 
-  const [ fetchQuery ] = useQueryMutation()
-  const onFetchData = async (url: string, params: Record<string, any> = {}) => {
-    try {
-      if(loading) return
-      setLoading(true)
-      const payload = {
-        url,
-        params
-      }
-      const response = await fetchQuery(payload).unwrap()
-      const { data, meta } = response
-      setRows(data)
-      setRowCount(meta.recordsFiltered)
-      setLoading(false)
-    } catch (error) {}
-  }
+  const {
+    fetchData
+  } = useQuery({collection, loading, setLoading, setRows, setRowCount, openDialog})
+
+  const callbackOnDeleted = () => fetchData(parameters)
+  const {
+    deleteData
+  } = useDestruction({collection, openDialog, callbackOnDeleted})
 
   useEffect(() => {
     if(!router.isReady) return
@@ -77,50 +66,15 @@ const CollectionPage: NextPageWithLayout = () => {
 
   useEffect(() => {
     if(!delete_id) return
-    onDelete(delete_id as string)
+    deleteData(delete_id as string)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [delete_id])
 
   useEffect(() => {
     if(!ready) return
-    onFetchData(`/${collection}`, parameters)
+    fetchData(parameters)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ready, collection, parameters])
-
-  const onDelete = async (id: string) => {
-    try {
-      const isOkay = await openDialog({
-        title: 'Delete',
-        content: 'Are you sure want to delete?'
-      })
-      if(!isOkay) {
-        router.push(`/${collection}`)
-        return
-      }
-
-      const payload: RequestDataType = {
-        url: `/${collection}/${id}`,
-        data: {}
-      }
-
-      const response = await deleteData(payload).unwrap()
-      const { status, message } = response
-      openDialog({
-        title: status,
-        content: message,
-        onOk: () => {
-          router.push(`/${collection}`)
-          onFetchData(url, parameters)
-        }
-      })
-    } catch (error) {
-      const { status, message } = (error as any).data
-      openDialog({
-        title: status,
-        content: message
-      })
-    }
-  }
 
   const ToolbarActions: FunctionComponent = () => {
     return <Box
