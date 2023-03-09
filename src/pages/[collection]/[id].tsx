@@ -126,12 +126,14 @@ const CollectionDetailPage: NextPageWithLayout = () => {
       <DashboardDetailLayout
         title={pageTitle}
       >
-        <FormGenerator
-          forms={forms}
-          data={data}
-          onDataChanged={setData}
-          readOnly={readOnly}
-        />
+        <Box sx={{mt: 4}}>
+          <FormGenerator
+            forms={forms}
+            data={data}
+            onDataChanged={setData}
+            readOnly={readOnly}
+          />
+        </Box>
         <AppBar position="fixed" color="inherit" sx={{ top: 'auto', bottom: 0, left: 280, width: 'calc(100vw - 280px)'}}>
           {(!readOnly)? (<Toolbar sx={{ display: 'flex', flexDirection: 'row'}}>
             <Box sx={{ flexGrow: 1, display: 'flex' }}>
