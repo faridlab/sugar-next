@@ -1,4 +1,4 @@
-import { FunctionComponent, useEffect, useState } from 'react'
+import { FunctionComponent, useEffect, useMemo, useState } from 'react'
 import { useRouter } from 'next/router'
 import Head from 'next/head'
 import DashboardLayout from '@app/layouts/dashboard'
@@ -24,11 +24,8 @@ const CollectionPage: NextPageWithLayout = () => {
   const router = useRouter()
   const { collection, delete_id } = router.query
   const [ columns, setColumns ] = useState<GridEnrichedColDef[]>([])
-  const [ rows, setRows ] = useState<any[]>([])
-  const [ loading, setLoading ] = useState<boolean>(false)
   // NOTE: i don't like this approach use ready state, please find ahother cool way
   const [ ready, setReady ] = useState<boolean>(false)
-  const [ rowCount, setRowCount ] = useState(0)
   const [ pageTitle, setPageTitle ] = useState<string>('')
   const { openDialog, DialogScreen} = useDialog()
 
@@ -39,8 +36,10 @@ const CollectionPage: NextPageWithLayout = () => {
   } = filterParams
 
   const {
-    fetchData
-  } = useQuery({collection, loading, setLoading, setRows, setRowCount, openDialog})
+    fetchData,
+    loading,
+    response
+  } = useQuery({collection, openDialog})
 
   const callbackOnDeleted = () => fetchData(parameters)
   const {
@@ -58,7 +57,6 @@ const CollectionPage: NextPageWithLayout = () => {
 
     setParameters({...parameters, ...params})
     setColumns(columns)
-    setRows([])
     setReady(true)
     setPageTitle(collection as string)
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -69,6 +67,9 @@ const CollectionPage: NextPageWithLayout = () => {
     deleteData(delete_id as string)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [delete_id])
+
+  const rows = useMemo(() => response?.data || [], [response])
+  const rowCount = useMemo(() => response?.meta?.recordsFiltered || 0, [response])
 
   useEffect(() => {
     if(!ready) return
