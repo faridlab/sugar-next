@@ -31,7 +31,7 @@ export const apiRequest = createApi({
   }),
   endpoints: (builder) => ({
     fetch: builder.query({
-      query: ({ url, params = {}, headers = {}, config = {} }: RequestType) => {
+      query: ({ url, params = {}, headers, config = {} }: RequestType) => {
         return {
           url,
           method: 'GET',
@@ -41,7 +41,7 @@ export const apiRequest = createApi({
       },
     }),
     query: builder.mutation({
-      query: ({ url, params = {}, headers = {}, config = {} }: RequestType) => {
+      query: ({ url, params = {}, headers, config = {} }: RequestType) => {
         return {
           url,
           method: 'GET',
@@ -51,7 +51,7 @@ export const apiRequest = createApi({
       },
     }),
     post: builder.mutation({
-      query: ({ url, data, params = {}, headers = {}, config = {} }: RequestDataType) => {
+      query: ({ url, data, params = {}, headers, config = {} }: RequestDataType) => {
         return {
           url,
           method: 'POST',
@@ -62,7 +62,7 @@ export const apiRequest = createApi({
       },
     }),
     update: builder.mutation({
-      query: ({ url, data, params = {}, headers = {}, config = {} }: RequestDataType) => {
+      query: ({ url, data, params = {}, headers, config = {} }: RequestDataType) => {
         return {
           url,
           method: 'PUT',
@@ -73,7 +73,7 @@ export const apiRequest = createApi({
       },
     }),
     patch: builder.mutation({
-      query: ({ url, data, params = {}, headers = {}, config = {} }: RequestDataType) => {
+      query: ({ url, data, params = {}, headers, config = {} }: RequestDataType) => {
         return {
           url,
           method: 'PATCH',
@@ -84,7 +84,7 @@ export const apiRequest = createApi({
       },
     }),
     delete: builder.mutation({
-      query: ({ url, data, params = {}, headers = {}, config = {} }: RequestDataType) => {
+      query: ({ url, data, params = {}, headers, config = {} }: RequestDataType) => {
         return {
           url,
           method: 'DELETE',
