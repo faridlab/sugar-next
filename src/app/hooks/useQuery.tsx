@@ -1,24 +1,19 @@
 import {
   Dispatch,
-  SetStateAction} from "react"
+  SetStateAction,
+  useState} from "react"
 import { useQueryMutation } from '@app/services/api/apiRequest'
 
 interface QueryProps {
   collection: string | string[] | undefined;
-  loading: boolean;
-  setLoading: Dispatch<SetStateAction<boolean>>;
-  setRowCount: Dispatch<SetStateAction<number>>;
-  setRows: Dispatch<SetStateAction<any[]>>;
   openDialog: Function;
 }
 
 const useQuery = (props: QueryProps) => {
+  const [loading, setLoading] = useState<boolean>(false)
+  const [response, setResponse] = useState<any>()
   const {
     collection,
-    loading,
-    setLoading,
-    setRows,
-    setRowCount,
     openDialog
   } = props
 
@@ -29,10 +24,8 @@ const useQuery = (props: QueryProps) => {
       setLoading(true)
       const url = `/${collection}`
       const payload = { url, params }
-      const response = await fetchQuery(payload).unwrap()
-      const { data, meta } = response
-      setRows(data)
-      setRowCount(meta.recordsFiltered)
+      const resp = await fetchQuery(payload).unwrap()
+      setResponse(resp)
       setLoading(false)
     } catch (error) {
       const { status, message } = (error as any).data
@@ -44,7 +37,9 @@ const useQuery = (props: QueryProps) => {
   }
 
   return {
-    fetchData
+    fetchData,
+    loading,
+    response
   }
 }
 
